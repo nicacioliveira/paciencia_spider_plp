@@ -1,0 +1,1 @@
+/usr/bin/c++  -g   CMakeFiles/SolitaireSpider.dir/main.cpp.o CMakeFiles/SolitaireSpider.dir/src/Card.cpp.o CMakeFiles/SolitaireSpider.dir/src/Deck.cpp.o  -o SolitaireSpider 

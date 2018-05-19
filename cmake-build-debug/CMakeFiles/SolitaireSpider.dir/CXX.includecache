@@ -1,0 +1,38 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/home/nicacio/Dropbox/UFCG/PLP/paciencia_spider_plp/header/Card.h
+string
+-
+
+/home/nicacio/Dropbox/UFCG/PLP/paciencia_spider_plp/header/Deck.h
+Card.h
+/home/nicacio/Dropbox/UFCG/PLP/paciencia_spider_plp/header/Card.h
+
+/home/nicacio/Dropbox/UFCG/PLP/paciencia_spider_plp/main.cpp
+iostream
+-
+cstdlib
+-
+header/Card.h
+/home/nicacio/Dropbox/UFCG/PLP/paciencia_spider_plp/header/Card.h
+header/Deck.h
+/home/nicacio/Dropbox/UFCG/PLP/paciencia_spider_plp/header/Deck.h
+
+/home/nicacio/Dropbox/UFCG/PLP/paciencia_spider_plp/src/Card.cpp
+../header/Card.h
+/home/nicacio/Dropbox/UFCG/PLP/paciencia_spider_plp/header/Card.h
+
+/home/nicacio/Dropbox/UFCG/PLP/paciencia_spider_plp/src/Deck.cpp
+../header/Deck.h
+/home/nicacio/Dropbox/UFCG/PLP/paciencia_spider_plp/header/Deck.h
+iostream
+-
+../header/Card.h
+/home/nicacio/Dropbox/UFCG/PLP/paciencia_spider_plp/header/Card.h
+
