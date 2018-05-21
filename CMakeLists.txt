@@ -3,4 +3,4 @@ project(SolitaireSpider)
 
 set(CMAKE_CXX_STANDARD 11)
 
-add_executable(SolitaireSpider main.cpp header/Card.h src/Card.cpp header/Deck.h header/SpiderSolitaire.h src/Deck.cpp)
+add_executable(SolitaireSpider main.cpp header/Card.h src/Card.cpp header/Deck.h header/SpiderSolitaire.h src/Deck.cpp src/SpiderSolitaire.cpp)

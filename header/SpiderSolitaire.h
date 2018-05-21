@@ -17,12 +17,14 @@
 class SpiderSolitaire {
 
 private:
-    Suit suit;
-    Deck stacks[10];
-    Deck completedStacks[8];
+    Deck piles[10];
+    Deck completedPiles[8];
 
 
 public:
+    SpiderSolitaire();
+    void printPiles();
+    void printCompletedPiles();
 
 
 };

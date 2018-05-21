@@ -20,7 +20,7 @@ void Deck::addFrenchSuit(Suit _suit) {
     for (int i = 0; i < frenchSuitNumber; ++i) {
         addCard(new Card(_suit, getNumberOfValue(i+1), false, indexCounter++));
     }
-    
+
 }
 
 void Deck::fillPerSuit(int number_of_suits, Suit _suit) {
@@ -34,54 +34,107 @@ void Deck::shuffle() {
 }
 
 void Deck::handOutCardsTo(int quantity, Deck *to) {
-    while (quantity > 0 && size > 0) {
-        if (to->tail == NULL) {
-            to->head = to->tail = tail;
-        } else {
-            to->tail->setNext(tail);
-            to->tail->setPrev(tail);
-            to->tail = tail;
-        }
-        removeTail();
-        quantity--;
-    }
+
+    Card * _card = tail;
+    while (_card != NULL && --quantity > 0) {
+        _card = _card->getPrev();
+    };
+
+    moveCardTo(_card, to);
+
+
 }
 
 void Deck::moveCardTo(Card * _card, Deck * to) {
     if (_card != NULL && to != NULL) {
+        if (_card == head){
 
-        // desconect
-        if (_card->getPrev() == NULL && _card->getNext() != NULL) {
-            head = tail = NULL;
-        }
-        else if (_card->getPrev() != NULL && _card->getNext() == NULL) {
-            Card * tail_prev = tail->getPrev();
-            tail_prev->setNext(NULL);
-            tail = tail_prev;
-        }
-        else if (_card->getPrev() != NULL && _card->getNext() != NULL) {
-            Card * card_prev = _card->getPrev();
-            card_prev->setNext(NULL);
-            tail = card_prev;
-        }
-        else {
+            if (to->head == NULL) {
+                to->head = _card;
+                to->tail = tail;
+                to->size = size;
+                //
+                size = 0;
+                head = tail = NULL;
+            } else {
+                _card->setPrev(to->tail);
+                to->tail->setNext(_card);
+                to->tail = tail;
+                to->size += size;
+                //
+                size = 0;
+                head = tail = NULL;
+            }
 
-        }
+        } else if (_card == tail) {
 
-        //conect
-        if (to->tail == NULL) {
-            to->head = to->head = _card;
+            if (to->head == NULL) {
+                _card->getPrev()->setNext(NULL);
+                tail = _card->getPrev();
+                _card->setPrev(NULL);
+                size--;
+                //
+                to->size++;
+                to->head = to->tail = _card;
+            } else {
+                int newSize = 0;
+                Card * aux = _card;
+                while (aux != NULL){
+                    aux = aux->getNext();
+                    newSize++;
+                }
+                size -=newSize;
+                to->size += newSize;
+                tail->getPrev()->setNext(NULL);
+                tail = tail->getPrev();
+
+                //
+                to->tail->setNext(_card);
+                _card->setPrev(to->tail);
+                _card->setNext(NULL);
+                to->tail = _card;
+
+            }
+
         } else {
-            _card->setPrev(to->tail);
-            to->tail->setNext(_card);
-            Card *aux = _card;
-            while (aux->getNext() != NULL) aux = aux->getNext();
-            tail = aux;
+
+            if (to->head == NULL) {
+                int newSize = 0;
+                Card * aux = _card;
+                while (aux != NULL){
+                    aux = aux->getNext();
+                    newSize++;
+                }
+
+                to->head = _card;
+                to->tail = tail;
+                size -= newSize;
+                to->size += newSize;
+                //
+                tail = _card->getPrev();
+                _card->getPrev()->setNext(NULL);
+            } else {
+                int newSize = 0;
+                Card * aux = _card;
+                while (aux != NULL){
+                    aux = aux->getNext();
+                    newSize++;
+                }
+
+                Card * thisTail = _card->getPrev();
+                to->tail->setNext(_card);
+                _card->setPrev(to->tail);
+                to->tail = tail;
+                to->size += newSize;
+                size -= newSize;
+                thisTail->setNext(NULL);
+                tail = thisTail;
+
+
+            }
+
         }
-
-        //std::cout << "TO -> HEAD: " << to->head->getStringValue() << " TAIL: " << to->tail->getStringValue() << std::endl;
     }
-
 }
 
 Card * Deck::getCard(int _index) {

@@ -102,6 +102,9 @@
 		<Unit filename="/home/nicacio/Dropbox/UFCG/PLP/paciencia_spider_plp/src/Deck.cpp">
 			<Option target="SolitaireSpider"/>
 		</Unit>
+		<Unit filename="/home/nicacio/Dropbox/UFCG/PLP/paciencia_spider_plp/src/SpiderSolitaire.cpp">
+			<Option target="SolitaireSpider"/>
+		</Unit>
 		<Unit filename="/home/nicacio/Dropbox/UFCG/PLP/paciencia_spider_plp/CMakeLists.txt">
 			<Option virtualFolder="CMake Files\"/>
 		</Unit>

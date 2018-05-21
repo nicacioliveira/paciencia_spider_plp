@@ -2,6 +2,7 @@ file(REMOVE_RECURSE
   "CMakeFiles/SolitaireSpider.dir/main.cpp.o"
   "CMakeFiles/SolitaireSpider.dir/src/Card.cpp.o"
   "CMakeFiles/SolitaireSpider.dir/src/Deck.cpp.o"
+  "CMakeFiles/SolitaireSpider.dir/src/SpiderSolitaire.cpp.o"
   "SolitaireSpider.pdb"
   "SolitaireSpider"
 )

@@ -14,6 +14,12 @@ string
 Card.h
 /home/nicacio/Dropbox/UFCG/PLP/paciencia_spider_plp/header/Card.h
 
+/home/nicacio/Dropbox/UFCG/PLP/paciencia_spider_plp/header/SpiderSolitaire.h
+Card.h
+/home/nicacio/Dropbox/UFCG/PLP/paciencia_spider_plp/header/Card.h
+Deck.h
+/home/nicacio/Dropbox/UFCG/PLP/paciencia_spider_plp/header/Deck.h
+
 /home/nicacio/Dropbox/UFCG/PLP/paciencia_spider_plp/main.cpp
 iostream
 -
@@ -35,4 +41,8 @@ iostream
 -
 ../header/Card.h
 /home/nicacio/Dropbox/UFCG/PLP/paciencia_spider_plp/header/Card.h
+
+/home/nicacio/Dropbox/UFCG/PLP/paciencia_spider_plp/src/SpiderSolitaire.cpp
+../header/SpiderSolitaire.h
+/home/nicacio/Dropbox/UFCG/PLP/paciencia_spider_plp/header/SpiderSolitaire.h
 

@@ -204,6 +204,33 @@ src/Deck.cpp.s:
 	$(MAKE) -f CMakeFiles/SolitaireSpider.dir/build.make CMakeFiles/SolitaireSpider.dir/src/Deck.cpp.s
 .PHONY : src/Deck.cpp.s
 
+src/SpiderSolitaire.o: src/SpiderSolitaire.cpp.o
+
+.PHONY : src/SpiderSolitaire.o
+
+# target to build an object file
+src/SpiderSolitaire.cpp.o:
+	$(MAKE) -f CMakeFiles/SolitaireSpider.dir/build.make CMakeFiles/SolitaireSpider.dir/src/SpiderSolitaire.cpp.o
+.PHONY : src/SpiderSolitaire.cpp.o
+
+src/SpiderSolitaire.i: src/SpiderSolitaire.cpp.i
+
+.PHONY : src/SpiderSolitaire.i
+
+# target to preprocess a source file
+src/SpiderSolitaire.cpp.i:
+	$(MAKE) -f CMakeFiles/SolitaireSpider.dir/build.make CMakeFiles/SolitaireSpider.dir/src/SpiderSolitaire.cpp.i
+.PHONY : src/SpiderSolitaire.cpp.i
+
+src/SpiderSolitaire.s: src/SpiderSolitaire.cpp.s
+
+.PHONY : src/SpiderSolitaire.s
+
+# target to generate assembly for a file
+src/SpiderSolitaire.cpp.s:
+	$(MAKE) -f CMakeFiles/SolitaireSpider.dir/build.make CMakeFiles/SolitaireSpider.dir/src/SpiderSolitaire.cpp.s
+.PHONY : src/SpiderSolitaire.cpp.s
+
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -222,6 +249,9 @@ help:
 	@echo "... src/Deck.o"
 	@echo "... src/Deck.i"
 	@echo "... src/Deck.s"
+	@echo "... src/SpiderSolitaire.o"
+	@echo "... src/SpiderSolitaire.i"
+	@echo "... src/SpiderSolitaire.s"
 .PHONY : help
 
 

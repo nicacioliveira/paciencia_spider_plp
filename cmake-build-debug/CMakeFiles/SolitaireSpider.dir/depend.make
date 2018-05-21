@@ -12,3 +12,8 @@ CMakeFiles/SolitaireSpider.dir/src/Deck.cpp.o: ../header/Card.h
 CMakeFiles/SolitaireSpider.dir/src/Deck.cpp.o: ../header/Deck.h
 CMakeFiles/SolitaireSpider.dir/src/Deck.cpp.o: ../src/Deck.cpp
 
+CMakeFiles/SolitaireSpider.dir/src/SpiderSolitaire.cpp.o: ../header/Card.h
+CMakeFiles/SolitaireSpider.dir/src/SpiderSolitaire.cpp.o: ../header/Deck.h
+CMakeFiles/SolitaireSpider.dir/src/SpiderSolitaire.cpp.o: ../header/SpiderSolitaire.h
+CMakeFiles/SolitaireSpider.dir/src/SpiderSolitaire.cpp.o: ../src/SpiderSolitaire.cpp
+
