@@ -34,8 +34,8 @@ Card::Card(Suit _suit, CardValue _value, bool _turned, int _id) {
     suit = _suit;
     value = _value;
     turned = _turned;
-    next = nullptr;
-    prev = nullptr;
+    next = NULL;
+    prev = NULL;
     id = _id;
 }
 
@@ -127,13 +127,13 @@ struct Deck {
 };
 
 Deck::Deck() {
-    head = nullptr;
-    tail = nullptr;
+    head = NULL;
+    tail = NULL;
     size = 0;
 }
 
 void Deck::addCard(Card *c) {
-    if (tail == nullptr) {
+    if (tail == NULL) {
         head = tail = c;
     } else {
         tail->next = c;
@@ -196,16 +196,16 @@ CardValue Deck::getNumberOfValue(int _i) {
 }
 
 void Deck::moveCardTo(Card * _card, Deck * to) {
-    if (_card != nullptr && to != nullptr) {
+    if (_card != NULL && to != NULL) {
         if (_card == head){
 
-            if (to->head == nullptr) {
+            if (to->head == NULL) {
                 to->head = _card;
                 to->tail = tail;
                 to->size = size;
                 //
                 size = 0;
-                head = tail = nullptr;
+                head = tail = NULL;
             } else {
                 _card->prev = to->tail;
                 to->tail->next = _card;
@@ -213,15 +213,15 @@ void Deck::moveCardTo(Card * _card, Deck * to) {
                 to->size += size;
                 //
                 size = 0;
-                head = tail = nullptr;
+                head = tail = NULL;
             }
 
         } else if (_card == tail) {
 
-            if (to->head == nullptr) {
-                _card->prev->next = nullptr;
+            if (to->head == NULL) {
+                _card->prev->next = NULL;
                 tail = _card->prev;
-                _card->prev = nullptr;
+                _card->prev = NULL;
                 size--;
                 //
                 to->size++;
@@ -229,29 +229,29 @@ void Deck::moveCardTo(Card * _card, Deck * to) {
             } else {
                 int newSize = 0;
                 Card * aux = _card;
-                while (aux != nullptr){
+                while (aux != NULL){
                     aux = aux->next;
                     newSize++;
                 }
                 size -=newSize;
                 to->size += newSize;
-                tail->prev->next = nullptr;
+                tail->prev->next = NULL;
                 tail = tail->prev;
 
                 //
                 to->tail->next = _card;
                 _card->prev = to->tail;
-                _card->next = nullptr;
+                _card->next = NULL;
                 to->tail = _card;
 
             }
 
         } else {
 
-            if (to->head == nullptr) {
+            if (to->head == NULL) {
                 int newSize = 0;
                 Card * aux = _card;
-                while (aux != nullptr){
+                while (aux != NULL){
                     aux = aux->next;
                     newSize++;
                 }
@@ -262,11 +262,11 @@ void Deck::moveCardTo(Card * _card, Deck * to) {
                 to->size += newSize;
                 //
                 tail = _card->prev;
-                _card->prev->next = nullptr;
+                _card->prev->next = NULL;
             } else {
                 int newSize = 0;
                 Card * aux = _card;
-                while (aux != nullptr){
+                while (aux != NULL){
                     aux = aux->next;
                     newSize++;
                 }
@@ -277,7 +277,7 @@ void Deck::moveCardTo(Card * _card, Deck * to) {
                 to->tail = tail;
                 to->size += newSize;
                 size -= newSize;
-                thisTail->next = nullptr;
+                thisTail->next = NULL;
                 tail = thisTail;
             }
 
@@ -288,7 +288,7 @@ void Deck::moveCardTo(Card * _card, Deck * to) {
 void Deck::handOutCardsTo(int quantity, Deck *to) {
 
     Card * _card = tail;
-    while (_card != nullptr && --quantity > 0) {
+    while (_card != NULL && --quantity > 0) {
         _card = _card->prev;
     };
     tail->turned = true;
@@ -307,7 +307,7 @@ void Deck::shuffle() {
 
 void Deck::printCards() {
     Card *temp = head;
-    while (temp != nullptr) {
+    while (temp != NULL) {
         cout << "Id: " << temp->id << " " << temp->getStringSuit() << " " << temp->getStringValue() << " " << endl;
         temp = temp->next;
     }
