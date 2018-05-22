@@ -1,5 +1,6 @@
 #include <iostream>
 #include  <string>
+#include <vector>
 
 using namespace std;
 
@@ -41,48 +42,48 @@ Card::Card(Suit _suit, CardValue _value, bool _turned, int _id) {
 
 string Card::getStringValue() {
     string resp;
-    if (turned) {
-        return "--";
+    if (!turned) {
+        return "|-----|";
     } else {
         switch (value) {
-            case Ace:
-                resp = "Ace";
+            case Ace: //|queen|
+                resp += "| Ace |";
                 break;
             case Two:
-                resp = "2";
+                resp = "|  2  |";
                 break;
             case Three:
-                resp = "3";
+                resp = "|  3  |";
                 break;
             case Four:
-                resp = "4";
+                resp = "|  4  |";
                 break;
             case Five:
-                resp = "5";
+                resp = "|  5  |";
                 break;
             case Six:
-                resp = "6";
+                resp = "|  6  |";
                 break;
             case Seven:
-                resp = "7";
+                resp = "|  7  |";
                 break;
             case Eight:
-                resp = "8";
+                resp = "|  8  |";
                 break;
             case Nine:
-                resp = "9";
+                resp = "|  9  |";
                 break;
             case Ten:
-                resp = "10";
+                resp = "|  10 |";
                 break;
             case Jack:
-                resp = "Jack";
+                resp = "| Jack|";
                 break;
             case Queen:
-                resp = "Queen";
+                resp = "|Queen|";
                 break;
             case King:
-                resp = "King";
+                resp = "| King|";
                 break;
         }
         return resp;
@@ -124,6 +125,8 @@ struct Deck {
     void moveCardTo(Card *_card, Deck * to);
     void shuffle();
     void printCards();
+
+    vector<Card *> getCards();
 };
 
 Deck::Deck() {
@@ -313,6 +316,15 @@ void Deck::printCards() {
     }
 }
 
+vector<Card *> Deck::getCards() {
+    Card *aux = head;
+    vector<Card *> v;
+    while (aux != NULL) {
+        v.push_back(aux);
+        aux = aux->next;
+    }
+    return v;
+}
 // ---------------------------------------------------------------------------------------
 
 int start(Deck *deck, Deck piles[10]) {
@@ -330,8 +342,27 @@ int start(Deck *deck, Deck piles[10]) {
     deck->handOutCardsTo(5, &piles[9]);
 }
 
-string printPiles(Deck * pile) {
-    string piles = "";
+string printPiles(Deck * piles, int _size) {
+    string p;
+    vector<vector<Card *>> v;
+    string header = "";
+
+    for (int i = 0; i < _size; ++i) {
+        v.push_back(piles[i].getCards());
+        header += "          " + to_string(i+1) + "   ";
+    }
+
+
+    int i = 0;
+    for (int i = 0; i < 10; ++i) {
+        p = "";
+        for (int j = 0; j < 10; ++j) {
+            if (v[j][i] != NULL)
+                p += "       " + v[j][i]->getStringValue() + "";
+            //cout <<  to_string(i) + " " << to_string(j) << endl;
+        }
+        cout << p << endl;
+    }
 }
 
 string menu() {
@@ -345,7 +376,8 @@ int main() {
     Deck piles[10];
     Deck completedPiles[8];
     start(&deck, piles);
-    cout << menu() << endl;
-
+    printPiles(piles, 10);
+    //vector<Card *> p = piles[0].getCards();
+    //cout << p[6]->getStringValue() << endl;
     return 0;
 }
