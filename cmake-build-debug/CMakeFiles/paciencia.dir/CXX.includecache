@@ -6,11 +6,19 @@
 
 #IncludeRegexTransform: 
 
-/home/nicacio/Dropbox/UFCG/PLP/workspace/paciencia_spider_plp/SpiderSolitaire.cpp
+/home/nicacioods/paciencia_spider_plp/SpiderSolitaire.cpp
 iostream
 -
 string
 -
 vector
+-
+
+/home/nicacioods/paciencia_spider_plp/solitaire.cpp
+iostream
+-
+vector
+-
+string
 -
 

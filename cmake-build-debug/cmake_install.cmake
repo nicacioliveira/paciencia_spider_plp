@@ -1,4 +1,4 @@
-# Install script for directory: /home/nicacio/Dropbox/UFCG/PLP/workspace/paciencia_spider_plp
+# Install script for directory: /home/nicacioods/paciencia_spider_plp
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -45,5 +45,5 @@ endif()
 
 string(REPLACE ";" "\n" CMAKE_INSTALL_MANIFEST_CONTENT
        "${CMAKE_INSTALL_MANIFEST_FILES}")
-file(WRITE "/home/nicacio/Dropbox/UFCG/PLP/workspace/paciencia_spider_plp/cmake-build-debug/${CMAKE_INSTALL_MANIFEST}"
+file(WRITE "/home/nicacioods/paciencia_spider_plp/cmake-build-debug/${CMAKE_INSTALL_MANIFEST}"
      "${CMAKE_INSTALL_MANIFEST_CONTENT}")

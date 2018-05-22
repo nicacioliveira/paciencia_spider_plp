@@ -3,3 +3,5 @@
 
 CMakeFiles/paciencia.dir/SpiderSolitaire.cpp.o: ../SpiderSolitaire.cpp
 
+CMakeFiles/paciencia.dir/solitaire.cpp.o: ../solitaire.cpp
+

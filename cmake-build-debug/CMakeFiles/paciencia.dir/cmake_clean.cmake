@@ -1,5 +1,6 @@
 file(REMOVE_RECURSE
   "CMakeFiles/paciencia.dir/SpiderSolitaire.cpp.o"
+  "CMakeFiles/paciencia.dir/solitaire.cpp.o"
   "paciencia.pdb"
   "paciencia"
 )

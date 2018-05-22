@@ -125,6 +125,7 @@ struct Deck {
     void moveCardTo(Card *_card, Deck * to);
     void shuffle();
     void printCards();
+    Card * getCard(int i);
 
     vector<Card *> getCards();
 };
@@ -316,6 +317,14 @@ void Deck::printCards() {
     }
 }
 
+Card * Deck::getCard(int i) {
+    Card * aux = head;
+    while (aux != NULL) {
+        if (aux->id == i) return aux;
+        aux = aux->next;
+    }
+}
+
 vector<Card *> Deck::getCards() {
     Card *aux = head;
     vector<Card *> v;
@@ -342,31 +351,37 @@ int start(Deck *deck, Deck piles[10]) {
     deck->handOutCardsTo(5, &piles[9]);
 }
 
-string printPiles(Deck * piles, int _size) {
-    string p;
-    vector<vector<Card *>> v;
+/*
+ * Print all piles
+ */
+void printPiles(Deck * piles, int _size) {
+    try {
+    string response = "";
+    vector<vector<Card *>> pilesMatrix;
     string header = "";
+    int i, j = 0;
 
-    for (int i = 0; i < _size; ++i) {
-        v.push_back(piles[i].getCards());
+    for (i = 0; i < _size; ++i) {
+        pilesMatrix.push_back(piles[i].getCards());
         header += "          " + to_string(i+1) + "   ";
     }
+    cout << header << endl;
 
-
-    int i = 0;
-    for (int i = 0; i < 10; ++i) {
-        p = "";
-        for (int j = 0; j < 10; ++j) {
-            if (v[j][i] != NULL)
-                p += "       " + v[j][i]->getStringValue() + "";
-            //cout <<  to_string(i) + " " << to_string(j) << endl;
+        for (i = 0; i < 10; ++i) {
+            response = "";
+            for (j = 0; j < 10; ++j) {
+                if (pilesMatrix[j][i] == NULL) break;
+                response += "       " + pilesMatrix[j][i]->getStringValue() + "";
+            }
+            cout << response << endl;
         }
-        cout << p << endl;
+    } catch (int e) {
+        cout << e << endl;
     }
 }
 
 string menu() {
-    string m = "";
+    string m = "\t\t\t\tSpider Solitaire";
     m += "";
     return m;
 }
@@ -377,7 +392,7 @@ int main() {
     Deck completedPiles[8];
     start(&deck, piles);
     printPiles(piles, 10);
-    //vector<Card *> p = piles[0].getCards();
-    //cout << p[6]->getStringValue() << endl;
+
+
     return 0;
 }
