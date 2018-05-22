@@ -1,0 +1,3 @@
+/home/nicacio/Dropbox/UFCG/PLP/workspace/paciencia/cmake-build-debug/CMakeFiles/rebuild_cache.dir
+/home/nicacio/Dropbox/UFCG/PLP/workspace/paciencia/cmake-build-debug/CMakeFiles/edit_cache.dir
+/home/nicacio/Dropbox/UFCG/PLP/workspace/paciencia/cmake-build-debug/CMakeFiles/paciencia.dir
