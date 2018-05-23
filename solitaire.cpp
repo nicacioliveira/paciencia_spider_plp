@@ -226,9 +226,10 @@ int moveCardsTo(vector<Card> &from, int value, vector<Card> &to) {
     return response;
 }
 
+//OK
 void deck_shuffle(vector<Card> &deck) {
     //Lucas
-	for(int i = 0; i < deck.size(); i++) {
+    for(int i = 0; i < deck.size(); i++) {
 	      	int valueGenerated = rand() % deck.size();
 	      	Card temporaryCard = deck[i];
 		deck[i] = deck[valueGenerated];
@@ -240,7 +241,7 @@ void deck_shuffle(vector<Card> &deck) {
 //OK
 int start(vector<Card> &deck, vector<vector<Card> > &piles) {
     fillDeck(deck);
-    //deck_shuffle(deck);
+    deck_shuffle(deck);
     handOutCardsTo(deck, 5, piles[0]);
     handOutCardsTo(deck, 5, piles[1]);
     handOutCardsTo(deck, 5, piles[2]);
@@ -272,13 +273,63 @@ int deal(vector<Card> &deck, vector<vector<Card> > &piles) {
     }
 }
 
+int getFirstValuePossible(vector<Card> pile) {
+    int value = pile.back().value;
+    for (int i = pile.size() - 1; i > 0; --i) {
+        if ((pile[i].value+1) != pile[i-1].value && !pile[i-1].turned) break;
+        value = pile[i-1].value;
+    }
+    return value;
+}
+
+void hint(vector<Card> deck, vector<vector<Card> > piles) {
+    Card c;
+    c.value = -1;
+    c.turned = 1;
+    string response = "--------------HINT-------------\n";
+
+    for (int i = 0; i < piles.size(); ++i) {
+
+        if (piles[i].size() > 0) {
+
+            c.value = getFirstValuePossible(piles[i]);
+
+            for (int j = 0; j < piles.size(); ++j) {
+
+                if ((piles[j].back().value-1) == c.value) {
+                    response += "Card: " + getStringValue(c) + " -- ";
+                    ostringstream indexI;
+                    indexI << i;
+                    response += "Pile: " + indexI.str() + " --> ";
+                    ostringstream indexJ;
+                    indexJ << j;
+                    response += "" + indexJ.str() + "; ";
+                    response += "\n";
+                    break;
+                }
+            }
+
+        }
+
+    }
+
+    if (c.value == -1 && deck.size() >= 10) {
+        cout << "No hint at the moment. But you can deal a new card into each tableau at the column." << endl;
+    } else if (deck.size() < 10) {
+        cout << "No hint at the moment." << endl;
+    } else {
+        cout << response;
+    }
+}
+
 int main() {
     vector<Card> deck;//104
     vector<vector<Card> > piles(10);
     vector<vector<Card> > completedPiles(10);
 
     start(deck, piles);
-
+    printPiles(piles);
+    hint(deck, piles);
 
 
     return EXIT_SUCCESS;
