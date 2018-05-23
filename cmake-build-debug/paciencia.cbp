@@ -8,38 +8,38 @@
 		<Option virtualFolders="CMake Files\;"/>
 		<Build>
 			<Target title="all">
-				<Option working_dir="/home/nicacioods/paciencia_spider_plp/cmake-build-debug"/>
+				<Option working_dir="/home/nicacio/Dropbox/UFCG/PLP/workspace/paciencia_spider_plp/cmake-build-debug"/>
 				<Option type="4"/>
 				<MakeCommands>
-					<Build command="/usr/bin/make -j4 -f &quot;/home/nicacioods/paciencia_spider_plp/cmake-build-debug/Makefile&quot;  VERBOSE=1 all"/>
-					<CompileFile command="/usr/bin/make -j4 -f &quot;/home/nicacioods/paciencia_spider_plp/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
-					<Clean command="/usr/bin/make -j4 -f &quot;/home/nicacioods/paciencia_spider_plp/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
-					<DistClean command="/usr/bin/make -j4 -f &quot;/home/nicacioods/paciencia_spider_plp/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<Build command="/usr/bin/make -j4 -f &quot;/home/nicacio/Dropbox/UFCG/PLP/workspace/paciencia_spider_plp/cmake-build-debug/Makefile&quot;  VERBOSE=1 all"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/home/nicacio/Dropbox/UFCG/PLP/workspace/paciencia_spider_plp/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/home/nicacio/Dropbox/UFCG/PLP/workspace/paciencia_spider_plp/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/home/nicacio/Dropbox/UFCG/PLP/workspace/paciencia_spider_plp/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
 				</MakeCommands>
 			</Target>
 			<Target title="rebuild_cache">
-				<Option working_dir="/home/nicacioods/paciencia_spider_plp/cmake-build-debug"/>
+				<Option working_dir="/home/nicacio/Dropbox/UFCG/PLP/workspace/paciencia_spider_plp/cmake-build-debug"/>
 				<Option type="4"/>
 				<MakeCommands>
-					<Build command="/usr/bin/make -j4 -f &quot;/home/nicacioods/paciencia_spider_plp/cmake-build-debug/Makefile&quot;  VERBOSE=1 rebuild_cache"/>
-					<CompileFile command="/usr/bin/make -j4 -f &quot;/home/nicacioods/paciencia_spider_plp/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
-					<Clean command="/usr/bin/make -j4 -f &quot;/home/nicacioods/paciencia_spider_plp/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
-					<DistClean command="/usr/bin/make -j4 -f &quot;/home/nicacioods/paciencia_spider_plp/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<Build command="/usr/bin/make -j4 -f &quot;/home/nicacio/Dropbox/UFCG/PLP/workspace/paciencia_spider_plp/cmake-build-debug/Makefile&quot;  VERBOSE=1 rebuild_cache"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/home/nicacio/Dropbox/UFCG/PLP/workspace/paciencia_spider_plp/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/home/nicacio/Dropbox/UFCG/PLP/workspace/paciencia_spider_plp/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/home/nicacio/Dropbox/UFCG/PLP/workspace/paciencia_spider_plp/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
 				</MakeCommands>
 			</Target>
 			<Target title="edit_cache">
-				<Option working_dir="/home/nicacioods/paciencia_spider_plp/cmake-build-debug"/>
+				<Option working_dir="/home/nicacio/Dropbox/UFCG/PLP/workspace/paciencia_spider_plp/cmake-build-debug"/>
 				<Option type="4"/>
 				<MakeCommands>
-					<Build command="/usr/bin/make -j4 -f &quot;/home/nicacioods/paciencia_spider_plp/cmake-build-debug/Makefile&quot;  VERBOSE=1 edit_cache"/>
-					<CompileFile command="/usr/bin/make -j4 -f &quot;/home/nicacioods/paciencia_spider_plp/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
-					<Clean command="/usr/bin/make -j4 -f &quot;/home/nicacioods/paciencia_spider_plp/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
-					<DistClean command="/usr/bin/make -j4 -f &quot;/home/nicacioods/paciencia_spider_plp/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<Build command="/usr/bin/make -j4 -f &quot;/home/nicacio/Dropbox/UFCG/PLP/workspace/paciencia_spider_plp/cmake-build-debug/Makefile&quot;  VERBOSE=1 edit_cache"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/home/nicacio/Dropbox/UFCG/PLP/workspace/paciencia_spider_plp/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/home/nicacio/Dropbox/UFCG/PLP/workspace/paciencia_spider_plp/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/home/nicacio/Dropbox/UFCG/PLP/workspace/paciencia_spider_plp/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
 				</MakeCommands>
 			</Target>
 			<Target title="paciencia">
-				<Option output="/home/nicacioods/paciencia_spider_plp/cmake-build-debug/paciencia" prefix_auto="0" extension_auto="0"/>
-				<Option working_dir="/home/nicacioods/paciencia_spider_plp/cmake-build-debug"/>
+				<Option output="/home/nicacio/Dropbox/UFCG/PLP/workspace/paciencia_spider_plp/cmake-build-debug/paciencia" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/nicacio/Dropbox/UFCG/PLP/workspace/paciencia_spider_plp/cmake-build-debug"/>
 				<Option object_output="./"/>
 				<Option type="1"/>
 				<Option compiler="gcc"/>
@@ -54,15 +54,15 @@
 					<Add directory="/usr/include"/>
 				</Compiler>
 				<MakeCommands>
-					<Build command="/usr/bin/make -j4 -f &quot;/home/nicacioods/paciencia_spider_plp/cmake-build-debug/Makefile&quot;  VERBOSE=1 paciencia"/>
-					<CompileFile command="/usr/bin/make -j4 -f &quot;/home/nicacioods/paciencia_spider_plp/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
-					<Clean command="/usr/bin/make -j4 -f &quot;/home/nicacioods/paciencia_spider_plp/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
-					<DistClean command="/usr/bin/make -j4 -f &quot;/home/nicacioods/paciencia_spider_plp/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<Build command="/usr/bin/make -j4 -f &quot;/home/nicacio/Dropbox/UFCG/PLP/workspace/paciencia_spider_plp/cmake-build-debug/Makefile&quot;  VERBOSE=1 paciencia"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/home/nicacio/Dropbox/UFCG/PLP/workspace/paciencia_spider_plp/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/home/nicacio/Dropbox/UFCG/PLP/workspace/paciencia_spider_plp/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/home/nicacio/Dropbox/UFCG/PLP/workspace/paciencia_spider_plp/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
 				</MakeCommands>
 			</Target>
 			<Target title="paciencia/fast">
-				<Option output="/home/nicacioods/paciencia_spider_plp/cmake-build-debug/paciencia" prefix_auto="0" extension_auto="0"/>
-				<Option working_dir="/home/nicacioods/paciencia_spider_plp/cmake-build-debug"/>
+				<Option output="/home/nicacio/Dropbox/UFCG/PLP/workspace/paciencia_spider_plp/cmake-build-debug/paciencia" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/nicacio/Dropbox/UFCG/PLP/workspace/paciencia_spider_plp/cmake-build-debug"/>
 				<Option object_output="./"/>
 				<Option type="1"/>
 				<Option compiler="gcc"/>
@@ -77,20 +77,17 @@
 					<Add directory="/usr/include"/>
 				</Compiler>
 				<MakeCommands>
-					<Build command="/usr/bin/make -j4 -f &quot;/home/nicacioods/paciencia_spider_plp/cmake-build-debug/Makefile&quot;  VERBOSE=1 paciencia/fast"/>
-					<CompileFile command="/usr/bin/make -j4 -f &quot;/home/nicacioods/paciencia_spider_plp/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
-					<Clean command="/usr/bin/make -j4 -f &quot;/home/nicacioods/paciencia_spider_plp/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
-					<DistClean command="/usr/bin/make -j4 -f &quot;/home/nicacioods/paciencia_spider_plp/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<Build command="/usr/bin/make -j4 -f &quot;/home/nicacio/Dropbox/UFCG/PLP/workspace/paciencia_spider_plp/cmake-build-debug/Makefile&quot;  VERBOSE=1 paciencia/fast"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/home/nicacio/Dropbox/UFCG/PLP/workspace/paciencia_spider_plp/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/home/nicacio/Dropbox/UFCG/PLP/workspace/paciencia_spider_plp/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/home/nicacio/Dropbox/UFCG/PLP/workspace/paciencia_spider_plp/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
 				</MakeCommands>
 			</Target>
 		</Build>
-		<Unit filename="/home/nicacioods/paciencia_spider_plp/SpiderSolitaire.cpp">
+		<Unit filename="/home/nicacio/Dropbox/UFCG/PLP/workspace/paciencia_spider_plp/solitaire.cpp">
 			<Option target="paciencia"/>
 		</Unit>
-		<Unit filename="/home/nicacioods/paciencia_spider_plp/solitaire.cpp">
-			<Option target="paciencia"/>
-		</Unit>
-		<Unit filename="/home/nicacioods/paciencia_spider_plp/CMakeLists.txt">
+		<Unit filename="/home/nicacio/Dropbox/UFCG/PLP/workspace/paciencia_spider_plp/CMakeLists.txt">
 			<Option virtualFolder="CMake Files\"/>
 		</Unit>
 	</Project>

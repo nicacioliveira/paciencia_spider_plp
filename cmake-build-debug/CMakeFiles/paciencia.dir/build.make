@@ -34,19 +34,19 @@ cmake_force:
 SHELL = /bin/sh
 
 # The CMake executable.
-CMAKE_COMMAND = /home/nicacioods/clion-2018.1.2/bin/cmake/bin/cmake
+CMAKE_COMMAND = /home/nicacio/clion/bin/cmake/bin/cmake
 
 # The command to remove a file.
-RM = /home/nicacioods/clion-2018.1.2/bin/cmake/bin/cmake -E remove -f
+RM = /home/nicacio/clion/bin/cmake/bin/cmake -E remove -f
 
 # Escaping for special characters.
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/nicacioods/paciencia_spider_plp
+CMAKE_SOURCE_DIR = /home/nicacio/Dropbox/UFCG/PLP/workspace/paciencia_spider_plp
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/nicacioods/paciencia_spider_plp/cmake-build-debug
+CMAKE_BINARY_DIR = /home/nicacio/Dropbox/UFCG/PLP/workspace/paciencia_spider_plp/cmake-build-debug
 
 # Include any dependencies generated for this target.
 include CMakeFiles/paciencia.dir/depend.make
@@ -57,42 +57,18 @@ include CMakeFiles/paciencia.dir/progress.make
 # Include the compile flags for this target's objects.
 include CMakeFiles/paciencia.dir/flags.make
 
-CMakeFiles/paciencia.dir/SpiderSolitaire.cpp.o: CMakeFiles/paciencia.dir/flags.make
-CMakeFiles/paciencia.dir/SpiderSolitaire.cpp.o: ../SpiderSolitaire.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/nicacioods/paciencia_spider_plp/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/paciencia.dir/SpiderSolitaire.cpp.o"
-	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/paciencia.dir/SpiderSolitaire.cpp.o -c /home/nicacioods/paciencia_spider_plp/SpiderSolitaire.cpp
-
-CMakeFiles/paciencia.dir/SpiderSolitaire.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/paciencia.dir/SpiderSolitaire.cpp.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/nicacioods/paciencia_spider_plp/SpiderSolitaire.cpp > CMakeFiles/paciencia.dir/SpiderSolitaire.cpp.i
-
-CMakeFiles/paciencia.dir/SpiderSolitaire.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/paciencia.dir/SpiderSolitaire.cpp.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/nicacioods/paciencia_spider_plp/SpiderSolitaire.cpp -o CMakeFiles/paciencia.dir/SpiderSolitaire.cpp.s
-
-CMakeFiles/paciencia.dir/SpiderSolitaire.cpp.o.requires:
-
-.PHONY : CMakeFiles/paciencia.dir/SpiderSolitaire.cpp.o.requires
-
-CMakeFiles/paciencia.dir/SpiderSolitaire.cpp.o.provides: CMakeFiles/paciencia.dir/SpiderSolitaire.cpp.o.requires
-	$(MAKE) -f CMakeFiles/paciencia.dir/build.make CMakeFiles/paciencia.dir/SpiderSolitaire.cpp.o.provides.build
-.PHONY : CMakeFiles/paciencia.dir/SpiderSolitaire.cpp.o.provides
-
-CMakeFiles/paciencia.dir/SpiderSolitaire.cpp.o.provides.build: CMakeFiles/paciencia.dir/SpiderSolitaire.cpp.o
-
-
 CMakeFiles/paciencia.dir/solitaire.cpp.o: CMakeFiles/paciencia.dir/flags.make
 CMakeFiles/paciencia.dir/solitaire.cpp.o: ../solitaire.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/nicacioods/paciencia_spider_plp/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object CMakeFiles/paciencia.dir/solitaire.cpp.o"
-	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/paciencia.dir/solitaire.cpp.o -c /home/nicacioods/paciencia_spider_plp/solitaire.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/nicacio/Dropbox/UFCG/PLP/workspace/paciencia_spider_plp/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/paciencia.dir/solitaire.cpp.o"
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/paciencia.dir/solitaire.cpp.o -c /home/nicacio/Dropbox/UFCG/PLP/workspace/paciencia_spider_plp/solitaire.cpp
 
 CMakeFiles/paciencia.dir/solitaire.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/paciencia.dir/solitaire.cpp.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/nicacioods/paciencia_spider_plp/solitaire.cpp > CMakeFiles/paciencia.dir/solitaire.cpp.i
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/nicacio/Dropbox/UFCG/PLP/workspace/paciencia_spider_plp/solitaire.cpp > CMakeFiles/paciencia.dir/solitaire.cpp.i
 
 CMakeFiles/paciencia.dir/solitaire.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/paciencia.dir/solitaire.cpp.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/nicacioods/paciencia_spider_plp/solitaire.cpp -o CMakeFiles/paciencia.dir/solitaire.cpp.s
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/nicacio/Dropbox/UFCG/PLP/workspace/paciencia_spider_plp/solitaire.cpp -o CMakeFiles/paciencia.dir/solitaire.cpp.s
 
 CMakeFiles/paciencia.dir/solitaire.cpp.o.requires:
 
@@ -107,17 +83,15 @@ CMakeFiles/paciencia.dir/solitaire.cpp.o.provides.build: CMakeFiles/paciencia.di
 
 # Object files for target paciencia
 paciencia_OBJECTS = \
-"CMakeFiles/paciencia.dir/SpiderSolitaire.cpp.o" \
 "CMakeFiles/paciencia.dir/solitaire.cpp.o"
 
 # External object files for target paciencia
 paciencia_EXTERNAL_OBJECTS =
 
-paciencia: CMakeFiles/paciencia.dir/SpiderSolitaire.cpp.o
 paciencia: CMakeFiles/paciencia.dir/solitaire.cpp.o
 paciencia: CMakeFiles/paciencia.dir/build.make
 paciencia: CMakeFiles/paciencia.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/nicacioods/paciencia_spider_plp/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Linking CXX executable paciencia"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/nicacio/Dropbox/UFCG/PLP/workspace/paciencia_spider_plp/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Linking CXX executable paciencia"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/paciencia.dir/link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.
@@ -125,7 +99,6 @@ CMakeFiles/paciencia.dir/build: paciencia
 
 .PHONY : CMakeFiles/paciencia.dir/build
 
-CMakeFiles/paciencia.dir/requires: CMakeFiles/paciencia.dir/SpiderSolitaire.cpp.o.requires
 CMakeFiles/paciencia.dir/requires: CMakeFiles/paciencia.dir/solitaire.cpp.o.requires
 
 .PHONY : CMakeFiles/paciencia.dir/requires
@@ -135,6 +108,6 @@ CMakeFiles/paciencia.dir/clean:
 .PHONY : CMakeFiles/paciencia.dir/clean
 
 CMakeFiles/paciencia.dir/depend:
-	cd /home/nicacioods/paciencia_spider_plp/cmake-build-debug && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/nicacioods/paciencia_spider_plp /home/nicacioods/paciencia_spider_plp /home/nicacioods/paciencia_spider_plp/cmake-build-debug /home/nicacioods/paciencia_spider_plp/cmake-build-debug /home/nicacioods/paciencia_spider_plp/cmake-build-debug/CMakeFiles/paciencia.dir/DependInfo.cmake --color=$(COLOR)
+	cd /home/nicacio/Dropbox/UFCG/PLP/workspace/paciencia_spider_plp/cmake-build-debug && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/nicacio/Dropbox/UFCG/PLP/workspace/paciencia_spider_plp /home/nicacio/Dropbox/UFCG/PLP/workspace/paciencia_spider_plp /home/nicacio/Dropbox/UFCG/PLP/workspace/paciencia_spider_plp/cmake-build-debug /home/nicacio/Dropbox/UFCG/PLP/workspace/paciencia_spider_plp/cmake-build-debug /home/nicacio/Dropbox/UFCG/PLP/workspace/paciencia_spider_plp/cmake-build-debug/CMakeFiles/paciencia.dir/DependInfo.cmake --color=$(COLOR)
 .PHONY : CMakeFiles/paciencia.dir/depend
 

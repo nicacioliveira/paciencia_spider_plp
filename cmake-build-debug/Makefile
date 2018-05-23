@@ -39,19 +39,19 @@ cmake_force:
 SHELL = /bin/sh
 
 # The CMake executable.
-CMAKE_COMMAND = /home/nicacioods/clion-2018.1.2/bin/cmake/bin/cmake
+CMAKE_COMMAND = /home/nicacio/clion/bin/cmake/bin/cmake
 
 # The command to remove a file.
-RM = /home/nicacioods/clion-2018.1.2/bin/cmake/bin/cmake -E remove -f
+RM = /home/nicacio/clion/bin/cmake/bin/cmake -E remove -f
 
 # Escaping for special characters.
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/nicacioods/paciencia_spider_plp
+CMAKE_SOURCE_DIR = /home/nicacio/Dropbox/UFCG/PLP/workspace/paciencia_spider_plp
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/nicacioods/paciencia_spider_plp/cmake-build-debug
+CMAKE_BINARY_DIR = /home/nicacio/Dropbox/UFCG/PLP/workspace/paciencia_spider_plp/cmake-build-debug
 
 #=============================================================================
 # Targets provided globally by CMake.
@@ -59,7 +59,7 @@ CMAKE_BINARY_DIR = /home/nicacioods/paciencia_spider_plp/cmake-build-debug
 # Special rule for the target rebuild_cache
 rebuild_cache:
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Running CMake to regenerate build system..."
-	/home/nicacioods/clion-2018.1.2/bin/cmake/bin/cmake -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR)
+	/home/nicacio/clion/bin/cmake/bin/cmake -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR)
 .PHONY : rebuild_cache
 
 # Special rule for the target rebuild_cache
@@ -70,7 +70,7 @@ rebuild_cache/fast: rebuild_cache
 # Special rule for the target edit_cache
 edit_cache:
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "No interactive CMake dialog available..."
-	/home/nicacioods/clion-2018.1.2/bin/cmake/bin/cmake -E echo No\ interactive\ CMake\ dialog\ available.
+	/home/nicacio/clion/bin/cmake/bin/cmake -E echo No\ interactive\ CMake\ dialog\ available.
 .PHONY : edit_cache
 
 # Special rule for the target edit_cache
@@ -80,9 +80,9 @@ edit_cache/fast: edit_cache
 
 # The main all target
 all: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/nicacioods/paciencia_spider_plp/cmake-build-debug/CMakeFiles /home/nicacioods/paciencia_spider_plp/cmake-build-debug/CMakeFiles/progress.marks
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/nicacio/Dropbox/UFCG/PLP/workspace/paciencia_spider_plp/cmake-build-debug/CMakeFiles /home/nicacio/Dropbox/UFCG/PLP/workspace/paciencia_spider_plp/cmake-build-debug/CMakeFiles/progress.marks
 	$(MAKE) -f CMakeFiles/Makefile2 all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/nicacioods/paciencia_spider_plp/cmake-build-debug/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/nicacio/Dropbox/UFCG/PLP/workspace/paciencia_spider_plp/cmake-build-debug/CMakeFiles 0
 .PHONY : all
 
 # The main clean target
@@ -123,33 +123,6 @@ paciencia/fast:
 	$(MAKE) -f CMakeFiles/paciencia.dir/build.make CMakeFiles/paciencia.dir/build
 .PHONY : paciencia/fast
 
-SpiderSolitaire.o: SpiderSolitaire.cpp.o
-
-.PHONY : SpiderSolitaire.o
-
-# target to build an object file
-SpiderSolitaire.cpp.o:
-	$(MAKE) -f CMakeFiles/paciencia.dir/build.make CMakeFiles/paciencia.dir/SpiderSolitaire.cpp.o
-.PHONY : SpiderSolitaire.cpp.o
-
-SpiderSolitaire.i: SpiderSolitaire.cpp.i
-
-.PHONY : SpiderSolitaire.i
-
-# target to preprocess a source file
-SpiderSolitaire.cpp.i:
-	$(MAKE) -f CMakeFiles/paciencia.dir/build.make CMakeFiles/paciencia.dir/SpiderSolitaire.cpp.i
-.PHONY : SpiderSolitaire.cpp.i
-
-SpiderSolitaire.s: SpiderSolitaire.cpp.s
-
-.PHONY : SpiderSolitaire.s
-
-# target to generate assembly for a file
-SpiderSolitaire.cpp.s:
-	$(MAKE) -f CMakeFiles/paciencia.dir/build.make CMakeFiles/paciencia.dir/SpiderSolitaire.cpp.s
-.PHONY : SpiderSolitaire.cpp.s
-
 solitaire.o: solitaire.cpp.o
 
 .PHONY : solitaire.o
@@ -186,9 +159,6 @@ help:
 	@echo "... rebuild_cache"
 	@echo "... edit_cache"
 	@echo "... paciencia"
-	@echo "... SpiderSolitaire.o"
-	@echo "... SpiderSolitaire.i"
-	@echo "... SpiderSolitaire.s"
 	@echo "... solitaire.o"
 	@echo "... solitaire.i"
 	@echo "... solitaire.s"

@@ -5,13 +5,28 @@
 #include <iostream>
 #include <vector>
 #include <string>
+#include <algorithm>
 
 using namespace std;
+
 
 struct Card {
     int value;
     int turned;
 };
+
+string getStringValue(Card c);
+void printPiles(vector<vector<Card>> piles);
+void handOutCardsTo(vector<Card> &deck, int quantity, vector<Card> &PileTo);
+void fillDeck(vector<Card> & deck);
+int checkOrder(vector<Card> deck, int id);
+int checkCompletedPile(vector<Card> pilha, vector<vector<Card>> completedPiles);
+int moveCardsTo(vector<Card> &from, int value, vector<Card> &to);
+void shuffle(vector<Card> deck);
+int start(vector<Card> &deck, vector<vector<Card>> &piles);
+int deal(vector<Card> deck, int quantity, vector<Card> PileTo);
+void printDeck(vector<Card> deck);
+int contains(vector<Card> deck, int value);
 
 string getStringValue(Card c) {
     string resp;
@@ -65,31 +80,39 @@ string getStringValue(Card c) {
 
 void printPiles(vector<vector<Card>> piles) {
     //nicacio
-    try {
-        string response = "";
-        string header = "";
-        int i, j = 0;
+    string response = "";
+    string header = "";
+    Card c;
 
-        cout << header << endl;
+    int maxIndex = 0;
 
-        for (i = 0; i < piles.size(); ++i) {
-            response = "";
-            for (j = 0; j < piles[i].size(); ++j) {
-                response += "       " + getStringValue(piles[j][i]) + "";
-            }
-            cout << response << endl;
+    for (int i = 0; i < piles.size(); ++i) {
+        if (piles[maxIndex].size() < piles[i].size()) maxIndex = i;
+        header += "          " + to_string(i) + "   ";
+    }
+    cout << header << endl;
+
+    string card_value = "";
+
+    for (int i = 0; i < piles[maxIndex].size(); ++i) {
+        response = "";
+        for (int j = 0; j < piles.size(); ++j) {
+            if (i >= piles[j].size())
+                card_value = "       ";
+            else
+                card_value = getStringValue(piles[j][i]);
+            response += "       " + card_value + "";
         }
-    } catch (int e) {
-        cout << e << endl;
+        cout << response << endl;
     }
 }
 
-void handOutCardsTo(vector<Card> deck, int quantity, vector<Card> PileTo) {
+void handOutCardsTo(vector<Card> &deck, int quantity, vector<Card> &PileTo) {
     //damiao
 }
 
-void fillDeck(vector<Card>) {
-    //Daniele
+void fillDeck(vector<Card> & deck) {
+    //daniela
 }
 
 int checkOrder(vector<Card> deck, int id) {
@@ -99,17 +122,58 @@ int checkOrder(vector<Card> deck, int id) {
 int checkCompletedPile(vector<Card> pilha, vector<vector<Card>> completedPiles) {
     //kelvin
 }
-void moveCardsTo(vector<Card> from, vector<Card> to) {
-    //nicacio
+
+int contains(vector<Card> deck, int value) {
+    int resp = 0;
+    for (Card c : deck) {
+        if (c.value == value) {
+            resp = 1;
+            break;
+        }
+    }
+    return resp;
 }
 
-void shuffle(vector<Card> deck) {
+int moveCardsTo(vector<Card> &from, int value, vector<Card> &to) {
+    //nicacio
+    int response = 0;
+    int isValidMoviment;
+    if (to.size() == 0)
+        isValidMoviment = 1;
+    else if (value < to.back().value)
+        isValidMoviment = 1;
+    else
+        isValidMoviment = 0;
+
+    if (contains(from, value) && checkOrder(from, value) && isValidMoviment) {
+        vector<Card> stack;
+        for (int i = from.size() - 1; i >= 0; ++i) {
+            if (from[i].value == value) {
+                stack.push_back(from.back());
+                from.pop_back();
+                break;
+            }
+            stack.push_back(from.back());
+            from.pop_back();
+        }
+
+        from.back().turned = 1;
+
+        for (int i = 0; i < stack.size(); ++i)  {
+            to.push_back(stack.back());
+            stack.pop_back();
+        }
+    }
+    return response;
+}
+
+void deck_shuffle(vector<Card> &deck) {
     //Lucas
 }
 
-int start(vector<Card> deck,  vector<vector<Card>> piles) {
+int start(vector<Card> &deck, vector<vector<Card>> &piles) {
     fillDeck(deck);
-    shuffle(deck);
+    deck_shuffle(deck);
     handOutCardsTo(deck, 5, piles[0]);
     handOutCardsTo(deck, 5, piles[1]);
     handOutCardsTo(deck, 5, piles[2]);
@@ -127,10 +191,9 @@ int deal(vector<Card> deck, int quantity, vector<Card> PileTo) {
 }
 
 int main() {
-    vector<Card> deck[104];
-    vector<vector<Card>> piles[10];
-    vector<vector<Card>> completedPiles[10];
-    int option = 1;
+    vector<Card> deck(104);
+    vector<vector<Card>> piles(10);
+    vector<vector<Card>> completedPiles(10);
 
     return 0;
 }
