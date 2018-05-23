@@ -226,6 +226,7 @@ int moveCardsTo(vector<Card> &from, int value, vector<Card> &to) {
     return response;
 }
 
+//OK
 void deck_shuffle(vector<Card> &deck) {
     //Lucas
     for(int i = 0; i < deck.size(); i++) {
@@ -304,7 +305,6 @@ void hint(vector<Card> deck, vector<vector<Card> > piles) {
                     indexJ << j;
                     response += "" + indexJ.str() + "; ";
                     response += "\n";
-                    //cout << "From: " + to_string(i)  + " To: " + to_string(j) + ", element " + to_string(value) << endl;
                     break;
                 }
             }
