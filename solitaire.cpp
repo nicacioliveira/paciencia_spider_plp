@@ -202,7 +202,7 @@ void deck_shuffle(vector<Card> &deck) {
 
 int start(vector<Card> &deck, vector<vector<Card> > &piles) {
     fillDeck(deck);
-    deck_shuffle(deck);
+    //deck_shuffle(deck);
     handOutCardsTo(deck, 5, piles[0]);
     handOutCardsTo(deck, 5, piles[1]);
     handOutCardsTo(deck, 5, piles[2]);
@@ -235,12 +235,10 @@ int deal(vector<Card> deck, vector<vector<Card> > piles) {
 }
 
 int main() {
-    vector<Card> deck(104);
+    vector<Card> deck;//104
     vector<vector<Card> > piles(10);
     vector<vector<Card> > completedPiles(10);
 
-    start(deck, piles);
-    printPiles(piles);
     int option = 1;
 
     return EXIT_SUCCESS;
