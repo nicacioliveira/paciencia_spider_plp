@@ -1,0 +1,18 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/home/nicacio/Dropbox/UFCG/PLP/workspace/paciencia_spider_plp/solitaire.cpp
+iostream
+-
+vector
+-
+string
+-
+algorithm
+-
+
