@@ -1,351 +1,176 @@
+//
+// Created by nicacioods on 22/05/18.
+//
+
 #include <iostream>
-#include  <string>
+#include <vector>
+#include <string>
 
 using namespace std;
 
-
-struct Card;
-struct Deck;
-
-enum CardValue { Ace=1, Two=2, Three=3, Four=4, Five=5, Six=6, Seven=7, Eight=8, Nine=9, Ten=10, Jack=11, Queen=12, King=13 };
-enum Suit { CUPS=1, COINS=2, CLUBS=3, SPADES=4 };
-
 const int frenchSuitNumber = 13;
+const int numberOfSuits = 8;
+const int qtdPiles = 10;
+const int _false = 0;
 
-int indexCounter = 0;
-
-// -------------------------------------- CARD --------------------------------------------
 struct Card {
-
-    int id;
-    Suit suit;
-    CardValue value;
-    bool turned;
-    Card *next;
-    Card *prev;
-
-    Card();
-    Card(Suit _suit, CardValue _value, bool _turned, int _id);
-    string getStringValue();
-    string getStringSuit();
+    int value;
+    int turned;
 };
 
-Card::Card(Suit _suit, CardValue _value, bool _turned, int _id) {
-    suit = _suit;
-    value = _value;
-    turned = _turned;
-    next = NULL;
-    prev = NULL;
-    id = _id;
-}
-
-string Card::getStringValue() {
+string getStringValue(Card c) {
     string resp;
-    if (turned) {
-        return "--";
+    if (!c.turned) {
+        return "|-----|";
     } else {
-        switch (value) {
-            case Ace:
-                resp = "Ace";
+        switch (c.value) {
+            case 1: //|queen|
+                resp += "| Ace |";
                 break;
-            case Two:
-                resp = "2";
+            case 2:
+                resp = "|  2  |";
                 break;
-            case Three:
-                resp = "3";
+            case 3:
+                resp = "|  3  |";
                 break;
-            case Four:
-                resp = "4";
+            case 4:
+                resp = "|  4  |";
                 break;
-            case Five:
-                resp = "5";
+            case 5:
+                resp = "|  5  |";
                 break;
-            case Six:
-                resp = "6";
+            case 6:
+                resp = "|  6  |";
                 break;
-            case Seven:
-                resp = "7";
+            case 7:
+                resp = "|  7  |";
                 break;
-            case Eight:
-                resp = "8";
+            case 8:
+                resp = "|  8  |";
                 break;
-            case Nine:
-                resp = "9";
+            case 9:
+                resp = "|  9  |";
                 break;
-            case Ten:
-                resp = "10";
+            case 10:
+                resp = "|  10 |";
                 break;
-            case Jack:
-                resp = "Jack";
+            case 11:
+                resp = "| Jack|";
                 break;
-            case Queen:
-                resp = "Queen";
+            case 12:
+                resp = "|Queen|";
                 break;
-            case King:
-                resp = "King";
+            case 13:
+                resp = "| King|";
                 break;
         }
         return resp;
     }
 }
 
-string Card::getStringSuit() {
-    string resp;
-    switch (suit) {
-        case CUPS:
-            resp = "Cups";
-            break;
-        case COINS:
-            resp = "Coins";
-            break;
-        case CLUBS:
-            resp = "Clubs";
-            break;
-        case SPADES:
-            resp = "Spades";
-            break;
-    }
-    return resp;
-}
+void printPiles(vector<vector<Card>> piles) {
+    //nicacio
+    try {
+        string response = "";
+        string header = "";
+        int i, j = 0;
 
-// -------------------------------------- Deck --------------------------------------------
+        cout << header << endl;
 
-struct Deck {
-    Card * head;
-    Card * tail;
-    int size;
-
-    Deck();
-    void addCard(Card *c);
-    void addFrenchSuit(Suit _suit);
-    CardValue getNumberOfValue(int _i);
-    void handOutCardsTo(int quantity, Deck * to);
-    void fillPerSuit(int number_of_suits, Suit _suit);
-    void moveCardTo(Card *_card, Deck * to);
-    void shuffle();
-    void printCards();
-};
-
-Deck::Deck() {
-    head = NULL;
-    tail = NULL;
-    size = 0;
-}
-
-void Deck::addCard(Card *c) {
-    if (tail == NULL) {
-        head = tail = c;
-    } else {
-        tail->next = c;
-        c->prev = tail;
-        tail = c;
-    }
-    size++;
-}
-
-void Deck::addFrenchSuit(Suit _suit) {
-    for (int i = 0; i < frenchSuitNumber; ++i) {
-        addCard(new Card(_suit, getNumberOfValue(i+1), false, indexCounter++));
-    }
-}
-
-CardValue Deck::getNumberOfValue(int _i) {
-    CardValue resp;
-    switch (_i) {
-        case 1:
-            resp = Ace;
-            break;
-        case 2:
-            resp = Two;
-            break;
-        case 3:
-            resp = Three;
-            break;
-        case 4:
-            resp = Four;
-            break;
-        case 5:
-            resp = Five;
-            break;
-        case 6:
-            resp = Six;
-            break;
-        case 7:
-            resp = Seven;
-            break;
-        case 8:
-            resp = Eight;
-            break;
-        case 9:
-            resp = Nine;
-            break;
-        case 10:
-            resp = Ten;
-            break;
-        case 11:
-            resp = Jack;
-            break;
-        case 12:
-            resp = Queen;
-            break;
-        case 13:
-            resp = King;
-            break;
-    }
-    return resp;
-}
-
-void Deck::moveCardTo(Card * _card, Deck * to) {
-    if (_card != NULL && to != NULL) {
-        if (_card == head){
-
-            if (to->head == NULL) {
-                to->head = _card;
-                to->tail = tail;
-                to->size = size;
-                //
-                size = 0;
-                head = tail = NULL;
-            } else {
-                _card->prev = to->tail;
-                to->tail->next = _card;
-                to->tail = tail;
-                to->size += size;
-                //
-                size = 0;
-                head = tail = NULL;
+        for (i = 0; i < piles.size(); ++i) {
+            response = "";
+            for (j = 0; j < piles[i].size(); ++j) {
+                response += "       " + getStringValue(piles[j][i]) + "";
             }
+            cout << response << endl;
+        }
+    } catch (int e) {
+        cout << e << endl;
+    }
+}
 
-        } else if (_card == tail) {
+//Adiciona as cartas do deck a pilha
+void handOutCardsTo(vector<Card> deck, int quantity, vector<Card> PileTo) {
+    //damiao
+    for(int i = 0; i < quantity; i++) {
+        PileTo.push_back(deck.back());
+        deck.pop_back();
+    }
+}
 
-            if (to->head == NULL) {
-                _card->prev->next = NULL;
-                tail = _card->prev;
-                _card->prev = NULL;
-                size--;
-                //
-                to->size++;
-                to->head = to->tail = _card;
-            } else {
-                int newSize = 0;
-                Card * aux = _card;
-                while (aux != NULL){
-                    aux = aux->next;
-                    newSize++;
-                }
-                size -=newSize;
-                to->size += newSize;
-                tail->prev->next = NULL;
-                tail = tail->prev;
+Card newCard(int i){
+    Card oneCard;
+    oneCard.value = i + 1;
+    oneCard.turned = _false;
+    return oneCard;
+}
 
-                //
-                to->tail->next = _card;
-                _card->prev = to->tail;
-                _card->next = NULL;
-                to->tail = _card;
+void addFrenchSuit(vector<Card> deck) {
+    for(int i = 0; i < frenchSuitNumber; i++) {
+        deck.push_back(newCard(i));
+    }
+}
 
-            }
+void fillDeck(vector<Card> deck) {
+    //Daniele
+    for(int i = 0; i < numberOfSuits; i++) {
+        addFrenchSuit(deck);
+    }
+}
 
-        } else {
+int checkOrder(vector<Card> deck, int id) {
+    //kelvin
+}
 
-            if (to->head == NULL) {
-                int newSize = 0;
-                Card * aux = _card;
-                while (aux != NULL){
-                    aux = aux->next;
-                    newSize++;
-                }
+int checkCompletedPile(vector<Card> pilha, vector<vector<Card>> completedPiles) {
+    //kelvin
+}
+void moveCardsTo(vector<Card> from, vector<Card> to) {
+    //nicacio
+}
 
-                to->head = _card;
-                to->tail = tail;
-                size -= newSize;
-                to->size += newSize;
-                //
-                tail = _card->prev;
-                _card->prev->next = NULL;
-            } else {
-                int newSize = 0;
-                Card * aux = _card;
-                while (aux != NULL){
-                    aux = aux->next;
-                    newSize++;
-                }
+void shuffle(vector<Card> deck) {
+    //Lucas
+}
 
-                Card * thisTail = _card->prev;
-                to->tail->next = _card;
-                _card->prev = to->tail;
-                to->tail = tail;
-                to->size += newSize;
-                size -= newSize;
-                thisTail->next = NULL;
-                tail = thisTail;
-            }
+int start(vector<Card> deck,  vector<vector<Card>> piles) {
+    fillDeck(deck);
+    shuffle(deck);
+    handOutCardsTo(deck, 5, piles[0]);
+    handOutCardsTo(deck, 5, piles[1]);
+    handOutCardsTo(deck, 5, piles[2]);
+    handOutCardsTo(deck, 5, piles[3]);
+    handOutCardsTo(deck, 4, piles[4]);
+    handOutCardsTo(deck, 4, piles[5]);
+    handOutCardsTo(deck, 4, piles[6]);
+    handOutCardsTo(deck, 4, piles[7]);
+    handOutCardsTo(deck, 4, piles[8]);
+    handOutCardsTo(deck, 4, piles[9]);
+}
 
+//Distribui uma carta para cada pilha, caso todas as pilhas contenha uma ou mais cartas
+int deal(vector<Card> deck, vector<vector<Card>> piles) {
+    //damiao
+    int check = 1;
+
+    for(int i = 0; i < qtdPiles; i++) {
+        if (piles[i].size() < 1){
+            check = 0;
+            break;
         }
     }
-}
-
-void Deck::handOutCardsTo(int quantity, Deck *to) {
-
-    Card * _card = tail;
-    while (_card != NULL && --quantity > 0) {
-        _card = _card->prev;
-    };
-    tail->turned = true;
-    moveCardTo(_card, to);
-}
-
-void Deck::fillPerSuit(int number_of_suits, Suit _suit) {
-    for (int i = 0; i < number_of_suits; ++i) {
-        addFrenchSuit(_suit);
+    if (check > 0 && deck.size() > 0) {
+        for (int i = 0; i < qtdPiles; i++) {
+            handOutCardsTo(deck, 1, piles[i]);
+        }
     }
-}
 
-void Deck::shuffle() {
-
-}
-
-void Deck::printCards() {
-    Card *temp = head;
-    while (temp != NULL) {
-        cout << "Id: " << temp->id << " " << temp->getStringSuit() << " " << temp->getStringValue() << " " << endl;
-        temp = temp->next;
-    }
-}
-
-// ---------------------------------------------------------------------------------------
-
-int start(Deck *deck, Deck piles[10]) {
-    deck->fillPerSuit(8, SPADES);
-    deck->shuffle();
-    deck->handOutCardsTo(6, &piles[0]);
-    deck->handOutCardsTo(6, &piles[1]);
-    deck->handOutCardsTo(6, &piles[2]);
-    deck->handOutCardsTo(6, &piles[3]);
-    deck->handOutCardsTo(5, &piles[4]);
-    deck->handOutCardsTo(5, &piles[5]);
-    deck->handOutCardsTo(5, &piles[6]);
-    deck->handOutCardsTo(5, &piles[7]);
-    deck->handOutCardsTo(5, &piles[8]);
-    deck->handOutCardsTo(5, &piles[9]);
-}
-
-string printPiles(Deck * pile) {
-    string piles = "";
-}
-
-string menu() {
-    string m = "";
-    m += "";
-    return m;
 }
 
 int main() {
-    Deck deck;
-    Deck piles[10];
-    Deck completedPiles[8];
-    start(&deck, piles);
-    cout << menu() << endl;
-
-    return 0;
+    vector<Card> deck;
+    vector<vector<Card>> piles[qtdPiles];
+    vector<vector<Card>> completedPiles[10];
+    int option = 1;
+    return EXIT_SUCCESS;
 }
