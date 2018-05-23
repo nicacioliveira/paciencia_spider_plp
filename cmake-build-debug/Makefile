@@ -56,17 +56,6 @@ CMAKE_BINARY_DIR = /home/nicacio/Dropbox/UFCG/PLP/workspace/paciencia_spider_plp
 #=============================================================================
 # Targets provided globally by CMake.
 
-# Special rule for the target rebuild_cache
-rebuild_cache:
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Running CMake to regenerate build system..."
-	/home/nicacio/clion/bin/cmake/bin/cmake -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR)
-.PHONY : rebuild_cache
-
-# Special rule for the target rebuild_cache
-rebuild_cache/fast: rebuild_cache
-
-.PHONY : rebuild_cache/fast
-
 # Special rule for the target edit_cache
 edit_cache:
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "No interactive CMake dialog available..."
@@ -77,6 +66,17 @@ edit_cache:
 edit_cache/fast: edit_cache
 
 .PHONY : edit_cache/fast
+
+# Special rule for the target rebuild_cache
+rebuild_cache:
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Running CMake to regenerate build system..."
+	/home/nicacio/clion/bin/cmake/bin/cmake -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR)
+.PHONY : rebuild_cache
+
+# Special rule for the target rebuild_cache
+rebuild_cache/fast: rebuild_cache
+
+.PHONY : rebuild_cache/fast
 
 # The main all target
 all: cmake_check_build_system
@@ -111,17 +111,17 @@ depend:
 .PHONY : depend
 
 #=============================================================================
-# Target rules for targets named paciencia
+# Target rules for targets named solitaire
 
 # Build rule for target.
-paciencia: cmake_check_build_system
-	$(MAKE) -f CMakeFiles/Makefile2 paciencia
-.PHONY : paciencia
+solitaire: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 solitaire
+.PHONY : solitaire
 
 # fast build rule for target.
-paciencia/fast:
-	$(MAKE) -f CMakeFiles/paciencia.dir/build.make CMakeFiles/paciencia.dir/build
-.PHONY : paciencia/fast
+solitaire/fast:
+	$(MAKE) -f CMakeFiles/solitaire.dir/build.make CMakeFiles/solitaire.dir/build
+.PHONY : solitaire/fast
 
 solitaire.o: solitaire.cpp.o
 
@@ -129,7 +129,7 @@ solitaire.o: solitaire.cpp.o
 
 # target to build an object file
 solitaire.cpp.o:
-	$(MAKE) -f CMakeFiles/paciencia.dir/build.make CMakeFiles/paciencia.dir/solitaire.cpp.o
+	$(MAKE) -f CMakeFiles/solitaire.dir/build.make CMakeFiles/solitaire.dir/solitaire.cpp.o
 .PHONY : solitaire.cpp.o
 
 solitaire.i: solitaire.cpp.i
@@ -138,7 +138,7 @@ solitaire.i: solitaire.cpp.i
 
 # target to preprocess a source file
 solitaire.cpp.i:
-	$(MAKE) -f CMakeFiles/paciencia.dir/build.make CMakeFiles/paciencia.dir/solitaire.cpp.i
+	$(MAKE) -f CMakeFiles/solitaire.dir/build.make CMakeFiles/solitaire.dir/solitaire.cpp.i
 .PHONY : solitaire.cpp.i
 
 solitaire.s: solitaire.cpp.s
@@ -147,7 +147,7 @@ solitaire.s: solitaire.cpp.s
 
 # target to generate assembly for a file
 solitaire.cpp.s:
-	$(MAKE) -f CMakeFiles/paciencia.dir/build.make CMakeFiles/paciencia.dir/solitaire.cpp.s
+	$(MAKE) -f CMakeFiles/solitaire.dir/build.make CMakeFiles/solitaire.dir/solitaire.cpp.s
 .PHONY : solitaire.cpp.s
 
 # Help Target
@@ -156,9 +156,9 @@ help:
 	@echo "... all (the default if no target is provided)"
 	@echo "... clean"
 	@echo "... depend"
-	@echo "... rebuild_cache"
 	@echo "... edit_cache"
-	@echo "... paciencia"
+	@echo "... rebuild_cache"
+	@echo "... solitaire"
 	@echo "... solitaire.o"
 	@echo "... solitaire.i"
 	@echo "... solitaire.s"

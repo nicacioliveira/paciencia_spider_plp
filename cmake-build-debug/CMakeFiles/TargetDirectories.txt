@@ -1,3 +1,3 @@
-/home/nicacio/Dropbox/UFCG/PLP/workspace/paciencia_spider_plp/cmake-build-debug/CMakeFiles/rebuild_cache.dir
 /home/nicacio/Dropbox/UFCG/PLP/workspace/paciencia_spider_plp/cmake-build-debug/CMakeFiles/edit_cache.dir
-/home/nicacio/Dropbox/UFCG/PLP/workspace/paciencia_spider_plp/cmake-build-debug/CMakeFiles/paciencia.dir
+/home/nicacio/Dropbox/UFCG/PLP/workspace/paciencia_spider_plp/cmake-build-debug/CMakeFiles/rebuild_cache.dir
+/home/nicacio/Dropbox/UFCG/PLP/workspace/paciencia_spider_plp/cmake-build-debug/CMakeFiles/solitaire.dir

@@ -1,1 +1,0 @@
-/usr/bin/c++  -g   CMakeFiles/paciencia.dir/solitaire.cpp.o  -o paciencia 
