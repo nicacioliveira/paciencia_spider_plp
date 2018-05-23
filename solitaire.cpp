@@ -6,6 +6,7 @@
 #include <vector>
 #include <string>
 #include <algorithm>
+#include <sstream>
 
 using namespace std;
 
@@ -20,14 +21,14 @@ struct Card {
 };
 
 string getStringValue(Card c);
-void printPiles(vector<vector<Card>> piles);
+void printPiles(vector<vector<Card> > piles);
 void handOutCardsTo(vector<Card> &deck, int quantity, vector<Card> &PileTo);
 void fillDeck(vector<Card> & deck);
 int checkOrder(vector<Card> deck, int id);
-int checkCompletedPile(vector<Card> pilha, vector<vector<Card>> completedPiles);
+int checkCompletedPile(vector<Card> pilha, vector<vector<Card> > completedPiles);
 int moveCardsTo(vector<Card> &from, int value, vector<Card> &to);
 void shuffle(vector<Card> deck);
-int start(vector<Card> &deck, vector<vector<Card>> &piles);
+int start(vector<Card> &deck, vector<vector<Card> > &piles);
 int deal(vector<Card> deck, int quantity, vector<Card> PileTo);
 void printDeck(vector<Card> deck);
 int contains(vector<Card> deck, int value);
@@ -82,7 +83,7 @@ string getStringValue(Card c) {
     }
 }
 
-void printPiles(vector<vector<Card>> piles) {
+void printPiles(vector<vector<Card> > piles) {
     //nicacio
     string response = "";
     string header = "";
@@ -91,8 +92,10 @@ void printPiles(vector<vector<Card>> piles) {
     int maxIndex = 0;
 
     for (int i = 0; i < piles.size(); ++i) {
+        ostringstream index;
         if (piles[maxIndex].size() < piles[i].size()) maxIndex = i;
-        header += "          " + to_string(i) + "   ";
+        index << i;
+        header += "          " + index.str() + "   ";
     }
     cout << header << endl;
 
@@ -144,14 +147,14 @@ int checkOrder(vector<Card> deck, int id) {
     //kelvin
 }
 
-int checkCompletedPile(vector<Card> pilha, vector<vector<Card>> completedPiles) {
+int checkCompletedPile(vector<Card> pilha, vector<vector<Card> > completedPiles) {
     //kelvin
 }
 
 int contains(vector<Card> deck, int value) {
     int resp = 0;
-    for (Card c : deck) {
-        if (c.value == value) {
+    for (int i = 0; i < deck.size(); ++i) {
+        if (deck[i].value == value) {
             resp = 1;
             break;
         }
@@ -194,9 +197,10 @@ int moveCardsTo(vector<Card> &from, int value, vector<Card> &to) {
 
 void deck_shuffle(vector<Card> &deck) {
     //Lucas
+    random_shuffle(deck.begin(), deck.end());
 }
 
-int start(vector<Card> &deck, vector<vector<Card>> &piles) {
+int start(vector<Card> &deck, vector<vector<Card> > &piles) {
     fillDeck(deck);
     deck_shuffle(deck);
     handOutCardsTo(deck, 5, piles[0]);
@@ -212,7 +216,7 @@ int start(vector<Card> &deck, vector<vector<Card>> &piles) {
 }
 
 //Distribui uma carta para cada pilha, caso todas as pilhas contenha uma ou mais cartas
-int deal(vector<Card> deck, vector<vector<Card>> piles) {
+int deal(vector<Card> deck, vector<vector<Card> > piles) {
     //damiao
     int check = 1;
 
@@ -232,9 +236,11 @@ int deal(vector<Card> deck, vector<vector<Card>> piles) {
 
 int main() {
     vector<Card> deck(104);
-    vector<vector<Card>> piles(10);
-    vector<vector<Card>> completedPiles(10);
+    vector<vector<Card> > piles(10);
+    vector<vector<Card> > completedPiles(10);
 
+    start(deck, piles);
+    printPiles(piles);
     int option = 1;
 
     return EXIT_SUCCESS;
