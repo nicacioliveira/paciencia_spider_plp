@@ -159,9 +159,10 @@ int deal(vector<Card> deck, vector<vector<Card>> piles) {
             break;
         }
     }
-    if (check > 0 && deck.size() > 0) {
-        for (int i = 0; i < qtdPiles; i++) {
-            handOutCardsTo(deck, 1, piles[i]);
+
+    for (int i = 0; i < qtdPiles; i++) {
+        if (check > 0 && deck.size() > 0) {
+        handOutCardsTo(deck, 1, piles[i]);
         }
     }
 
