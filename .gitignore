@@ -1,3 +1,8 @@
 .idea/
-cmake-build-debug/
+
+
+# CMake
 CMakeLists.txt
+
+cmake-build-debug/
+cmake-build-release/
