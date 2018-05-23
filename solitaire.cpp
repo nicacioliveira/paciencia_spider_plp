@@ -10,6 +10,7 @@ using namespace std;
 
 const int frenchSuitNumber = 13;
 const int numberOfSuits = 8;
+const int qtdPiles = 10;
 const int _false = 0;
 
 struct Card {
@@ -88,8 +89,13 @@ void printPiles(vector<vector<Card>> piles) {
     }
 }
 
+//Adiciona as cartas do deck a pilha
 void handOutCardsTo(vector<Card> deck, int quantity, vector<Card> PileTo) {
     //damiao
+    for (int i = 0; i < quantity; i++) {
+        PileTo.push_back(deck.back());
+        deck.pop_back();
+    }
 }
 
 Card newCard(int i){
@@ -100,10 +106,11 @@ Card newCard(int i){
 }
 
 void addFrenchSuit(vector<Card> deck) {
-    for(int i = 0; i < frenchSuitNumber; i++) { 
-        deck.push_back(newCard(i)); 
+    for(int i = 0; i < frenchSuitNumber; i++) {
+        deck.push_back(newCard(i));
     }
-} 
+}
+
 
 void fillDeck(vector<Card> deck) {
     //Daniele
@@ -142,14 +149,31 @@ int start(vector<Card> deck,  vector<vector<Card>> piles) {
     handOutCardsTo(deck, 4, piles[9]);
 }
 
-int deal(vector<Card> deck, int quantity, vector<Card> PileTo) {
+//Distribui uma carta para cada pilha, caso todas as pilhas contenha uma ou mais cartas
+int deal(vector<Card> deck, vector<vector<Card>> piles) {
     //damiao
+    int check = 1;
+
+    for (int i = 0; i < qtdPiles; i++) {
+        if (piles[i].size() < 1) {
+            check = 0;
+            break;
+        }
+    }
+
+    for (int i = 0; i < qtdPiles; i++) {
+        if (check > 0 && deck.size() > 0) {
+            handOutCardsTo(deck, 1, piles[i]);
+        }
+    }
 }
 
 int main() {
     vector<Card> deck;
-    vector<vector<Card>> piles[10];
+    vector<vector<Card>> piles[qtdPiles];
     vector<vector<Card>> completedPiles[10];
+
     int option = 1;
+
     return EXIT_SUCCESS;
 }
