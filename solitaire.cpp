@@ -114,12 +114,23 @@ void printPiles(vector<vector<Card> > piles) {
     }
 }
 
-//Adiciona as cartas do deck a pilha
+//Distribui as cartas do deck para a pilha
 void handOutCardsTo(vector<Card> &deck, int quantity, vector<Card> &PileTo) {
     //damiao
-    for (int i = 0; i < quantity; i++) {
-        PileTo.push_back(deck.back());
+
+    Card c;
+    if (quantity <= deck.size() && quantity > 0) {
+        //remove do deck e passa para a pilha
+        for (int i = 0; i < quantity - 1; ++i) {
+            c = deck.back();
+            deck.pop_back();
+            PileTo.push_back(c);
+        }
+        //torna a ultima carta da pilha visivel
+        c = deck.back();
         deck.pop_back();
+        c.turned = 1;
+        PileTo.push_back(c);
     }
 }
 
@@ -239,6 +250,8 @@ int main() {
     vector<vector<Card> > piles(10);
     vector<vector<Card> > completedPiles(10);
 
+    start(deck, piles);
+    printPiles(piles);
     int option = 1;
 
     return EXIT_SUCCESS;
