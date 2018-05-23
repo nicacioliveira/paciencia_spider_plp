@@ -228,8 +228,13 @@ int moveCardsTo(vector<Card> &from, int value, vector<Card> &to) {
 
 void deck_shuffle(vector<Card> &deck) {
     //Lucas
-    srand(time(0));
-    random_shuffle(deck.begin(), deck.end());
+	for(int i = 0; i < deck.size(); i++) {
+	      	int valueGenerated = rand() % deck.size();
+	      	Card temporaryCard = deck[i];
+		deck[i] = deck[valueGenerated];
+	  	deck[valueGenerated] = temporaryCard;
+	}
+
 }
 
 //OK
