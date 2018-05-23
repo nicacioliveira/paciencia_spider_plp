@@ -8,6 +8,10 @@
 
 using namespace std;
 
+const int frenchSuitNumber = 13;
+const int numberOfSuits = 8;
+const int _false = 0;
+
 struct Card {
     int value;
     int turned;
@@ -88,8 +92,24 @@ void handOutCardsTo(vector<Card> deck, int quantity, vector<Card> PileTo) {
     //damiao
 }
 
-void fillDeck(vector<Card>) {
+Card newCard(int i){
+    Card oneCard;
+    oneCard.value = i + 1;
+    oneCard.turned = _false;
+    return oneCard;
+}
+
+void addFrenchSuit(vector<Card> deck) {
+    for(int i = 0; i < frenchSuitNumber; i++) { 
+        deck.push_back(newCard(i)); 
+    }
+} 
+
+void fillDeck(vector<Card> deck) {
     //Daniele
+    for(int i = 0; i < numberOfSuits; i++) {
+        addFrenchSuit(deck);
+    }
 }
 
 int checkOrder(vector<Card> deck, int id) {
@@ -127,10 +147,9 @@ int deal(vector<Card> deck, int quantity, vector<Card> PileTo) {
 }
 
 int main() {
-    vector<Card> deck[104];
+    vector<Card> deck;
     vector<vector<Card>> piles[10];
     vector<vector<Card>> completedPiles[10];
     int option = 1;
-
-    return 0;
+    return EXIT_SUCCESS;
 }
