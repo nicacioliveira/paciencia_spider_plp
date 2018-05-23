@@ -4,7 +4,7 @@ set(CMAKE_DEPENDS_LANGUAGES
   )
 # The set of files for implicit dependencies of each language:
 set(CMAKE_DEPENDS_CHECK_CXX
-  "C:/Users/Robson/workspace18.1/PLP/paciencia_spider_plp/SpiderSolitaire.cpp" "C:/Users/Robson/workspace18.1/PLP/paciencia_spider_plp/cmake-build-debug/CMakeFiles/paciencia.dir/SpiderSolitaire.cpp.obj"
+  "/home/nicacio/Dropbox/UFCG/PLP/workspace/paciencia_spider_plp/SpiderSolitaire.cpp" "/home/nicacio/Dropbox/UFCG/PLP/workspace/paciencia_spider_plp/cmake-build-debug/CMakeFiles/paciencia.dir/SpiderSolitaire.cpp.o"
   )
 set(CMAKE_CXX_COMPILER_ID "GNU")
 

@@ -1,9 +1,7 @@
 file(REMOVE_RECURSE
-  "CMakeFiles/paciencia.dir/SpiderSolitaire.cpp.obj"
+  "CMakeFiles/paciencia.dir/SpiderSolitaire.cpp.o"
   "paciencia.pdb"
-  "paciencia.exe"
-  "paciencia.exe.manifest"
-  "libpaciencia.dll.a"
+  "paciencia"
 )
 
 # Per-language clean rules from dependency scanning.

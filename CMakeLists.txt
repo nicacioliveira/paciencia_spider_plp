@@ -3,4 +3,4 @@ project(paciencia)
 
 set(CMAKE_CXX_STANDARD 11)
 
-add_executable(paciencia SpiderSolitaire.cpp)
+add_executable(paciencia solitaire.cpp)
