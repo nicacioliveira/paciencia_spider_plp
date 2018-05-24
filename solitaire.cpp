@@ -297,7 +297,7 @@ int moveCardsTo(vector<Card> &from, int value, vector<Card> &to) {
     //      2. value of the card is not greater than (neither equal) the value of the end of the pile;
 
 
-    if (contains(from, value) && checkOrder(from, value) && isValidMov(to, value)) {
+    if (contains(from, value) && isValidMov(to, value)) {
         vector<Card> stack;
         // removes cards of (from), set last value of (from) to turned and passes the values ​​to (to)
         for (int i = from.size() - 1; i >= 0; --i) {
