@@ -71,7 +71,7 @@ void fillDeck(vector<Card> & deck);
  * @param card value
  * @return 1: valid; 0: not valid
  */
-int checkOrder(vector<Card> deck, int id);
+int isValidMov(vector<Card> deck, int id);
 
 /**
  * Checks
