@@ -4,6 +4,7 @@
 //
 
 #include <iostream>
+#include <stdio.h>
 #include <vector>
 #include <string>
 #include <algorithm>
@@ -33,7 +34,7 @@ string getStringValue(Card c);
  * Prints the piles in column format
  * @param piles
  */
-void printPiles(vector<vector<Card> > piles);
+void printPiles(vector<Card> deck, vector<vector<Card> > piles);
 
 /**
  * Distributes a specific number of cards to the pile.
@@ -119,7 +120,7 @@ void start(vector<Card> &deck, vector<vector<Card> > &piles);
  * @param piles
  * @return 1: deal is possible; 0: deal is not possible
  */
-int deal(vector<Card> &deck, vector<vector<Card> > &piles);
+void deal(vector<Card> &deck, vector<vector<Card> > &piles);
 
 // ---------------------------------------------------------------------------------------------------------------------
 
@@ -173,39 +174,44 @@ string getStringValue(Card c) {
     }
 }
 
-void printPiles(vector<vector<Card> > piles) {
+void printPiles(vector<Card> deck, vector<vector<Card> > piles) {
     //implemented by nicacio
-    string response = "";
-    string header = "";
-    Card c;
+    if (deck.empty()) {
+        cout << "The game has not started." << endl;
+    } else {
+        string response = "";
+        string header = "";
+        Card c;
 
-    // index of the biggest pile
-    int maxIndex = 0;
+        // index of the biggest pile
+        int maxIndex = 0;
 
-    // Search biggest Pile
-    for (int i = 0; i < piles.size(); ++i) {
-        ostringstream index;
-        if (piles[maxIndex].size() < piles[i].size()) maxIndex = i;
-        index << i;
-        header += "          " + index.str() + "   ";
-    }
-
-    //Header of the piles
-    cout << header << endl;
-
-    string card_value = "";
-
-    // Transpose
-    for (int i = 0; i < piles[maxIndex].size(); ++i) {
-        response = "";
-        for (int j = 0; j < piles.size(); ++j) {
-            if (i >= piles[j].size())
-                card_value = "       ";
-            else
-                card_value = getStringValue(piles[j][i]);
-            response += "       " + card_value + "";
+        // Search biggest Pile
+        for (int i = 0; i < piles.size(); ++i) {
+            ostringstream index;
+            if (piles[maxIndex].size() < piles[i].size()) maxIndex = i;
+            index << i;
+            header += "      " + index.str() + "   ";
         }
-        cout << response << endl;
+
+        //Header of the piles
+        cout << header << endl;
+
+        string card_value = "";
+
+        // Transpose
+        for (int i = 0; i < piles[maxIndex].size(); ++i) {
+            response = "";
+            for (int j = 0; j < piles.size(); ++j) {
+                if (i >= piles[j].size())
+                    card_value = "       ";
+                else
+                    card_value = getStringValue(piles[j][i]);
+                response += "   " + card_value + "";
+            }
+            cout << response << endl;
+        }
+        cout << endl;
     }
 }
 
@@ -254,8 +260,10 @@ int checkOrder(vector<Card> deck, int cardValue) {
     //provisorio
     int isValid = 1;
     if (deck.back().value != cardValue) {
-        for (int i = deck.size() - 1; i > 0; ++i) {
-            if ((deck[i - 1].value + 1) != deck[i].value) {
+        for (int i = deck.size() - 1; i > 0; --i) {
+            if (deck[i-1].turned == 0) break;
+            if (deck[i].value == cardValue) break;
+            if ((deck[i].value+1) != deck[i-1].value) {
                 isValid = 0;
                 break;
             }
@@ -303,13 +311,14 @@ int moveCardsTo(vector<Card> &from, int value, vector<Card> &to) {
                 from.pop_back();
                 break;
             }
+            cout << from.back().value + " " << endl;
             stack.push_back(from.back());
             from.pop_back();
         }
 
         from.back().turned = 1;
-
-        for (int i = 0; i < stack.size(); ++i)  {
+        int stackSize = stack.size();
+        for (int i = 0; i < stackSize; ++i)  {
             to.push_back(stack.back());
             stack.pop_back();
         }
@@ -330,34 +339,47 @@ void deck_shuffle(vector<Card> &deck) {
 }
 
 void start(vector<Card> &deck, vector<vector<Card> > &piles) {
-    fillDeck(deck);
-    deck_shuffle(deck);
-    handOutCardsTo(deck, 5, piles[0]);
-    handOutCardsTo(deck, 5, piles[1]);
-    handOutCardsTo(deck, 5, piles[2]);
-    handOutCardsTo(deck, 5, piles[3]);
-    handOutCardsTo(deck, 4, piles[4]);
-    handOutCardsTo(deck, 4, piles[5]);
-    handOutCardsTo(deck, 4, piles[6]);
-    handOutCardsTo(deck, 4, piles[7]);
-    handOutCardsTo(deck, 4, piles[8]);
-    handOutCardsTo(deck, 4, piles[9]);
+    if (!deck.empty())
+        cout << "The game has already started." << endl;
+    else {
+        fillDeck(deck);
+        deck_shuffle(deck);
+        handOutCardsTo(deck, 5, piles[0]);
+        handOutCardsTo(deck, 5, piles[1]);
+        handOutCardsTo(deck, 5, piles[2]);
+        handOutCardsTo(deck, 5, piles[3]);
+        handOutCardsTo(deck, 4, piles[4]);
+        handOutCardsTo(deck, 4, piles[5]);
+        handOutCardsTo(deck, 4, piles[6]);
+        handOutCardsTo(deck, 4, piles[7]);
+        handOutCardsTo(deck, 4, piles[8]);
+        handOutCardsTo(deck, 4, piles[9]);
+    }
 }
 
-int deal(vector<Card> &deck, vector<vector<Card> > &piles) {
+void deal(vector<Card> &deck, vector<vector<Card> > &piles) {
     //Implemented by Damiao
-    int check = 1;
+    if (deck.empty())
+        cout << "The game has not started." << endl;
+    else {
 
-    for (int i = 0; i < qtdPiles; i++) {
-        if (piles[i].size() < 1) {
-            check = 0;
-            break;
+        int check = 1;
+
+        for (int i = 0; i < qtdPiles; i++) {
+            if (piles[i].size() < 1) {
+                check = 0;
+                break;
+            }
         }
-    }
-
-    for (int i = 0; i < qtdPiles; i++) {
-        if (check > 0 && deck.size() > 0) {
-            handOutCardsTo(deck, 1, piles[i]);
+        if (check == 0)
+            cout << "All stacks must contain at least one card." << endl;
+        else {
+            for (int i = 0; i < qtdPiles; i++) {
+                if (check > 0 && deck.size() > 0) {
+                    handOutCardsTo(deck, 1, piles[i]);
+                }
+            }
+            printPiles(deck, piles);
         }
     }
 }
@@ -411,15 +433,150 @@ void hint(vector<Card> deck, vector<vector<Card> > piles) {
     }
 }
 
+void help() {
+    string cmd = "";
+    cmd += "   |---------------------------------HELP--------------------------------|\n";
+    cmd += "   |Start:         start                                                 |\n";
+    cmd += "   |Quit Game:     quit                                                  |\n";
+    cmd += "   |Reset Game:    reset                                                 |\n";
+    cmd += "   |Help:          help                                                  |\n";
+    cmd += "   |Hint:          hint                                                  |\n";
+    cmd += "   |print piles:   print                                                 |\n";
+    cmd += "   |deal:          deal                                                  |\n";
+    cmd += "   |_____________________________________________________________________|\n";
+    cmd += "   |Move cards:    move (press Enter)                                    |\n";
+    cmd += "   |               <card value> <output pile number> <input pile number> |\n";
+    cmd += "   |---------------------------------------------------------------------|\n";
+
+    cout << cmd << endl;
+}
+
+
+void spiderLogo() {
+    string logo = "";
+    logo += " _______  _______  ___      ___   _______  _______  ___   ______    _______ \n";
+    logo += "|       ||       ||   |    |   | |       ||   _   ||   | |    _ |  |       |\n";
+    logo += "|  _____||   _   ||   |    |   | |_     _||  |_|  ||   | |   | ||  |    ___|\n";
+    logo += "| |_____ |  | |  ||   |    |   |   |   |  |       ||   | |   |_||_ |   |___ \n";
+    logo += "|_____  ||  |_|  ||   |___ |   |   |   |  |       ||   | |    __  ||    ___|\n";
+    logo += " _____| ||       ||       ||   |   |   |  |   _   ||   | |   |  | ||   |___ \n";
+    logo += "|_______||_______||_______||___|   |___|  |__| |__||___| |___|  |_||_______|\n";
+    logo += "                                                                            \n";
+    logo += "                                   /      \\                                \n";
+    logo += "                                \\  \\  ,,  /  /                            \n";
+    logo += "                                 '-.`\\()/`.-'                              \n";
+    logo += "                                .--_'(  )'_--.                              \n";
+    logo += "                               / /` /`''`\\ `\\ \\                          \n";
+    logo += "                                |  |  ><  |  |                              \n";
+    logo += "                                \\  \\      /  /                            \n";
+    logo += "                                    '.__.'                                  \n";
+    cout << logo << endl;
+}
+
+void bye() {
+    string bye = "";
+    cout << endl;
+    bye += "                    ____             _ _                        \n";
+    bye += "                   |  _ \\           | | |                      \n";
+    bye += "                   | |_) |_   _  ___| | |      / _ \\           \n";
+    bye += "                   |  _ <| | | |/ _ \\ | |    \\_\\(_)/_/       \n";
+    bye += "                   | |_) | |_| |  __/_|_|    \\_//\"\\\\_       \n";
+    bye += "                   |____/ \\__, |\\___(_|_)      /   \\         \n";
+    bye += "                          __/ |                                 \n";
+    bye += "                         |___/                                  \n";
+    cout << bye << endl;
+}
+
+int getOption() {
+    string opt = "";
+    int response = -1;
+    while (response == -1) {
+        cout << "Command? ";
+        cin >> opt;
+
+        if (opt == "start")      response = 1;
+        else if (opt == "quit")  response = 0;
+        else if (opt == "reset") response = 2;
+        else if (opt == "help")  response = 3;
+        else if (opt == "hint")  response = 4;
+        else if (opt == "move")  response = 5;
+        else if (opt == "print") response = 6;
+        else if (opt == "deal")  response = 7;
+        else response = -1;
+
+        if (response == -1) cout << "Invalid Command!!!" << endl;
+
+    }
+    return response;
+}
+
+void move(vector<Card> &deck, vector<vector<Card> > &piles) {
+    int value, from, to;
+    scanf("%d %d %d", &value, &from, &to);
+
+    if ((value <= 13 && value >= 1) && (from >= 0 && from <= 9) && (to >= 0 && to <= 9)) {
+        if (moveCardsTo(piles[from], value, piles[to]))
+            printPiles(deck, piles);
+        else
+            cout << "Impossible move!!!" << endl;
+    }
+}
+
 int main() {
     vector<Card> deck;//104
     vector<vector<Card> > piles(10);
     vector<vector<Card> > completedPiles(10);
 
-    start(deck, piles);
-    printPiles(piles);
-    hint(deck, piles);
+    int opt; // [0: quit]; [1: start]; [2: reset]; [3: help] ; [4:hint]; [5:move]; []
+    spiderLogo();
+    help();
+    opt = getOption();
+    while (true) {
+        if (opt == 0) {
+            bye();
+            break;
+        }
+        else if (opt == 1) {
+            //start
+            start(deck, piles);
+            printPiles(deck, piles);
+        }
+        else if (opt == 2) {
+            deck.clear();
+            piles[0].clear();
+            piles[1].clear();
+            piles[2].clear();
+            piles[3].clear();
+            piles[4].clear();
+            piles[5].clear();
+            piles[6].clear();
+            piles[7].clear();
+            piles[8].clear();
+            piles[9].clear();
+            completedPiles.clear();
+            start(deck, piles);
+            printPiles(deck, piles);
+            //reset
+        }
+        else if (opt == 3) {
+            help();
+        }
+        else if (opt == 4) {
+            hint(deck, piles);
+        }
+        else if (opt == 5) {
+            move(deck, piles);
+        }
+        else if (opt == 6){
+            printPiles(deck, piles);
+        }
+        else if (opt == 7) {
+            deal(deck, piles);
+        }
 
+        // test winner
+        opt = getOption();
+    }
 
     return EXIT_SUCCESS;
 }
