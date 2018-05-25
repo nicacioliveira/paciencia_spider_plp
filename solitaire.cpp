@@ -127,51 +127,73 @@ void deal(vector<Card> &deck, vector<vector<Card> > &piles);
 string getStringValue(Card c) {
     string resp;
     if (!c.turned) {
-        return "|-----|";
-    } else {
-        switch (c.value) {
-            case 1: //|queen|
-                resp += "| Ace |";
-                break;
-            case 2:
-                resp = "|  2  |";
-                break;
-            case 3:
-                resp = "|  3  |";
-                break;
-            case 4:
-                resp = "|  4  |";
-                break;
-            case 5:
-                resp = "|  5  |";
-                break;
-            case 6:
-                resp = "|  6  |";
-                break;
-            case 7:
-                resp = "|  7  |";
-                break;
-            case 8:
-                resp = "|  8  |";
-                break;
-            case 9:
-                resp = "|  9  |";
-                break;
-            case 10:
-                resp = "|  10 |";
-                break;
-            case 11:
-                resp = "| Jack|";
-                break;
-            case 12:
-                resp = "|Queen|";
-                break;
-            case 13:
-                resp = "| King|";
-                break;
-        }
-        return resp;
+        resp = "|-----|";
     }
+    else if (c.value == 1)
+        resp = "| Ace |";
+    else if (c.value == 2)
+        resp = "|  2  |";
+    else if (c.value == 3)
+        resp = "|  3  |";
+    else if (c.value == 4)
+        resp = "|  4  |";
+    else if (c.value == 5)
+        resp = "|  5  |";
+    else if (c.value == 6)
+        resp = "|  6  |";
+    else if (c.value == 7)
+        resp = "|  7  |";
+    else if (c.value == 8)
+        resp = "|  8  |";
+    else if (c.value == 9)
+        resp = "|  9  |";
+    else if (c.value == 10)
+        resp = "| 10  |";
+    else if (c.value == 11)
+        resp = "| Jack|";
+    else if (c.value == 12)
+        resp = "|Queen|";
+    else if (c.value == 13)
+        resp = "| King|";
+    else {
+        resp = "       ";
+    }
+    return resp;
+}
+
+int getIntValue(string card) {
+    transform(card.begin(), card.end(), card.begin(), ::tolower);
+    int resp;
+    if (card == "ace" || card == "1")
+        resp = 1;
+    else if (card == "2")
+        resp = 2;
+    else if (card == "3")
+        resp = 3;
+    else if (card == "4")
+        resp = 4;
+    else if (card == "5")
+        resp = 5;
+    else if (card == "6")
+        resp = 6;
+    else if (card == "7")
+        resp = 7;
+    else if (card == "8")
+        resp = 8;
+    else if (card == "9")
+        resp = 9;
+    else if (card == "10")
+        resp = 10;
+    else if (card == "jack" || card == "11")
+        resp = 11;
+    else if (card == "queen"|| card == "12")
+        resp = 12;
+    else if (card == "king" || card == "13")
+        resp = 13;
+    else
+        resp = -1;
+
+    return resp;
 }
 
 void printPiles(vector<Card> deck, vector<vector<Card> > piles) {
@@ -334,9 +356,28 @@ int checkCompletedPile(vector<Card> &pile) {
 int checkCompletedSuit(vector<Card> deck, int cardValue) {
     //Implemented by Kelvin
 
-    int count = 0;
-    int isValid = 1;
-    Card next= deck.back();
+    int count = 1;
+    int isValid = 0;
+    if (!deck.empty() && deck.back().value == 1) {
+        Card next = deck.back();
+        deck.pop_back();
+        while (count <= 13 && !deck.empty()) {
+
+            if (count == 13 && next.value == 13){
+                isValid = 1;
+                break;
+            } else if ((deck.back().value) == next.value + 1) {
+                count++;
+                next = deck.back();
+                deck.pop_back();
+            } else {
+                isValid = 0;
+                break;
+            }
+        }
+    }
+
+    /*Card next= deck.back();
     deck.pop_back();
     while (!deck.empty() && isValid) {
         count++;
@@ -349,7 +390,8 @@ int checkCompletedSuit(vector<Card> deck, int cardValue) {
         }
         next = deck.back();
         deck.pop_back();
-    }
+    }*/
+
     return isValid;
 }
 
@@ -437,9 +479,9 @@ int moveCardsTo(vector<Card> &from, int value, vector<Card> &to) {
             from.pop_back();
         }
 
-        from.back().turned = 1;
-        int stackSize = stack.size();
-        for (int i = 0; i < stackSize; ++i)  {
+        if (!from.empty()) from.back().turned = 1;
+
+        while (!stack.empty()) {
             to.push_back(stack.back());
             stack.pop_back();
         }
@@ -450,7 +492,7 @@ int moveCardsTo(vector<Card> &from, int value, vector<Card> &to) {
 
 void deck_shuffle(vector<Card> &deck) {
     //Implemented by Lucas
-    //srand(time (0));
+    srand(time (0));
     for(int i = 0; i < deck.size(); i++) {
         int valueGenerated = rand() % deck.size();
         Card temporaryCard = deck[i];
@@ -504,46 +546,59 @@ void deal(vector<Card> &deck, vector<vector<Card> > &piles) {
 }
 
 int getFirstValuePossible(vector<Card> pile) {
-    int value = pile.back().value;
+    int value = -1;
+    if (!pile.empty()) {
+        value = pile.back().value;
 
-    for (int i = pile.size() - 1; i > 0; --i) {
-        if (pile[i-1].turned == 0) break;
-        //if (pile[i].value == cardValue) break;
-        if ((pile[i].value+1) != pile[i-1].value) {
-            break;
+        for (int i = pile.size() - 1; i > 0; --i) {
+            if (pile[i - 1].turned == 0) break;
+            //if (pile[i].value == cardValue) break;
+            if ((pile[i].value + 1) != pile[i - 1].value) {
+                break;
+            }
+            value = pile[i - 1].value;
         }
-        value = pile[i-1].value;
     }
     return value;
 }
+string makeHintString(int indexPileFrom, int indexPileTo, Card c) {
+    string response;
+    ostringstream indexI;
+    ostringstream indexJ;
+    indexI << indexPileFrom;
+    indexJ << indexPileTo;
+    response += "Card: " + getStringValue(c) + " -- ";
+    response += "Pile: " + indexI.str() + " --> ";
+    response += "" + indexJ.str() + "; ";
+    response += "\n";
+    return response;
+}
 
 void hint(vector<Card> deck, vector<vector<Card> > piles) {
-    Card c;
-    c.value = -1;
-    c.turned = 1;
+    Card card;
+    card.value = -1;
+    card.turned = 1;
+
     string response = "--------------HINT-------------\n";
 
-    for (int i = 0; i < piles.size(); ++i) {
-        c.value = getFirstValuePossible(piles[i]);
-        for (int j = 0; j < piles.size(); ++j) {
-            if ( j != i && (piles[j].back().value-1) == c.value) {
-                ostringstream indexI;
-                ostringstream indexJ;
-                indexI << i;
-                indexJ << j;
-                response += "Card: " + getStringValue(c) + " -- ";
-                response += "Pile: " + indexI.str() + " --> ";
-                response += "" + indexJ.str() + "; ";
-                response += "\n";
+    for (int indexPileFrom = 0; indexPileFrom < piles.size(); ++indexPileFrom) {
 
+        card.value = getFirstValuePossible(piles[indexPileFrom]);
+
+        if (card.value != -1) {
+
+            for (int indexPileTo = 0; indexPileTo < piles.size(); ++indexPileTo) {
+                if (piles[indexPileTo].empty())
+                    response += makeHintString(indexPileFrom, indexPileTo, card);
+                else if (indexPileTo != indexPileFrom && (piles[indexPileTo].back().value - 1) == card.value)
+                    response += makeHintString(indexPileFrom, indexPileTo, card);
             }
         }
-
     }
 
-    if (c.value == -1 && deck.size() >= 10) {
+    if (response == "--------------HINT-------------\n" && deck.size() >= 10) {
         cout << "No hint at the moment. But you can deal a new card into each tableau at the column." << endl;
-    } else if (c.value == -1 && deck.size() < 10) {
+    } else if (card.value == -1 && deck.size() < 10) {
         cout << "No hint at the moment." << endl;
     } else {
         cout << response;
@@ -630,8 +685,12 @@ int getOption() {
 }
 
 void move(vector<Card> &deck, vector<vector<Card> > &piles) {
+    char cardIn[5];
     int value, from, to;
-    scanf("%d %d %d", &value, &from, &to);
+    scanf("%s %d %d", cardIn, &from, &to);
+    string card(cardIn);
+    value = getIntValue(card);
+
     if ((value <= 13 && value >= 1) && (from >= 0 && from <= 9) && (to >= 0 && to <= 9)) {
         if (moveCardsTo(piles[from], value, piles[to]))
             printPiles(deck, piles);
@@ -662,7 +721,8 @@ int main() {
     vector<vector<Card> > piles(10);
 
     int completedPilesCounter = 0;
-    /*int opt; // [0: quit]; [1: start]; [2: reset]; [3: help] ; [4:hint]; [5:move]; []
+
+    int opt; // [0: quit]; [1: start]; [2: reset]; [3: help] ; [4:hint]; [5:move]; []
     int isStarted = 0;
     spiderLogo();
     help();
@@ -713,23 +773,21 @@ int main() {
         }
 
         opt = getOption();
-    }*/
+    }
 
-
+    /*
     start(deck, piles);
     moveCardsTo(piles[8], 2, piles[7]);
     deal(deck, piles);
     moveCardsTo(piles[7], 3, piles[4]);
     moveCardsTo(piles[1], 7, piles[0]);
     moveCardsTo(piles[0], 8, piles[1]);
-    printPiles(deck, piles);
     hint(deck, piles);
     moveCardsTo(piles[5], 11, piles[0]);
     moveCardsTo(piles[6], 10, piles[0]);
     moveCardsTo(piles[1], 9, piles[0]);
     moveCardsTo(piles[4], 4, piles[1]);
     moveCardsTo(piles[6], 1, piles[3]);
-    printPiles(deck, piles);
     hint(deck, piles);
     moveCardsTo(piles[1], 5, piles[6]);
     moveCardsTo(piles[6], 6, piles[0]);
@@ -737,13 +795,9 @@ int main() {
     moveCardsTo(piles[0], 9, piles[1]);
     moveCardsTo(piles[0], 12, piles[9]);
     printPiles(deck, piles);
-    hint(deck, piles);
-    printPiles(deck, piles);
     checkWon(deck, piles, completedPilesCounter);
-    deal(deck, piles);
-    checkWon(deck, piles, completedPilesCounter);
-    moveCardsTo(piles[0], 9, piles[6]);
     printPiles(deck, piles);
+    */
 
     return EXIT_SUCCESS;
 }
