@@ -254,6 +254,15 @@ void fillDeck(vector<Card> &deck) {
     }
 }
 
+
+int checkOrder(int elem, int cardValue) {
+    int result = 0;
+    if((elem - cardValue) == 1) {
+        result = 1;
+    }
+    return result;
+}
+
 int isValidMov(vector<Card> pile, int cardValue) {
     //Implemented by Kelvin
     int isPossible = 0;
@@ -264,7 +273,7 @@ int isValidMov(vector<Card> pile, int cardValue) {
     else{
         int lastElem = pile[lastIndex].value - 1;
 
-        if((lastElem - cardValue) == 1) {
+        if(checkOrder(lastElem, cardValue) == 1) {
             isPossible = 1;
         }
     }
@@ -518,60 +527,50 @@ void move(vector<Card> &deck, vector<vector<Card> > &piles) {
 }
 
 int main() {
-    vector<Card> deck;//104
-    vector<vector<Card> > piles(10);
-    vector<vector<Card> > completedPiles(10);
+    Card c1 = newCard(13);
+    Card c2 = newCard(12);
+    Card c3 = newCard(11);
+    Card c4 = newCard(10);
+    Card c5 = newCard(9);
+    Card c6 = newCard(8);
+    Card c7 = newCard(7);
+    Card c8 = newCard(6);
+    Card c9 = newCard(5);
+    Card c10 = newCard(4);
+    Card c11 = newCard(3);
+    Card c12 = newCard(2);
+    Card c22 = newCard(5);
+    vector<Card> piles = {c22, c2, c3, c4, c5, c6, c7, c8, c9, c10, c11, c12};
+    int lastPos = piles.size() - 1;
+    int ace = 2;
+    int king = 13;
+    int cont = 0;
+    if(lastPos >= 0) {
+        int elem = piles[lastPos].value - 1;
+        if(elem == ace) {
+            while(lastPos - 1 >= 0 && checkOrder(piles[lastPos - 1].value - 1, elem) == 1) {
+                cout << "Inicio\n";
+                cout << "\n------Elemento anterior: " << piles[lastPos - 1].value - 1;
+                cout <<"\nElemento:"  << elem;
+                cont++;
+                elem = piles[lastPos - 1].value - 1;
+                cout << "\nUltima pos: " << lastPos-1;
+                cout << "\nUltima pos: " << lastPos;
+                lastPos--;
+                cout << "\nFim\n";
 
-    int opt; // [0: quit]; [1: start]; [2: reset]; [3: help] ; [4:hint]; [5:move]; []
-    spiderLogo();
-    help();
-    opt = getOption();
-    while (true) {
-        if (opt == 0) {
-            bye();
-            break;
-        }
-        else if (opt == 1) {
-            //start
-            start(deck, piles);
-            printPiles(deck, piles);
-        }
-        else if (opt == 2) {
-            deck.clear();
-            piles[0].clear();
-            piles[1].clear();
-            piles[2].clear();
-            piles[3].clear();
-            piles[4].clear();
-            piles[5].clear();
-            piles[6].clear();
-            piles[7].clear();
-            piles[8].clear();
-            piles[9].clear();
-            completedPiles.clear();
-            start(deck, piles);
-            printPiles(deck, piles);
-            //reset
-        }
-        else if (opt == 3) {
-            help();
-        }
-        else if (opt == 4) {
-            hint(deck, piles);
-        }
-        else if (opt == 5) {
-            move(deck, piles);
-        }
-        else if (opt == 6){
-            printPiles(deck, piles);
-        }
-        else if (opt == 7) {
-            deal(deck, piles);
+
+            }
         }
 
-        // test winner
-        opt = getOption();
+
     }
+
+
+
+
+
+
 
     return EXIT_SUCCESS;
 }
