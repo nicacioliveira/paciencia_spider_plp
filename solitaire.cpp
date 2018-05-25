@@ -65,6 +65,8 @@ void addFrenchSuit(vector<Card> &deck);
  */
 void fillDeck(vector<Card> & deck);
 
+int checkOrder(int elem, int cardValue);
+
 /**
  * Checks if the order of the cards is correct starting from a certain card
  * @param deck
@@ -79,7 +81,7 @@ int isValidMov(vector<Card> deck, int id);
  * @param completedPiles
  * @return 1: is true; 0: is not true
  */
-int checkCompletedPile(vector<Card> deck, vector<vector<Card> > completedPiles);
+int checkCompletedPile(vector<Card> &pile);
 
 /**
  * Checks whether a card is contained in a stack
@@ -281,8 +283,28 @@ int isValidMov(vector<Card> pile, int cardValue) {
     return isPossible;
 }
 
-int checkCompletedPile(vector<Card> deck, vector<vector<Card> > completedPiles) {
+int checkCompletedPile(vector<Card> &pile) {
     //kelvin
+
+    int completed = 0;
+    int lastPos = pile.size() - 1;
+    int ace = 2;
+    int king = 13;
+    int cont = 0;
+    if(lastPos >= 0) {
+        int elem = pile[lastPos].value - 1;
+        if(elem == ace) {
+            while(lastPos - 1 >= 0 && checkOrder(pile[lastPos - 1].value - 1, elem) == 1) {
+                cont++;
+                elem = piles[lastPos - 1].value - 1;
+                lastPos--;
+            }
+        }
+    }
+    if(cont == 11 && pile[lastPos].value - 1 == 13 ) {
+        completed = 1;
+    }
+    return completed;
 }
 
 int contains(vector<Card> deck, int value) {
