@@ -359,7 +359,7 @@ int checkCompletedPile(vector<Card> &pile) {
 */
 
 int checkCompletedSuit(vector<Card> deck, int cardValue) {
-    //Implemented by Kelvin
+    //Implemented by Nicacio
 
     int count = 1;
     int isValid = 0;
@@ -407,7 +407,7 @@ void congrats() {
 }
 
 void removeCompletedPile(vector<Card> &pile) {
-
+    //Implemented by Nicacio
     while (true) {
         if (pile.back().value == 13 || pile.empty() == 1) {
             pile.pop_back();
@@ -420,6 +420,7 @@ void removeCompletedPile(vector<Card> &pile) {
 }
 
 int checkCompletedPile(vector<vector<Card> > &piles) {
+    // Implemented by Nicacio
     int completedPilesNumber = 0;
     //13 is king
     for (int i = 0; i < piles.size(); ++i) {
@@ -435,6 +436,7 @@ int checkCompletedPile(vector<vector<Card> > &piles) {
 }
 
 int checkWon(vector<Card> &deck, vector<vector<Card> > &piles, int &completedPilesCounter) {
+    // Implemented by Nicacio
     int response = 0;
 
     completedPilesCounter += checkCompletedPile(piles);
@@ -448,6 +450,7 @@ int checkWon(vector<Card> &deck, vector<vector<Card> > &piles, int &completedPil
 }
 
 int contains(vector<Card> deck, int value) {
+    //Implemented by Nicacio
     int resp = 0;
     for (int i = 0; i < deck.size(); ++i) {
         if (deck[i].value == value) {
