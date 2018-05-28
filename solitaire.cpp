@@ -368,12 +368,12 @@ int checkCompletedSuit(vector<Card> deck, int cardValue) {
     if (!deck.empty() && deck.back().value == 1) {
         Card next = deck.back();
         deck.pop_back();
-        while (count <= 13 && !deck.empty()) {
+        while (count <= 13) {
 
             if (count == 13 && next.value == 13){
                 isValid = 1;
                 break;
-            } else if ((deck.back().value) == next.value + 1) {
+            } else if (!deck.empty() && (deck.back().value) == next.value + 1) {
                 count++;
                 next = deck.back();
                 deck.pop_back();
@@ -820,5 +820,17 @@ int main() {
     printPiles(deck, piles);
     */
 
+    /*Card c;
+    for (int i = 13; i > 0; --i) {
+        c.value = i;
+        c.turned = 1;
+        piles[0].push_back(c);
+    }
+
+    checkCompletedSuit(piles[0], 13);
+
+    for (int j = 0; j < 13; ++j) {
+        cout << piles[0][j].value << endl;
+    }*/
     return EXIT_SUCCESS;
 }
