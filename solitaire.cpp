@@ -790,6 +790,7 @@ int main() {
             if (checkWon(deck, piles, completedPilesCounter)) {
                 completedPilesCounter = 0;
                 isStarted = 0;
+                started = 1;
                 deck.clear();
                 resetPiles(piles);
                 start(deck, piles);
