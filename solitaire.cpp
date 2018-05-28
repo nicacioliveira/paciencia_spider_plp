@@ -710,7 +710,7 @@ void move(vector<Card> &deck, vector<vector<Card> > &piles) {
 
 int checkIsStarted(int isStarted) {
     if (isStarted == 0) {
-        cout << "The game has already started" << endl;
+        cout << "The game has not been started!" << endl;
         return 0;
     }
     return 1;
