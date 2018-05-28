@@ -720,7 +720,7 @@ void viewCompletedPilesNumber(int completedPilesCounter) {
 }
 
 void printContMovements(){
-    cout << "/n/n/nMade movements: " << contMovements << endl;
+    cout << "\n\nMade movements: " << contMovements << "\n" << endl;
 }
 
 int main() {
@@ -744,12 +744,15 @@ int main() {
             start(deck, piles);
             isStarted = 1;
             printPiles(deck, piles);
+            printContMovements();
         }
         else if (opt == 2) {
             deck.clear();
             resetPiles(piles);
             start(deck, piles);
             printPiles(deck, piles);
+            contMovements = 0;
+            printContMovements();
             //reset
         }
         else if (opt == 3) {
