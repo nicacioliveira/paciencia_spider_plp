@@ -36,7 +36,7 @@ string getStringValue(Card c);
  * Prints the piles in column format
  * @param piles
  */
-void printPiles(vector<Card> deck, vector<vector<Card> > piles);
+void printPiles(vector<vector<Card> > piles);
 
 /**
  * Distributes a specific number of cards to the pile.
@@ -203,7 +203,7 @@ int getIntValue(string card) {
     return resp;
 }
 
-void printPiles(vector<Card> deck, vector<vector<Card> > piles) {
+void printPiles(vector<vector<Card> > piles) {
     //implemented by nicacio
 
     string response = "";
@@ -426,6 +426,7 @@ int checkCompletedPile(vector<vector<Card> > &piles) {
         if (checkCompletedSuit(piles[i], 13) == 1) {
             removeCompletedPile(piles[i]);
             completedPilesNumber++;
+            printPiles(piles);
             cout << "One Suit completed in pile " << i << endl;
         }
     }
@@ -434,12 +435,12 @@ int checkCompletedPile(vector<vector<Card> > &piles) {
 }
 
 int checkWon(vector<Card> &deck, vector<vector<Card> > &piles, int &completedPilesCounter) {
-    int response = 1;
+    int response = 0;
 
     completedPilesCounter += checkCompletedPile(piles);
 
-    if (deck.size() != 0 || completedPilesCounter > numberOfSuits)
-        response = 0;
+    if (completedPilesCounter == numberOfSuits)
+        response = 1;
 
     if (response == 1) congrats();
 
@@ -546,7 +547,7 @@ void deal(vector<Card> &deck, vector<vector<Card> > &piles, int isStarted) {
                     handOutCardsTo(deck, 1, piles[i]);
                 }
             }
-            printPiles(deck, piles);
+            printPiles(piles);
         }
     }
 }
@@ -699,7 +700,7 @@ void move(vector<Card> &deck, vector<vector<Card> > &piles) {
 
     if ((value <= 13 && value >= 1) && (from >= 0 && from <= 9) && (to >= 0 && to <= 9)) {
         if (moveCardsTo(piles[from], value, piles[to])) {
-            printPiles(deck, piles);
+            printPiles(piles);
             contMovements++;
             printContMovements();
         } else
@@ -737,6 +738,7 @@ int main() {
 
     int opt; // [0: quit]; [1: start]; [2: reset]; [3: help] ; [4:hint]; [5:move]; [6:print]; [7:deal]; [8:suits]
     int isStarted = 0;
+    int started = 1;
     spiderLogo();
     help();
     opt = getOption();
@@ -748,11 +750,12 @@ int main() {
             resetPiles(piles);
             break;
         }
-        else if (opt == 1 && !checkIsStarted(isStarted)) {
+        else if (opt == 1 && checkIsStarted(started)) {
             //START
             start(deck, piles);
             isStarted = 1;
-            printPiles(deck, piles);
+            started = 0;
+            printPiles(piles);
             printContMovements();
         }
         else if (opt == 2 && checkIsStarted(isStarted)) {
@@ -760,7 +763,7 @@ int main() {
             deck.clear();
             resetPiles(piles);
             start(deck, piles);
-            printPiles(deck, piles);
+            printPiles(piles);
             contMovements = 0;
             printContMovements();
         }
@@ -782,14 +785,13 @@ int main() {
                 deck.clear();
                 resetPiles(piles);
                 start(deck, piles);
-                printPiles(deck, piles);
                 contMovements = 0;
                 printContMovements();
             }
         }
         else if (opt == 6 && checkIsStarted(isStarted)){
             //PRINT PILES
-            printPiles(deck, piles);
+            printPiles(piles);
             printContMovements();
         }
         else if (opt == 7 && checkIsStarted(isStarted)) {
@@ -823,9 +825,9 @@ int main() {
     deal(deck, piles);
     moveCardsTo(piles[0], 9, piles[1]);
     moveCardsTo(piles[0], 12, piles[9]);
-    printPiles(deck, piles);
+    printPiles(piles);
     checkWon(deck, piles, completedPilesCounter);
-    printPiles(deck, piles);
+    printPiles(piles);
     */
 
     /*Card c;
