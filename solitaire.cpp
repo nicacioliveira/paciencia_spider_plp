@@ -9,6 +9,7 @@
 #include <string>
 #include <algorithm>
 #include <sstream>
+#include <ctime>
 
 using namespace std;
 
@@ -16,6 +17,7 @@ const int frenchSuitNumber = 13;
 const int numberOfSuits = 8;
 const int qtdPiles = 10;
 const int _false = 0;
+const int contMovements = 0;
 
 struct Card {
     int value;
@@ -492,7 +494,7 @@ int moveCardsTo(vector<Card> &from, int value, vector<Card> &to) {
 
 void deck_shuffle(vector<Card> &deck) {
     //Implemented by Lucas
-    srand(time (0));
+    srand(time(0));
     for(int i = 0; i < deck.size(); i++) {
         int valueGenerated = rand() % deck.size();
         Card temporaryCard = deck[i];
@@ -716,13 +718,18 @@ void resetPiles(vector<vector<Card> > &piles) {
 void viewCompletedPilesNumber(int completedPilesCounter) {
     cout << "Complete suits: " << completedPilesCounter << endl;
 }
+
+void printContMovements(){
+    cout << "/n/n/nMade movements: " << contMovements << endl;
+}
+
 int main() {
     vector<Card> deck;//104
     vector<vector<Card> > piles(10);
 
     int completedPilesCounter = 0;
 
-    int opt; // [0: quit]; [1: start]; [2: reset]; [3: help] ; [4:hint]; [5:move]; []
+    int opt; // [0: quit]; [1: start]; [2: reset]; [3: help] ; [4:hint]; [5:move]; [6:print]; [7:deal]; [8:suits]
     int isStarted = 0;
     spiderLogo();
     help();
