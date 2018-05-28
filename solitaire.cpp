@@ -468,7 +468,7 @@ int moveCardsTo(vector<Card> &from, int value, vector<Card> &to) {
     int isValidMoviment;
     if (to.size() == 0)
         isValidMoviment = 1;
-    else if (value < to.back().value)
+    else if (value + 1 == to.back().value)
         isValidMoviment = 1;
     else
         isValidMoviment = 0;
