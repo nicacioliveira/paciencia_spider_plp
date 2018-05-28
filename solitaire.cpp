@@ -1,5 +1,5 @@
 //
-// Created by Nicacio, Damião, Daniela, Lucas and Kelvin on 05/20/18 for the discipline of PLP.
+// Created by Nicacio, Damiao, Daniela, Lucas and Kelvin on 05/20/18 for the discipline of PLP.
 // UFCG - Campina Grande - PB
 //
 
@@ -76,12 +76,35 @@ void fillDeck(vector<Card> & deck);
 int checkOrder(vector<Card> deck, int id);
 
 /**
- * Checks
+ * checks if there is any completed suit in any of the stacks
  * @param deck
  * @param completedPiles
  * @return 1: is true; 0: is not true
  */
-int checkCompletedPile(vector<Card> deck, vector<Card> pile);
+int checkCompletedSuit(vector<vector<Card> > &piles);
+
+/**
+ * Check if pile contais one completed suit
+ * @param pile
+ * @return
+ */
+int checkCompletedSuit(vector<Card> pile);
+
+/**
+ * removes a completed suit from a pile
+ * @param pile
+ */
+void removeCompletedSuit(vector<Card> &pile);
+
+/**
+ * Check winner
+ *
+ * @param deck
+ * @param piles
+ * @param completedPilesCounter
+ * @return
+ */
+int checkWon(vector<Card> &deck, vector<vector<Card> > &piles, int &completedPilesCounter);
 
 /**
  * Checks whether a card is contained in a stack
@@ -125,11 +148,38 @@ void start(vector<Card> &deck, vector<vector<Card> > &piles);
 void deal(vector<Card> &deck, vector<vector<Card> > &piles, int isStarded);
 
 /**
+ * Takes the first value that can be moved in a stack
+ * @param pile
+ * @return
+ */
+int getFirstValuePossible(vector<Card> pile);
+
+/**
+ * Gameplay hints
+ * @param deck
+ * @param piles
+ */
+void hint(vector<Card> deck, vector<vector<Card> > piles);
+
+/**
  * Prints the number of card movements performed
  */
 void printContMovements();
 
-// ---------------------------------------------------------------------------------------------------------------------
+/**
+ * Help options
+ */
+void help();
+
+void congrats();
+
+/**
+ * Get options in game
+ * @return
+ */
+int getOption();
+
+// -------------------------------------------------Basic Functions-----------------------------------------------------
 
 string getStringValue(Card c) {
     string resp;
@@ -283,8 +333,6 @@ void fillDeck(vector<Card> &deck) {
 
 int checkOrder(vector<Card> deck, int cardValue) {
     //Implemented by Kelvin
-
-    //provisorio
     int isValid = 1;
     if (deck.back().value != cardValue) {
         for (int i = deck.size() - 1; i > 0; --i) {
@@ -299,114 +347,33 @@ int checkOrder(vector<Card> deck, int cardValue) {
     return isValid;
 }
 
-/*
-int isValidMov(vector<Card> pile, int cardValue) {
-    //Implemented by Kelvin
-    int isPossible = 0;
-    int lastIndex = pile.size() - 1;
-    if(lastIndex < 0) {
-        isPossible = 1;
-    int count = 0;
-    int isValid = 1;
-    Card next= deck.back();
-    deck.pop_back();
-    while (!deck.empty() && isValid) {
-        count++;
-        if (count == 13 && next.value == 13)
-            break;
-        if (next.value+1 != deck.back().value) {
-            councheckCompletedPilet = 0;
-            isValid = 0;
-            break;
-        }
-        next = deck.back();
-        deck.pop_back();
-    }
-    else{
-        int lastElem = pile[lastIndex].value - 1;
-
-        if(checkOrder(lastElem, cardValue) == 1) {
-            isPossible = 1;
-        }
-    }
-
-    return isPossible;
-}*/
-/*
-int checkCompletedPile(vector<Card> &pile) {
-    //kelvin
-
-    int completed = 0;
-    int lastPos = pile.size() - 1;
-    int ace = 2;
-    int king = 13;
-    int cont = 0;
-    if(lastPos >= 0) {
-        int elem = pile[lastPos].value - 1;
-        if(elem == ace) {
-            while(lastPos - 1 >= 0 && checkOrder(pile[lastPos - 1].value - 1, elem) == 1) {
-                cont++;
-                elem = piles[lastPos - 1].value - 1;
-                lastPos--;
-            }
-        }
-    }
-    if(cont == 11 && pile[lastPos].value - 1 == 13 ) {
-        completed = 1;
-    }
-    return completed;
-}
-*/
-
-int checkCompletedSuit(vector<Card> deck, int cardValue) {
+int checkCompletedSuit(vector<Card> pile) {
     //Implemented by Nicacio
 
     int count = 1;
     int isValid = 0;
-    if (!deck.empty() && deck.back().value == 1) {
-        Card next = deck.back();
-        deck.pop_back();
+    if (!pile.empty() && pile.back().value == 1) {
+        Card next = pile.back();
+        pile.pop_back();
         while (count <= 13) {
 
             if (count == 13 && next.value == 13){
                 isValid = 1;
                 break;
-            } else if (!deck.empty() && (deck.back().value) == next.value + 1) {
+            } else if (!pile.empty() && (pile.back().value) == next.value + 1) {
                 count++;
-                next = deck.back();
-                deck.pop_back();
+                next = pile.back();
+                pile.pop_back();
             } else {
                 isValid = 0;
                 break;
             }
         }
     }
-
-    /*Card next= deck.back();
-    deck.pop_back();
-    while (!deck.empty() && isValid) {
-        count++;
-        if (count == 13 && next.value == 13)
-            break;
-        if (next.value+1 != deck.back().value) {
-            count = 0;
-            isValid = 0;
-            break;
-        }
-        next = deck.back();
-        deck.pop_back();
-    }*/
-
     return isValid;
 }
 
-void congrats() {
-    string congrats;
-    congrats += "You Won!!";
-    cout << congrats << endl;
-}
-
-void removeCompletedPile(vector<Card> &pile) {
+void removeCompletedSuit(vector<Card> &pile) {
     //Implemented by Nicacio
     while (true) {
         if (pile.back().value == 13 || pile.empty() == 1) {
@@ -419,13 +386,13 @@ void removeCompletedPile(vector<Card> &pile) {
 
 }
 
-int checkCompletedPile(vector<vector<Card> > &piles) {
+int checkCompletedSuit(vector<vector<Card> > &piles) {
     // Implemented by Nicacio
     int completedPilesNumber = 0;
     //13 is king
     for (int i = 0; i < piles.size(); ++i) {
-        if (checkCompletedSuit(piles[i], 13) == 1) {
-            removeCompletedPile(piles[i]);
+        if (checkCompletedSuit(piles[i]) == 1) {
+            removeCompletedSuit(piles[i]);
             completedPilesNumber++;
             printPiles(piles);
             cout << "One Suit completed in pile " << i << endl;
@@ -439,7 +406,7 @@ int checkWon(vector<Card> &deck, vector<vector<Card> > &piles, int &completedPil
     // Implemented by Nicacio
     int response = 0;
 
-    completedPilesCounter += checkCompletedPile(piles);
+    completedPilesCounter += checkCompletedSuit(piles);
 
     if (completedPilesCounter == numberOfSuits)
         response = 1;
@@ -509,7 +476,6 @@ void deck_shuffle(vector<Card> &deck) {
         deck[i] = deck[valueGenerated];
         deck[valueGenerated] = temporaryCard;
     }
-
 }
 
 void start(vector<Card> &deck, vector<vector<Card> > &piles) {
@@ -571,6 +537,10 @@ int getFirstValuePossible(vector<Card> pile) {
     }
     return value;
 }
+
+// ---------------------------------------------Jogability functions----------------------------------------------------
+
+//aux function for generate hint string
 string makeHintString(int indexPileFrom, int indexPileTo, Card c) {
     string response;
     ostringstream indexI;
@@ -588,8 +558,9 @@ void hint(vector<Card> deck, vector<vector<Card> > piles) {
     Card card;
     card.value = -1;
     card.turned = 1;
-
-    string response = "--------------HINT-------------\n";
+    string header = "--------------HINT-------------\n";
+    string response = "";
+    string footer = "-------------------------------\n";
 
     for (int indexPileFrom = 0; indexPileFrom < piles.size(); ++indexPileFrom) {
 
@@ -606,12 +577,14 @@ void hint(vector<Card> deck, vector<vector<Card> > piles) {
         }
     }
 
-    if (response == "--------------HINT-------------\n" && deck.size() >= 10) {
+    if (response.size() <= 0 && deck.size() >= 10) {
         cout << "No hint at the moment. But you can deal a new card into each tableau at the column." << endl;
-    } else if (card.value == -1 && deck.size() < 10) {
+    } else if (response.size() <= 0) {
+        cout << "No hint at the moment." << endl;
+    } else if (card.value == -1) {
         cout << "No hint at the moment." << endl;
     } else {
-        cout << response;
+        cout << header + response + footer << endl;
     }
 }
 
@@ -635,6 +608,7 @@ void help() {
     cout << cmd << endl;
 }
 
+// auxiliary function
 void spiderLogo() {
     string logo = "";
     logo += " _______  _______  ___      ___   _______  _______  ___   ______    _______ \n";
@@ -656,6 +630,7 @@ void spiderLogo() {
     cout << logo << endl;
 }
 
+// auxiliary function
 void bye() {
     string bye = "";
     cout << endl;
@@ -668,6 +643,28 @@ void bye() {
     bye += "                          __/ |                                 \n";
     bye += "                         |___/                                  \n";
     cout << bye << endl;
+}
+
+// auxiliary function
+void congrats() {
+    string congrats;
+    congrats += " __     __          __          __         _           \n";
+    congrats += " \\ \\   / /          \\ \\        / /        | |      \n";
+    congrats += "  \\ \\_/ /__  _   _   \\ \\  /\\  / /__  _ __ | |     \n";
+    congrats += "   \\   / _ \\| | | |   \\ \\/  \\/ / _ \\| '_ \\| |   \n";
+    congrats += "    | | (_) | |_| |    \\  /\\  / (_) | | | |_|        \n";
+    congrats += "    |_|\\___/ \\__,_|     \\/  \\/ \\___/|_| |_(_)     \n";
+    congrats += "                                                       \n";
+    congrats += "\n";
+    congrats += "   _____                            _         _       _   _                 _          \n";
+    congrats += "  / ____|                          | |       | |     | | (_)               | |         \n";
+    congrats += " | |     ___  _ __   __ _ _ __ __ _| |_ _   _| | __ _| |_ _  ___  _ __  ___| |         \n";
+    congrats += " | |    / _ \\| '_ \\ / _` | '__/ _` | __| | | | |/ _` | __| |/ _ \\| '_ \\/ __| |     \n";
+    congrats += " | |___| (_) | | | | (_| | | | (_| | |_| |_| | | (_| | |_| | (_) | | | \\__ \\_|       \n";
+    congrats += "  \\_____\\___/|_| |_|\\__, |_|  \\__,_|\\__|\\__,_|_|\\__,_|\\__|_|\\___/|_| |_|___(_)\n";
+    congrats += "                     __/ |                                                             \n";
+    congrats += "                    |___/                                                              \n";
+    cout << congrats << endl;
 }
 
 int getOption() {
@@ -694,6 +691,7 @@ int getOption() {
     return response;
 }
 
+//auxiliary move cards function
 void move(vector<Card> &deck, vector<vector<Card> > &piles) {
     char cardIn[5];
     int value, from, to;
@@ -712,6 +710,7 @@ void move(vector<Card> &deck, vector<vector<Card> > &piles) {
 
 }
 
+// auxiliary function
 int checkIsStarted(int isStarted) {
     if (isStarted == 0) {
         cout << "The game has not been started!" << endl;
@@ -720,15 +719,19 @@ int checkIsStarted(int isStarted) {
     return 1;
 }
 
+// auxiliary function
 void resetPiles(vector<vector<Card> > &piles) {
     for (int i = 0; i < piles.size(); ++i) {
         piles[i].clear();
     }
 }
+
+// auxiliary function
 void viewCompletedPilesNumber(int completedPilesCounter) {
     cout << "Complete suits: " << completedPilesCounter << endl;
 }
 
+// auxiliary function
 void printContMovements(){
     cout << "\n\nMade movements: " << contMovements << "\n" << endl;
 }
@@ -739,7 +742,9 @@ int main() {
 
     int completedPilesCounter = 0;
 
-    int opt; // [0: quit]; [1: start]; [2: reset]; [3: help] ; [4:hint]; [5:move]; [6:print]; [7:deal]; [8:suits]
+    // [0: quit]; [1: start]; [2: reset]; [3: help] ; [4:hint]; [5:move]; [6:print]; [7:deal]; [8:suits]
+    int opt;
+
     int isStarted = 0;
     int started = 1;
     spiderLogo();
@@ -809,41 +814,6 @@ int main() {
         opt = getOption();
     }
 
-    /*
-    start(deck, piles);
-    moveCardsTo(piles[8], 2, piles[7]);
-    deal(deck, piles);
-    moveCardsTo(piles[7], 3, piles[4]);
-    moveCardsTo(piles[1], 7, piles[0]);
-    moveCardsTo(piles[0], 8, piles[1]);
-    hint(deck, piles);
-    moveCardsTo(piles[5], 11, piles[0]);
-    moveCardsTo(piles[6], 10, piles[0]);
-    moveCardsTo(piles[1], 9, piles[0]);
-    moveCardsTo(piles[4], 4, piles[1]);
-    moveCardsTo(piles[6], 1, piles[3]);
-    hint(deck, piles);
-    moveCardsTo(piles[1], 5, piles[6]);
-    moveCardsTo(piles[6], 6, piles[0]);
-    deal(deck, piles);
-    moveCardsTo(piles[0], 9, piles[1]);
-    moveCardsTo(piles[0], 12, piles[9]);
-    printPiles(piles);
-    checkWon(deck, piles, completedPilesCounter);
-    printPiles(piles);
-    */
 
-    /*Card c;
-    for (int i = 13; i > 0; --i) {
-        c.value = i;
-        c.turned = 1;
-        piles[0].push_back(c);
-    }
-
-    checkCompletedSuit(piles[0], 13);
-
-    for (int j = 0; j < 13; ++j) {
-        cout << piles[0][j].value << endl;
-    }*/
     return EXIT_SUCCESS;
 }
