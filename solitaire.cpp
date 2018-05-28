@@ -413,6 +413,7 @@ void removeCompletedPile(vector<Card> &pile) {
     while (true) {
         if (pile.back().value == 13 || pile.empty() == 1) {
             pile.pop_back();
+            if (!pile.empty()) pile.back().turned = 1;
             break;
         }
         pile.pop_back();
