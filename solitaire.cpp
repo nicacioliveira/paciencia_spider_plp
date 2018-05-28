@@ -122,7 +122,7 @@ void start(vector<Card> &deck, vector<vector<Card> > &piles);
  * @param piles
  * @return 1: deal is possible; 0: deal is not possible
  */
-void deal(vector<Card> &deck, vector<vector<Card> > &piles);
+void deal(vector<Card> &deck, vector<vector<Card> > &piles, int isStarded);
 
 /**
  * Prints the number of card movements performed
@@ -205,43 +205,41 @@ int getIntValue(string card) {
 
 void printPiles(vector<Card> deck, vector<vector<Card> > piles) {
     //implemented by nicacio
-    if (deck.empty()) {
-        cout << "The game has not started." << endl;
-    } else {
-        string response = "";
-        string header = "";
-        Card c;
 
-        // index of the biggest pile
-        int maxIndex = 0;
+    string response = "";
+    string header = "";
+    Card c;
 
-        // Search biggest Pile
-        for (int i = 0; i < piles.size(); ++i) {
-            ostringstream index;
-            if (piles[maxIndex].size() < piles[i].size()) maxIndex = i;
-            index << i;
-            header += "      " + index.str() + "   ";
-        }
+    // index of the biggest pile
+    int maxIndex = 0;
 
-        //Header of the piles
-        cout << header << endl;
-
-        string card_value = "";
-
-        // Transpose
-        for (int i = 0; i < piles[maxIndex].size(); ++i) {
-            response = "";
-            for (int j = 0; j < piles.size(); ++j) {
-                if (i >= piles[j].size())
-                    card_value = "       ";
-                else
-                    card_value = getStringValue(piles[j][i]);
-                response += "   " + card_value + "";
-            }
-            cout << response << endl;
-        }
-        cout << endl;
+    // Search biggest Pile
+    for (int i = 0; i < piles.size(); ++i) {
+        ostringstream index;
+        if (piles[maxIndex].size() < piles[i].size()) maxIndex = i;
+        index << i;
+        header += "      " + index.str() + "   ";
     }
+
+    //Header of the piles
+    cout << header << endl;
+
+    string card_value = "";
+
+    // Transpose
+    for (int i = 0; i < piles[maxIndex].size(); ++i) {
+        response = "";
+        for (int j = 0; j < piles.size(); ++j) {
+            if (i >= piles[j].size())
+                card_value = "       ";
+            else
+                card_value = getStringValue(piles[j][i]);
+            response += "   " + card_value + "";
+        }
+        cout << response << endl;
+    }
+    cout << endl;
+
 }
 
 void handOutCardsTo(vector<Card> &deck, int quantity, vector<Card> &pile) {
@@ -525,10 +523,10 @@ void start(vector<Card> &deck, vector<vector<Card> > &piles) {
     handOutCardsTo(deck, 4, piles[9]);
 }
 
-void deal(vector<Card> &deck, vector<vector<Card> > &piles) {
+void deal(vector<Card> &deck, vector<vector<Card> > &piles, int isStarted) {
     //Implemented by Damiao
     if (deck.empty())
-        cout << "The game has not started." << endl;
+        cout << "You did not have any more cards to hand out!" << endl;
     else {
 
         int check = 1;
@@ -711,11 +709,11 @@ void move(vector<Card> &deck, vector<vector<Card> > &piles) {
 }
 
 int checkIsStarted(int isStarted) {
-    if (isStarted) {
+    if (isStarted == 0) {
         cout << "The game has already started" << endl;
-        return 1;
+        return 0;
     }
-    return 0;
+    return 1;
 }
 
 void resetPiles(vector<vector<Card> > &piles) {
@@ -744,34 +742,41 @@ int main() {
     opt = getOption();
     while (true) {
         if (opt == 0) {
+            //QUIT
             bye();
+            deck.clear();
+            resetPiles(piles);
             break;
         }
         else if (opt == 1 && !checkIsStarted(isStarted)) {
-            //start
+            //START
             start(deck, piles);
             isStarted = 1;
             printPiles(deck, piles);
             printContMovements();
         }
-        else if (opt == 2) {
+        else if (opt == 2 && checkIsStarted(isStarted)) {
+            //RESET
             deck.clear();
             resetPiles(piles);
             start(deck, piles);
             printPiles(deck, piles);
             contMovements = 0;
             printContMovements();
-            //reset
         }
         else if (opt == 3) {
+            //HELP MENU
             help();
         }
-        else if (opt == 4) {
+        else if (opt == 4 && checkIsStarted(isStarted)) {
+            //HINT
             hint(deck, piles);
         }
-        else if (opt == 5) {
+        else if (opt == 5 && checkIsStarted(isStarted)) {
+            //MOVE CARD
             move(deck, piles);
-            if (checkWon(deck,piles, completedPilesCounter)) {
+            // CHECK WON and CHECK COMPLETED PILES
+            if (checkWon(deck, piles, completedPilesCounter)) {
                 completedPilesCounter = 0;
                 isStarted = 0;
                 deck.clear();
@@ -782,14 +787,17 @@ int main() {
                 printContMovements();
             }
         }
-        else if (opt == 6){
+        else if (opt == 6 && checkIsStarted(isStarted)){
+            //PRINT PILES
             printPiles(deck, piles);
             printContMovements();
         }
-        else if (opt == 7) {
-            deal(deck, piles);
+        else if (opt == 7 && checkIsStarted(isStarted)) {
+            // HANDOUT CARDS
+            deal(deck, piles, isStarted);
         }
-        else if (opt == 8){
+        else if (opt == 8 && checkIsStarted(isStarted)){
+
             viewCompletedPilesNumber(completedPilesCounter);
         }
 
