@@ -9,6 +9,7 @@
 #include <string>
 #include <algorithm>
 #include <sstream>
+#include <ctime>
 
 using namespace std;
 
@@ -16,6 +17,7 @@ const int frenchSuitNumber = 13;
 const int numberOfSuits = 8;
 const int qtdPiles = 10;
 const int _false = 0;
+int contMovements = 0;
 
 struct Card {
     int value;
@@ -121,6 +123,11 @@ void start(vector<Card> &deck, vector<vector<Card> > &piles);
  * @return 1: deal is possible; 0: deal is not possible
  */
 void deal(vector<Card> &deck, vector<vector<Card> > &piles);
+
+/**
+ * Prints the number of card movements performed
+ */
+void printContMovements();
 
 // ---------------------------------------------------------------------------------------------------------------------
 
@@ -492,7 +499,7 @@ int moveCardsTo(vector<Card> &from, int value, vector<Card> &to) {
 
 void deck_shuffle(vector<Card> &deck) {
     //Implemented by Lucas
-    srand(time (0));
+    srand(time(0));
     for(int i = 0; i < deck.size(); i++) {
         int valueGenerated = rand() % deck.size();
         Card temporaryCard = deck[i];
@@ -692,9 +699,11 @@ void move(vector<Card> &deck, vector<vector<Card> > &piles) {
     value = getIntValue(card);
 
     if ((value <= 13 && value >= 1) && (from >= 0 && from <= 9) && (to >= 0 && to <= 9)) {
-        if (moveCardsTo(piles[from], value, piles[to]))
+        if (moveCardsTo(piles[from], value, piles[to])) {
             printPiles(deck, piles);
-        else
+            contMovements++;
+            printContMovements();
+        } else
             cout << "Impossible move!!!" << endl;
     }
 
@@ -716,13 +725,18 @@ void resetPiles(vector<vector<Card> > &piles) {
 void viewCompletedPilesNumber(int completedPilesCounter) {
     cout << "Complete suits: " << completedPilesCounter << endl;
 }
+
+void printContMovements(){
+    cout << "\n\nMade movements: " << contMovements << "\n" << endl;
+}
+
 int main() {
     vector<Card> deck;//104
     vector<vector<Card> > piles(10);
 
     int completedPilesCounter = 0;
 
-    int opt; // [0: quit]; [1: start]; [2: reset]; [3: help] ; [4:hint]; [5:move]; []
+    int opt; // [0: quit]; [1: start]; [2: reset]; [3: help] ; [4:hint]; [5:move]; [6:print]; [7:deal]; [8:suits]
     int isStarted = 0;
     spiderLogo();
     help();
@@ -737,12 +751,15 @@ int main() {
             start(deck, piles);
             isStarted = 1;
             printPiles(deck, piles);
+            printContMovements();
         }
         else if (opt == 2) {
             deck.clear();
             resetPiles(piles);
             start(deck, piles);
             printPiles(deck, piles);
+            contMovements = 0;
+            printContMovements();
             //reset
         }
         else if (opt == 3) {
@@ -760,10 +777,13 @@ int main() {
                 resetPiles(piles);
                 start(deck, piles);
                 printPiles(deck, piles);
+                contMovements = 0;
+                printContMovements();
             }
         }
         else if (opt == 6){
             printPiles(deck, piles);
+            printContMovements();
         }
         else if (opt == 7) {
             deal(deck, piles);
