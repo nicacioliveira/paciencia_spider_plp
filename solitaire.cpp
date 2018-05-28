@@ -17,7 +17,7 @@ const int frenchSuitNumber = 13;
 const int numberOfSuits = 8;
 const int qtdPiles = 10;
 const int _false = 0;
-const int contMovements = 0;
+int contMovements = 0;
 
 struct Card {
     int value;
@@ -123,6 +123,11 @@ void start(vector<Card> &deck, vector<vector<Card> > &piles);
  * @return 1: deal is possible; 0: deal is not possible
  */
 void deal(vector<Card> &deck, vector<vector<Card> > &piles);
+
+/**
+ * Prints the number of card movements performed
+ */
+void printContMovements();
 
 // ---------------------------------------------------------------------------------------------------------------------
 
@@ -694,9 +699,11 @@ void move(vector<Card> &deck, vector<vector<Card> > &piles) {
     value = getIntValue(card);
 
     if ((value <= 13 && value >= 1) && (from >= 0 && from <= 9) && (to >= 0 && to <= 9)) {
-        if (moveCardsTo(piles[from], value, piles[to]))
+        if (moveCardsTo(piles[from], value, piles[to])) {
             printPiles(deck, piles);
-        else
+            contMovements++;
+            printContMovements();
+        } else
             cout << "Impossible move!!!" << endl;
     }
 
@@ -770,10 +777,13 @@ int main() {
                 resetPiles(piles);
                 start(deck, piles);
                 printPiles(deck, piles);
+                contMovements = 0;
+                printContMovements();
             }
         }
         else if (opt == 6){
             printPiles(deck, piles);
+            printContMovements();
         }
         else if (opt == 7) {
             deal(deck, piles);
