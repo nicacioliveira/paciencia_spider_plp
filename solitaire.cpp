@@ -33,6 +33,13 @@ struct Card {
 string getStringValue(Card c);
 
 /**
+ * This function returns int value of the card value.
+ * @param string card value
+ * @return int card value
+ */
+int getIntValue(string card);
+
+/**
  * Prints the piles in column format
  * @param piles
  */
@@ -741,10 +748,7 @@ int main() {
     vector<vector<Card> > piles(10);
 
     int completedPilesCounter = 0;
-
-    // [0: quit]; [1: start]; [2: reset]; [3: help] ; [4:hint]; [5:move]; [6:print]; [7:deal]; [8:suits]
-    int opt;
-
+    int opt; // [0: quit]; [1: start]; [2: reset]; [3: help] ; [4:hint]; [5:move]; [6:print]; [7:deal]; [8:suits]
     int isStarted = 0;
     int started = 1;
     spiderLogo();
@@ -807,7 +811,7 @@ int main() {
             deal(deck, piles, isStarted);
         }
         else if (opt == 8 && checkIsStarted(isStarted)){
-
+            // SUITS NUMBER
             viewCompletedPilesNumber(completedPilesCounter);
         }
 
