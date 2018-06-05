@@ -648,13 +648,13 @@ void bye() {
 // auxiliary function
 void congrats() {
     string congrats;
-    congrats += " __     __          __          __         _           \n";
-    congrats += " \\ \\   / /          \\ \\        / /        | |      \n";
-    congrats += "  \\ \\_/ /__  _   _   \\ \\  /\\  / /__  _ __ | |     \n";
-    congrats += "   \\   / _ \\| | | |   \\ \\/  \\/ / _ \\| '_ \\| |   \n";
-    congrats += "    | | (_) | |_| |    \\  /\\  / (_) | | | |_|        \n";
-    congrats += "    |_|\\___/ \\__,_|     \\/  \\/ \\___/|_| |_(_)     \n";
-    congrats += "                                                       \n";
+    congrats += " __     __          __          ___       _        \n";
+    congrats += " \\ \\   / /          \\ \\        / (_)     | |   \n";
+    congrats += "  \\ \\_/ /__  _   _   \\ \\  /\\  / / _ _ __ | |  \n";
+    congrats += "   \\   / _ \\| | | |   \\ \\/  \\/ / | | '_ \\| | \n";
+    congrats += "    | | (_) | |_| |    \\  /\\  /  | | | | |_|     \n";
+    congrats += "    |_|\\___/ \\__,_|     \\/  \\/   |_|_| |_(_)   \n";
+    congrats += "                                                   \n";
     congrats += "\n";
     congrats += "   _____                            _         _       _   _                 _          \n";
     congrats += "  / ____|                          | |       | |     | | (_)               | |         \n";
