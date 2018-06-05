@@ -420,7 +420,7 @@ int contains(vector<Card> deck, int value) {
     //Implemented by Nicacio
     int resp = 0;
     for (int i = 0; i < deck.size(); ++i) {
-        if (deck[i].value == value) {
+        if (deck[i].value == value && deck[i].turned) {
             resp = 1;
             break;
         }
