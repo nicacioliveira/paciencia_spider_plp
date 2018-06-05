@@ -793,7 +793,6 @@ int main() {
                 started = 1;
                 deck.clear();
                 resetPiles(piles);
-                start(deck, piles);
                 contMovements = 0;
                 printContMovements();
             }
