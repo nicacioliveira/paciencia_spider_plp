@@ -275,7 +275,7 @@ void printPiles(vector<vector<Card> > piles) {
         ostringstream index;
         if (piles[maxIndex].size() < piles[i].size()) maxIndex = i;
         index << i;
-        header += "      " + index.str() + "   ";
+        header += "   |\\_" + index.str() + "_/|";
     }
 
     //Header of the piles
