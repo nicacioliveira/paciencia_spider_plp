@@ -3,130 +3,139 @@
 -- Created by Nicacio, Damiao, Daniela, Lucas and Kelvin on 05/20/18 for the discipline of PLP.   |
 -- UFCG - Campina Grande - PB                                                                     |
 ---------------------------------------------------------------------------------------------------
+module Main where
 
-import Data.List
-
--- Formatting of the suits:
--- empty: |-----|
--- Cards: | Ace |
---        |  2  |
---        |  3  |
---        |  4  |
---        |  5  |
---        |  6  |
---        |  7  |
---        |  8  |
---        |  9  |
---        | 10  |
---        |Jack |
---        |Queen|
---        | King|
-
-data Card = Card {
-    number :: Int,
-    value :: String,
-    turned :: Bool
-} deriving (Show)
-
-cardNumber :: Card -> Int
-cardNumber (Card n v t) = n
-
-cardValue :: Card -> String
-cardValue (Card n v t) = v
-
-cardIsTurned :: Card -> Bool
-cardIsTurned (Card n v t) = t
-
-frenchSuit = [Card 1  "| King|" True,
-        Card 2  "|Queen|" True,
-        Card 3  "| Jack|" True,
-        Card 4  "| 10  |" True,
-        Card 5  "|  9  |" True,
-        Card 6  "|  8  |" True,
-        Card 7  "|  7  |" True,
-        Card 8  "|  6  |" True,
-        Card 9  "|  5  |" True,
-        Card 10 "|  4  |" True,
-        Card 11 "|  3  |" True,
-        Card 12 "|  2  |" True,
-        Card 12 "| Ace |" True
-        ]
-
-createCard :: Int -> String -> Bool -> Card
-createCard n v t = Card {number = n, value = v, turned = t}
-
---- SHOW PILES
-formatLine :: [Card] -> String
-formatLine [] = ""
-formatLine s = (cardValue $ head s) ++ "  " ++ (formatLine $ tail s)
-
-formatPiles :: [[Card]] -> String
-formatPiles [] = ""
-formatPiles s = (formatLine $ head s) ++ "\n" ++ (formatPiles $ tail s)
-
-printPiles :: [[Card]] -> IO()
-printPiles piles = do
-    putStrLn "| --- |  | --- |  | --- |  | --- |  | --- |  | --- |  | --- |  | --- |  | --- |  | --- |  | --- |  | --- |  | --- |"
-    putStrLn $ formatPiles $ transpose piles
+import StackFunctions
+import Card
+import DeckFunctions
 
 
---- HANDOUTCARDSTO
---- deck, quantity, pile to
---- returns modified pile
-handOutCardsTo :: [Card] -> Int -> [Card] -> [Card]
-handOutCardsTo deck quantity pile = []
+isNotStarted :: Bool -> Bool
+isNotStarted started = started == False
 
---- filldeck or create
-fillDeck :: [Card] -> [Card]
-fillDeck deck = []
+isStarted :: Bool -> Bool
+isStarted started = started == True
 
----checkOrder
-checkOrder :: [Card] -> Int -> Bool
-checkOrder pile cardValue = False
+getOption :: IO String
+getOption = 
+    do
+        putStrLn "command?? "
+        opt <- getLine
+        return opt
 
----checkCompletedSuit
-checkCompletedSuit :: [Card] -> Bool
-checkCompletedSuit pile = False
 
-removeCompletedSuit :: [Card] -> Bool
-removeCompletedSuit piles = False
+main :: IO()
+main =  
+    do  
+        putStrLn spiderLogo
+        putStrLn help
+        run "" False [] [[]]
 
-checkWon :: [Card] -> [[Card]] -> Int -> Bool
-checkWon deck piles completedPilesNumber = False
 
-contains :: [Card] -> Bool
-contains pile = False
+run :: String -> Bool -> [Card] -> [[Card]] -> IO()
+run opt started deck piles  
+                            | opt == "quit" =
+                                do
+                                    putStrLn bye
 
--- moveCardsTo ????
+                            | opt == "start" && isNotStarted started =
+                                do
+                                    let d_p = createPiles 4 5 (newDeck 8) []
+                                    let deck = fst d_p
+                                    let piles = snd d_p
+                                    let d_p = createPiles 6 4 deck piles
+                                    let deck = fst d_p
+                                    let piles = snd d_p
+                                    
+                                    printPiles piles
 
--- deck_shuffle ???
+                                    run "" True deck piles
 
--- start ????
+                            | opt == "start" && isStarted started = 
+                                do
+                                    putStrLn "Is Started!!!"
+                                    run "" True deck piles
 
-deal :: [Card] -> [[Card]] -> [[Card]]
-deal deck piles = [[]]
+                            | opt == "reset" && isStarted started =
+                                do
+                                    let d_p = createPiles 4 5 (newDeck 8) []
+                                    let deck = fst d_p
+                                    let piles = snd d_p
+                                    let d_p = createPiles 6 4 deck piles
+                                    let deck = fst d_p
+                                    let piles = snd d_p
+                                    
+                                    printPiles piles
 
-hint :: [Card] -> [[Card]] -> IO()
-hint deck piles = do
-    putStrLn "not implemented"
+                                    run "" True deck piles
 
-help :: String
-help = 
-    "\n"
-    ++"  |---------------------------------HELP--------------------------------|\n"
-    ++"  |Start:            start                                              |\n"
-    ++"  |Quit Game:        quit                                               |\n"
-    ++"  |Reset Game:       reset                                              |\n"
-    ++"  |Help:             help                                               |\n"
-    ++"  |Hint:             hint                                               |\n"
-    ++"  |print piles:      print                                              |\n"
-    ++"  |deal:             deal                                               |\n"
-    ++"  |Completed Suits:  suits                                              |\n"
-    ++"  |_____________________________________________________________________|\n"
-    ++"  |Move cards:    move (press Enter)                                    |\n"
-    ++"  |               <card value> <output pile number> <input pile number> |\n"
-    ++"  |Cards:         Ace(1) 2 3 4 5 6 7 8 9 10 Jack(11) Queen(12) King(13) |\n"
-    ++"  |---------------------------------------------------------------------|\n"
+                            | opt == "reset" && isNotStarted started =
+                                do
+                                    putStrLn "Is not Started!!!"
+
+                                    run "" False deck piles
+
+                            | opt == "help"=
+                                do
+                                    putStrLn help
+                                    run "" started deck piles
+
+                            | opt == "hint" && isStarted started =
+                                do
+                                    putStrLn "Not Implemented!!!"
+                                    run "" started deck piles
+
+                            | opt == "hint" && isNotStarted started =
+                                do
+                                    putStrLn "is not Started!!!"
+                                    run "" started deck piles
+
+                            | opt == "move" && isStarted started =
+                                do
+                                    putStrLn "Not Implemented!!!"
+                                    run "" started deck piles
+
+                            | opt == "move" && isNotStarted started =
+                                do
+                                    putStrLn "is not Started!!!"
+                                    run "" started deck piles
+
+
+                            | opt == "deal" && isStarted started =
+                                do
+                                    putStrLn "Not Implemented!!!"
+                                    run "" started deck piles
+
+                            | opt == "deal" && isNotStarted started =
+                                do
+                                    putStrLn "is not Started!!!"
+                                    run "" started deck piles
+
+                            | opt == "suits" && isStarted started =
+                                do
+                                    putStrLn "Not Implemented!!!"
+                                    run "" started deck piles
+
+                            | opt == "suits" && isNotStarted started =
+                                do
+                                    putStrLn "is not Started!!!"
+                                    run "" started deck piles
+
+                            | opt == "print" && isStarted started = 
+                                do
+                                    printPiles piles
+                                    run "" True deck piles
+
+                            | opt == "print" && isNotStarted started = 
+                                do
+                                    putStrLn "Is not Started!!!"
+                                    run "" False deck piles
+
+                            | otherwise =
+                                do
+                                    opt <- getOption
+                                    run opt started deck piles
+
 
 spiderLogo :: String
 spiderLogo =
@@ -148,17 +157,23 @@ spiderLogo =
         ++"                                \\  \\      /  /                            \n"
         ++"                                    '.__.'                                  \n"
 
-bye :: String
-bye = 
+help :: String
+help = 
     "\n"
-    ++"                    ____             _ _                        \n"
-    ++"                   |  _ \\           | | |                      \n"
-    ++"                   | |_) |_   _  ___| | |      / _ \\           \n"
-    ++"                   |  _ <| | | |/ _ \\ | |    \\_\\(_)/_/       \n"
-    ++"                   | |_) | |_| |  __/_|_|    \\_//\"\\\\_       \n"
-    ++"                   |____/ \\__, |\\___(_|_)      /   \\         \n"
-    ++"                          __/ |                                 \n"
-    ++"                         |___/                                  \n"
+    ++"  |---------------------------------HELP--------------------------------|\n"
+    ++"  |Start:            start                                              |\n"
+    ++"  |Quit Game:        quit                                               |\n"
+    ++"  |Reset Game:       reset                                              |\n"
+    ++"  |Help:             help                                               |\n"
+    ++"  |Hint:             hint                                               |\n"
+    ++"  |print piles:      print                                              |\n"
+    ++"  |deal:             deal                                               |\n"
+    ++"  |Completed Suits:  suits                                              |\n"
+    ++"  |_____________________________________________________________________|\n"
+    ++"  |Move cards:    move (press Enter)                                    |\n"
+    ++"  |               <card value> <output pile number> <input pile number> |\n"
+    ++"  |Cards:         Ace(1) 2 3 4 5 6 7 8 9 10 Jack(11) Queen(12) King(13) |\n"
+    ++"  |---------------------------------------------------------------------|\n"
 
 congrats :: String
 congrats = 
@@ -179,3 +194,16 @@ congrats =
         ++"  \\_____\\___/|_| |_|\\__, |_|  \\__,_|\\__|\\__,_|_|\\__,_|\\__|_|\\___/|_| |_|___(_)\n"
         ++"                     __/ |                                                             \n"
         ++"                    |___/                                                              \n"
+
+
+bye :: String
+bye = 
+    "\n"
+    ++"                    ____             _ _                        \n"
+    ++"                   |  _ \\           | | |                      \n"
+    ++"                   | |_) |_   _  ___| | |      / _ \\           \n"
+    ++"                   |  _ <| | | |/ _ \\ | |    \\_\\(_)/_/       \n"
+    ++"                   | |_) | |_| |  __/_|_|    \\_//\"\\\\_       \n"
+    ++"                   |____/ \\__, |\\___(_|_)      /   \\         \n"
+    ++"                          __/ |                                 \n"
+    ++"                         |___/                                  \n"
