@@ -4,18 +4,25 @@ import Data.List
 import Card
 import StackFunctions
 
+------------------------------------------------------------------------------------------------------------------------------------
 
 printPiles :: [[Card]] -> IO()
 printPiles piles =
-	do
-		let str = formatPiles $ transpose $ toStringPiles piles
-		putStrLn "|  -  | |  -  | |  -  | |  -  | |  -  | |  -  | |  -  | |  -  | |  -  | |  -  |"
-		putStrLn str
-
+    do
+        let str = formatPiles $ transpose $ toStringPiles (maxLenthInPiles piles) piles
+        putStrLn "|  -  | |  -  | |  -  | |  -  | |  -  | |  -  | |  -  | |  -  | |  -  | |  -  |"
+        putStrLn str
 
 formatPiles :: [[String]] -> String
 formatPiles [] = ""
 formatPiles (x:xs) = formatPile x ++ "\n" ++ formatPiles xs
+
+maxLenthInPiles :: [[Card]] -> Int
+maxLenthInPiles piles = maximum $ map length piles
+
+addString :: String -> Int -> [String] -> [String]
+addString _ 0 l = l
+addString s n l = addString s (n-1) (push s l)
 
 formatPile :: [String] -> String
 formatPile [] = ""
@@ -23,9 +30,11 @@ formatPile (x:xs) = x ++ " " ++ formatPile xs
 
 
 --[[Card, Card],[Card, Card]] -> [["value", "value"], ["value", "value"]]
-toStringPiles :: [[Card]] -> [[String]]
-toStringPiles [] = []
-toStringPiles (x:xs) = (map toString x):toStringPiles xs
+toStringPiles :: Int -> [[Card]] -> [[String]]
+toStringPiles _ [] = []
+toStringPiles n (x:xs) = (addString "       " (n - (length x))(map toString x)):toStringPiles n xs
+
+------------------------------------------------------------------------------------------------------------------------------------
 
 --One suit of 13 cards
 newSuit :: [Card]
@@ -65,7 +74,6 @@ createPiles n qtd deck piles =
 
 ------------------------------------------------------------------------------------------------------------------
 
-
 -- FOR TESTS
 
 pile0 = [newCard 1 False, newCard 2 False, newCard 3 False, newCard 4 False, newCard 5 False]
@@ -73,7 +81,7 @@ pile1 = [newCard 1 False, newCard 2 False, newCard 3 False, newCard 4 False, new
 pile2 = [newCard 1 False, newCard 2 False, newCard 3 False, newCard 4 False, newCard 5 True]
 pile3 = [newCard 1 False, newCard 2 False, newCard 3 False, newCard 4 False, newCard 5 True]
 pile4 = [newCard 1 False, newCard 2 False, newCard 3 False, newCard 4 True]
-pile5 = [newCard 1 False, newCard 2 False, newCard 3 False, newCard 4 True]
+pile5 = [newCard 1 False, newCard 2 False, newCard 3 False, newCard 4 True, newCard 4 True, newCard 4 True, newCard 4 True]
 pile6 = [newCard 1 False, newCard 2 False, newCard 3 False, newCard 4 True]
 pile7 = [newCard 1 False, newCard 2 False, newCard 3 False, newCard 4 True]
 pile8 = [newCard 1 False, newCard 2 False, newCard 3 False, newCard 4 True]
@@ -81,5 +89,5 @@ pile9 = [newCard 1 False, newCard 2 False, newCard 3 False, newCard 4 True]
 
 piles = [pile0, pile1, pile2, pile3, pile4, pile5, pile6, pile7, pile8, pile9]
 
-str = transpose $ toStringPiles piles
-formated = formatPiles str
+{-str = transpose $ toStringPiles piles
+formated = formatPiles str-}
