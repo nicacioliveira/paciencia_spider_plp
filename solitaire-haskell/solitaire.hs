@@ -1,6 +1,6 @@
 ---------------------------------------------------------------------------------------------------
 --                                     Spider Solitaire                                           |
--- Created by Nicacio, Damiao, Daniela, Lucas and Kelvin on 05/20/18 for the discipline of PLP.   |
+-- Created by Nicacio                                                                             |
 -- UFCG - Campina Grande - PB                                                                     |
 ---------------------------------------------------------------------------------------------------
 module Main where
@@ -8,7 +8,6 @@ module Main where
 import StackFunctions
 import Card
 import DeckFunctions
-
 
 isNotStarted :: Bool -> Bool
 isNotStarted started = started == False
@@ -21,6 +20,7 @@ getOption =
     do
         putStrLn "command?? "
         opt <- getLine
+        putStrLn ""
         return opt
 
 
@@ -29,113 +29,191 @@ main =
     do  
         putStrLn spiderLogo
         putStrLn help
-        run "" False [] [[]]
+        run 0 0 "" False [] [[]]
 
 
-run :: String -> Bool -> [Card] -> [[Card]] -> IO()
-run opt started deck piles  
+-- 
+run :: Int -> Int -> String -> Bool -> [Card] -> [[Card]] -> IO()
+run numberOfPlays completedSuits opt started deck piles
+                            --The player wins when:
+                            | completedSuits == 8 =
+                                do
+                                    putStrLn "8 completed suits"
+                                    putStrLn congrats
+                                    run 0 0 "help" False [] [[]]
+
                             | opt == "quit" =
                                 do
                                     putStrLn bye
 
                             | opt == "start" && isNotStarted started =
                                 do
-                                    let d_p = createPiles 4 5 (newDeck 8) []
+                                    let d_p = createPiles 4 5 (shuffle $ newDeck 8) []
                                     let deck = fst d_p
                                     let piles = snd d_p
                                     let d_p = createPiles 6 4 deck piles
                                     let deck = fst d_p
                                     let piles = snd d_p
-                                    
-                                    printPiles piles
 
-                                    run "" True deck piles
+                                    run numberOfPlays completedSuits "print" True deck piles
 
                             | opt == "start" && isStarted started = 
                                 do
                                     putStrLn "Is Started!!!"
-                                    run "" True deck piles
+                                    run numberOfPlays completedSuits "" True deck piles
 
                             | opt == "reset" && isStarted started =
                                 do
-                                    let d_p = createPiles 4 5 (newDeck 8) []
+                                    let d_p = createPiles 4 5 (shuffle $ newDeck 8) []
                                     let deck = fst d_p
                                     let piles = snd d_p
                                     let d_p = createPiles 6 4 deck piles
                                     let deck = fst d_p
                                     let piles = snd d_p
-                                    
-                                    printPiles piles
 
-                                    run "" True deck piles
+                                    run 0 0 "print" True deck piles
 
                             | opt == "reset" && isNotStarted started =
                                 do
                                     putStrLn "Is not Started!!!"
 
-                                    run "" False deck piles
+                                    run numberOfPlays completedSuits "" False deck piles
 
                             | opt == "help"=
                                 do
                                     putStrLn help
-                                    run "" started deck piles
+                                    run numberOfPlays completedSuits "" started deck piles
 
                             | opt == "hint" && isStarted started =
                                 do
-                                    putStrLn "Not Implemented!!!"
-                                    run "" started deck piles
+                                    let hintResponse = hint piles
+
+                                    if thereAreEmptyPiles piles then 
+                                        putStrLn "There are empty piles that can be used in moves."
+                                    else
+                                        putStr ""
+
+                                    if hintResponse == "" && length deck >= 10 then
+                                            putStrLn "No hint at the moment. But you can deal a new card into each tableau at the column."
+                                    else
+                                        if hintResponse == "" then
+                                            putStrLn "No hint at the moment."
+                                        else
+                                            do
+                                                putStrLn "--------------HINT-------------"
+                                                putStrLn hintResponse
+                                                putStrLn "-------------------------------"
+
+                                    run numberOfPlays completedSuits "" started deck piles
 
                             | opt == "hint" && isNotStarted started =
                                 do
                                     putStrLn "is not Started!!!"
-                                    run "" started deck piles
+                                    run numberOfPlays completedSuits "" started deck piles
 
                             | opt == "move" && isStarted started =
                                 do
-                                    putStrLn "Not Implemented!!!"
-                                    run "" started deck piles
+                                    putStr "Card? "
+                                    card    <- getLine
+                                    putStr "From? "
+                                    from    <- getLine
+                                    putStr "To? "
+                                    to      <- getLine
+
+                                    if (isNumber card && isNumber from && isNumber to) then
+                                        do
+                                            let movement        = (move ( read from) ( read to) ( read card) piles)
+                                            let isValidMovement = fst movement
+                                            let pileFrom        = fst $ snd movement
+                                            let pileTo          = snd $ snd movement
+
+                                            if (isValidMovement) then
+                                                do
+                                                    let p1 = replaceValueAtPos ( read from) pileFrom piles
+                                                    let p2 = replaceValueAtPos ( read to) pileTo p1
+                                                    let checkWon = checkCompletedPiles completedSuits p2
+
+                                                    let completedSuits = fst checkWon
+                                                    let p3 = snd checkWon
+
+                                                    run (numberOfPlays+1) completedSuits "print" started deck p3
+                                            else
+                                                do
+                                                    putStrLn "Invalid movement!"
+                                                    run numberOfPlays completedSuits "" started deck piles                                        
+                                    else
+                                        do
+                                            putStrLn "Invalid Input!"
+                                            run numberOfPlays completedSuits "" started deck piles  
 
                             | opt == "move" && isNotStarted started =
                                 do
                                     putStrLn "is not Started!!!"
-                                    run "" started deck piles
-
+                                    run numberOfPlays completedSuits "" started deck piles
 
                             | opt == "deal" && isStarted started =
                                 do
-                                    putStrLn "Not Implemented!!!"
-                                    run "" started deck piles
+
+                                    if (oneCardPerPile piles) == False then
+                                        do
+                                            putStrLn "All stacks must contain at least one card."
+                                            run numberOfPlays completedSuits "" started deck piles
+                                    else
+                                        if length deck < 10 then
+                                            do
+                                                putStrLn "You did not have any more cards to hand out!"
+                                                run numberOfPlays completedSuits "" started deck piles
+                                        else
+                                            do
+                                                let d_p = deal deck piles
+                                                let deck = fst d_p
+                                                let piles = snd d_p
+
+                                                run numberOfPlays completedSuits "print" started deck piles
 
                             | opt == "deal" && isNotStarted started =
                                 do
                                     putStrLn "is not Started!!!"
-                                    run "" started deck piles
+                                    run numberOfPlays completedSuits "" started deck piles
 
                             | opt == "suits" && isStarted started =
                                 do
-                                    putStrLn "Not Implemented!!!"
-                                    run "" started deck piles
+                                    putStrLn "-------------------------------------------------------------------------------"
+                                    putStrLn ("Completed Suits: " ++ show completedSuits)
+                                    putStrLn "-------------------------------------------------------------------------------"
+                                    run numberOfPlays completedSuits "" started deck piles
 
                             | opt == "suits" && isNotStarted started =
                                 do
                                     putStrLn "is not Started!!!"
-                                    run "" started deck piles
+                                    run numberOfPlays completedSuits "" started deck piles
 
                             | opt == "print" && isStarted started = 
                                 do
+                                    putStrLn "-------------------------------------------------------------------------------"
+                                    putStrLn ("Number of Plays: " ++ show numberOfPlays)
+                                    putStrLn ("Completed Suits: " ++ show completedSuits)
+                                    putStrLn "-------------------------------------------------------------------------------"
                                     printPiles piles
-                                    run "" True deck piles
+                                    run numberOfPlays completedSuits "" True deck piles
 
                             | opt == "print" && isNotStarted started = 
                                 do
                                     putStrLn "Is not Started!!!"
-                                    run "" False deck piles
+                                    run numberOfPlays completedSuits "" False deck piles
 
                             | otherwise =
                                 do
                                     opt <- getOption
-                                    run opt started deck piles
+                                    run numberOfPlays completedSuits opt started deck piles
 
+
+
+-- used in move function
+isNumber :: String -> Bool
+isNumber s =    case reads s :: [(Integer, String)] of
+                    [(_, "")] -> True
+                    _         -> False
 
 spiderLogo :: String
 spiderLogo =
