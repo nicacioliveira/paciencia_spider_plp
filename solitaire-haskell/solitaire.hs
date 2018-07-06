@@ -211,3 +211,7 @@ bye =
 isElem :: Card -> [Card] -> Bool
 isElem _ [] = False
 isElem card (elem:lista) = (if (card == elem) then True  else  isElem card lista)
+
+equals :: Card -> Card -> Bool
+equals cardA cardB  |(value cardA == value cardB) && (turned cardA == turned cardB) = True
+                     |otherwise = False
