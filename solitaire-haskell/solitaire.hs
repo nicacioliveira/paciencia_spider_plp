@@ -225,3 +225,8 @@ checkCompletedPile deck
 					|otherwise = (pile == revDeck)
 					where pile = [Card{value = 1, turned = True}, Card{value = 2, turned = True}, Card{value = 3, turned = True}, Card{value = 4, turned = True}, Card{value = 5, turned = True}, Card{value = 6, turned = True}, Card{value = 7, turned = True}, Card{value = 8, turned = True}, Card{value = 9, turned = True}, Card{value = 10, turned = True}, Card{value = 11, turned = True}, Card{value = 12, turned = True}, Card{value = 13, turned = True}]
 					      revDeck =(take 13 (reverse deck))
+
+move :: Card -> [Card] -> [Card]
+move cardA pile = if ((isTurned topPile && isTurned cardA) && ((getValue(topPile)) - getValue cardA) == 1) then (push cardA pile)  else pile
+				
+				where topPile = top pile
