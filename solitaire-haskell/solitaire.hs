@@ -215,3 +215,11 @@ isElem card (elem:lista) = (if (card == elem) then True  else  isElem card lista
 equals :: Card -> Card -> Bool
 equals cardA cardB  |(value cardA == value cardB) && (turned cardA == turned cardB) = True
                      |otherwise = False
+
+checkCompletedPile::[Card] ->Bool
+checkCompletedPile [] = False
+checkCompletedPile deck  
+					| length deck < 13  = False
+					|otherwise = (pile == revDeck)
+					where pile = [Card{value = 1, turned = True}, Card{value = 2, turned = True}, Card{value = 3, turned = True}, Card{value = 4, turned = True}, Card{value = 5, turned = True}, Card{value = 6, turned = True}, Card{value = 7, turned = True}, Card{value = 8, turned = True}, Card{value = 9, turned = True}, Card{value = 10, turned = True}, Card{value = 11, turned = True}, Card{value = 12, turned = True}, Card{value = 13, turned = True}]
+					      revDeck =(take 13 (reverse deck))
