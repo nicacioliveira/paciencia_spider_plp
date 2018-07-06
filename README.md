@@ -2,8 +2,7 @@
 
 # Projeto da disciplina de PLP - UFCG
 
-Implementado em c++ de forma estruturada.
-
-Obs: Basta compilar o arquivo solitaire.cpp
+Implementado em c++ para o paradigma estruturado.
+Implementado em Haskell para o paradigma funcional.
 
 ***Nota: O terminal deve conter no mínimo 100 colunas para que as pilhas de cartas possam ser visualizadas corretamente.***
