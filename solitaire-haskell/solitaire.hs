@@ -207,3 +207,7 @@ bye =
     ++"                   |____/ \\__, |\\___(_|_)      /   \\         \n"
     ++"                          __/ |                                 \n"
     ++"                         |___/                                  \n"
+
+isElem :: Card -> [Card] -> Bool
+isElem _ [] = False
+isElem card (elem:lista) = (if (card == elem) then True  else  isElem card lista)
