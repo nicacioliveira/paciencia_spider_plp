@@ -213,9 +213,11 @@ isElem _ [] = False
 isElem card (elem:lista) = (if (card == elem) then True  else  isElem card lista)
 
 equals :: Card -> Card -> Bool
-equals cardA cardB  |(value cardA == value cardB) && (turned cardA == turned cardB) = True
+equals cardA cardB  |(getValue cardA == getValue cardB) && (isTurned cardA == isTurned cardB) = True
                      |otherwise = False
+					 
 
+					 
 checkCompletedPile::[Card] ->Bool
 checkCompletedPile [] = False
 checkCompletedPile deck  
