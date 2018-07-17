@@ -3,7 +3,7 @@
 
 
 main:-
-	spiderLogo(), helpGame(), congrats(), bye().
+	spiderLogo(), helpGame(), congrats(), bye(), halt(0).
 
 
 
