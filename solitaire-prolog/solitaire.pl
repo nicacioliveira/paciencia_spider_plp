@@ -41,6 +41,7 @@ createDeck(D) :-createSuit(S1), createSuit(S2), createSuit(S3), createSuit(S4), 
                 random_permutation(X7, D).
                 
 
+
 insertInHead(NewHead, Tail, [NewHead|Tail]).
 
 head([H|T], H).
