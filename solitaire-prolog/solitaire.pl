@@ -87,18 +87,18 @@ encontraeElem(I, [_|T], E):- X is I - 1, encontraeElem(X, T, E).
 tamL([_], 1):- !.
 tamL([_|L], T):- tamL(L, X), T is X + 1.
 
+
 printar_pilha(I,Pilha) :-
     tamL(Pilha, Tamanho),
-    ( I >= Tamanho , write('     ');
-    I < Tamanho , encontraeElem(I,Pilha,T1),
-                                            (
-                                            
-                                            T1 =:= 1, write(' | ace  | ');
-                                            T1 > 1, T1 < 10, write(' |--0') ,print(T1),write('--| ');
-                                            T1 =:= 10, write(' |--') ,print(T1),write('--| ');
-                                            T1 =:= 11, write(' | jack | ');
-                                            T1 =:= 12, write(' | queen| ');
-                                            T1 =:= 13, write(' | king | '))).
+    encontraeElem(I + 1,Pilha,T2),
+    ((T2 == false, write(' |------| '));
+    (T2 == true,( I >= Tamanho , write('     ');
+				 I < Tamanho , encontraeElem(I,Pilha,T1),(T1 =:= 1, write(' | ace  | ');
+														  T1 > 1, T1 < 10, write(' |--0') ,print(T1),write('--| ');
+														  T1 =:= 10, write(' |--') ,print(T1),write('--| ');
+														  T1 =:= 11, write(' | jack | ');
+														  T1 =:= 12, write(' | queen| ');
+														  T1 =:= 13, write(' | king | '))))).
                                             
                                             
 
