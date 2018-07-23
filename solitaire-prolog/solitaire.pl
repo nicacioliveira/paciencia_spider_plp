@@ -92,7 +92,7 @@ printar_pilha(I,Pilha) :-
     tamL(Pilha, Tamanho),
     encontraeElem(I + 1,Pilha,T2),
     ((T2 == false, write(' |------| '));
-    (T2 == true,( I >= Tamanho , write('     ');
+    (T2 == true,( I >= Tamanho , write('          ');
 				 I < Tamanho , encontraeElem(I,Pilha,T1),(T1 =:= 1, write(' | ace  | ');
 														  T1 > 1, T1 < 10, write(' |--0') ,print(T1),write('--| ');
 														  T1 =:= 10, write(' |--') ,print(T1),write('--| ');
@@ -131,34 +131,34 @@ printar_p(I,Pilha, X) :-
 	tamL(Pilha9, Tamanho9),
 	tamL(Pilha10, Tamanho10),
     
-    ( I >= Tamanho1 , write('     ');
+    ( I >= Tamanho1 , write('          ');
     I < Tamanho1 , print_p2(I,Pilha1)),
     
-    ( I >= Tamanho2 , write('     ');
+    ( I >= Tamanho2 , write('          ');
     I < Tamanho2 , print_p2(I,Pilha2)),
     
-    ( I >= Tamanho3 , write('     ');
+    ( I >= Tamanho3 , write('          ');
     I < Tamanho3 , print_p2(I,Pilha3)),
     
-    ( I >= Tamanho4 , write('     ');
+    ( I >= Tamanho4 , write('          ');
     I < Tamanho4 , print_p2(I,Pilha4)),
     
-    ( I >= Tamanho5 , write('     ');
+    ( I >= Tamanho5 , write('          ');
     I < Tamanho5 , print_p2(I,Pilha5)),
     
-    ( I >= Tamanho6 , write('     ');
+    ( I >= Tamanho6 , write('          ');
     I < Tamanho6 , print_p2(I,Pilha6)),
     
-    ( I >= Tamanho7 , write('     ');
+    ( I >= Tamanho7 , write('          ');
     I < Tamanho7 , print_p2(I,Pilha7)),
     
-    ( I >= Tamanho8 , write('     ');
+    ( I >= Tamanho8 , write('          ');
     I < Tamanho8 , print_p2(I,Pilha8)),
     
-    ( I >= Tamanho9 , write('     ');
+    ( I >= Tamanho9 , write('          ');
     I < Tamanho9 , print_p2(I,Pilha9)),
     
-    ( I >= Tamanho10 , write('     ');
+    ( I >= Tamanho10 , write('          ');
     I < Tamanho10 , print_p2(I,Pilha10)),
  
     write('\n'),
