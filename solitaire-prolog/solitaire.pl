@@ -44,7 +44,7 @@ createDeck(D) :-createSuit(S1), createSuit(S2), createSuit(S3), createSuit(S4), 
                 append(X5, S7, X6),
                 append(X6, S8, X7),
                 random_permutation(X7, D).
-                
+
 
 insertInHead(NewHead, Tail, [NewHead|Tail]).
 
@@ -56,7 +56,7 @@ drop(N,[_|Tail],LastElements) :- N > 0, N1 is N  - 1, drop(N1,Tail,LastElements)
 
 transferElements(N, A, B, NA, NB) :- take(N, A, Elems), append(Elems, B, NB), drop(N, A, NA).
 
-createPiles(Deck, Piles, NewDeck) :- 
+createPiles(Deck, Piles, NewDeck) :-
                                     transferElements(5, Deck, [], NDeck1, NewPile1),
                                     transferElements(5, NDeck1, [], NDeck2, NewPile2),
                                     transferElements(5, NDeck2, [], NDeck3, NewPile3),
@@ -132,9 +132,9 @@ completeSpaces(N, List, NewList) :- length(List, LenList), Qtd is N-LenList, gen
 %Format Pile
 formatPile(L,R) :- formatP(L,R).
 formatP([],[]).
-formatP([Card|T1],[H|T2]) :- 
+formatP([Card|T1],[H|T2]) :-
     getCard(Card, Value), getTurned(Card, Turned),
-    toStringCard(Value, Turned, H), 
+    toStringCard(Value, Turned, H),
     formatP(T1,T2).
 
 %Format All Piles
@@ -150,7 +150,7 @@ printP([]).
 printP([Pile|Piles]) :-
     atomic_list_concat(Pile, ' ',List),
     writeln(List), printP(Piles).
-    
+
 printPiles(Piles) :-
     formatPiles(Piles, FormatedPiles),
     transpose(FormatedPiles, P),
@@ -199,8 +199,8 @@ checkIsPossibleMove(_, Pile) :- length(Pile, 0).
 checkIsPossibleMove(CardValue, [[Value|_]|_]) :- CardValue is Value - 1,!.
 
 moveCardsTo(CardValue, IndexPileFrom, IndexPileTo, Piles, NewPiles) :-
-    % get pile from -> check order in pile from -> 
-    % getElement(s) to move -> get pile to -> 
+    % get pile from -> check order in pile from ->
+    % getElement(s) to move -> get pile to ->
     % append Elements ++ pileTo ->
     % replace new and old list in pies for return
     getByIndex(Piles, IndexPileFrom, PileFrom), getByIndex(Piles, IndexPileTo, PileTo),
@@ -218,10 +218,10 @@ oneCardPerPile([Pile|Piles]) :- length(Pile, LenPile), LenPile > 0, oneCardPerPi
 
 %++++++++++++++++Note. Verify if length(Deck) >= 10+++++++++++++++
 %one card perPile
-deal([Card|Deck], [Pile], [P], Deck) :- 
+deal([Card|Deck], [Pile], [P], Deck) :-
     insertInHead(Card, Pile, P), !.
 
-deal([Card|Deck], [Pile|Piles], [P|RespPiles], RespDeck) :- 
+deal([Card|Deck], [Pile|Piles], [P|RespPiles], RespDeck) :-
     insertInHead(Card, Pile, P), deal(Deck, Piles, RespPiles, RespDeck).
 
 
@@ -278,8 +278,8 @@ getPossibleCard([C|ResultantePile], Card) :-
    Card = C.
 
 genHintOfCard(NCard, NLastCard, Card, LastCard, Str) :-
-    isValidOrder(LastCard, Card) -> Card = [VCard, _],
-    toStringCard([V|VCard], [T|VCard], StrC),
+    isValidOrder(LastCard, Card) -> Card = [VCard, TCard],
+    toStringCard(VCard, TCard, StrC),
     string_concat("Card: ", StrC, Str1),
     string_concat(Str1, "-- Pile: ", Str2),
     string_concat(Str2, NCard, Str3),
@@ -340,11 +340,11 @@ spiderLogo :-
        writeln("                            //// ||||||| ////                               "),
        writeln("                            \\\\\\\\         ////                               "),
        writeln("                             \\\\\\\\       ////                                ").
-    
-    
-    
-    
-    
+
+
+
+
+
     helpGame :-
     nl, writeln("  |---------------------------------HELP--------------------------------|"),
         writeln("  |Start:            start (1)                                          |"),
@@ -360,11 +360,11 @@ spiderLogo :-
         writeln("  |               <card value> <output pile number> <input pile number> |"),
         writeln("  |Cards:         Ace(1) 2 3 4 5 6 7 8 9 10 Jack(11) Queen(12) King(13) |"),
         writeln("  |---------------------------------------------------------------------|"),nl.
-    
-    
-    
-    
-    
+
+
+
+
+
     congrats :-
     nl, writeln(" __     __          __          ___       _        "),
         writeln(" \\ \\   / /          \\ \\        / (_)     | |   "),
@@ -380,11 +380,11 @@ spiderLogo :-
         writeln("  \\_____\\___/|_| |_|\\__, |_|  \\__,_|\\__|\\__,_|_|\\__,_|\\__|_|\\___/|_| |_|___(_)"),
         writeln("                     __/ |                                                             "),
         writeln("                    |___/                                                              ").
-    
-        
-    
-    
-    
+
+
+
+
+
     bye :-
     nl, writeln("                    ____             _ _                        "),
         writeln("                   |  _ \\           | | |                      "),
@@ -393,7 +393,7 @@ spiderLogo :-
         writeln("                   | |_) | |_| |  __/_|_|    \\_//\"\\\\_       "),
         writeln("                   |____/ \\__, |\\___(_|_)      /   \\         "),
         writeln("                         |___/                                  ").
-    
+
 
 %--GRAPHICS---------------------------------------------------------------------------------------------------------------------
 
@@ -429,7 +429,7 @@ start(_, _, false) :-
     printPiles(P),
     run(DD, P, true).
 
-start(Deck,Piles,true) :- 
+start(Deck,Piles,true) :-
     writeln("Is Started!!!"),
     run(Deck, Piles, true).
 
@@ -449,7 +449,7 @@ help(Deck, Piles, Started) :-
 
 hint(Deck, Piles, true) :-
         (thereAreEmptyPiles(Piles) ->
-          writeln("There are empty piles that can be used in moves.");
+          writeln("\nThere are empty piles that can be used in moves.");
         true),
         hint(Piles, HintResponse),
         (HintResponse == "", length(Deck, L), L >= 10 ->
@@ -470,7 +470,7 @@ print(Deck, Piles, true) :-
     write(Piles),nl,
     run(Deck, Piles, true).
 
-print(Deck, Piles, false) :- 
+print(Deck, Piles, false) :-
     write("Not Started"),
     run(Deck, Piles, false).
 
@@ -480,7 +480,7 @@ deal(Deck, Piles, true) :-
     length(Deck, LenDeck), LenDeck < 1,writeln("No more cards!!!"), run(Deck, Piles, true);
     %or
     oneCardPerPile(Piles), deal(Deck, Piles, NP, ND), printPiles(NP), run(ND, NP, true);
-    %or 
+    %or
     writeln("All piles must contain at least one card."), run(Deck, Piles, true).
 
 deal(Deck, Piles, false) :-
@@ -507,7 +507,7 @@ move(Deck, Piles, true) :-
     writeln("Invalid or impossible movement!"), run(Deck, Piles, true).
 
 move(Deck, Piles, false) :-
-    writeln("Not Started"), 
+    writeln("Not Started"),
     run(Deck, Piles, false).
 
 %----------exit
