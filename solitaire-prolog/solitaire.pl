@@ -39,7 +39,7 @@ createDeck(D) :-createSuit(S1), createSuit(S2), createSuit(S3), createSuit(S4), 
                 append(X5, S7, X6),
                 append(X6, S8, X7),
                 random_permutation(X7, D).
-                
+
 
 insertInHead(NewHead, Tail, [NewHead|Tail]).
 
@@ -54,7 +54,7 @@ drop(N,[_|Tail],LastElements) :- N > 0, N1 is N  - 1, drop(N1,Tail,LastElements)
 
 transferElements(N, A, B, NA, NB) :- take(N, A, Elems), append(Elems, B, NB), drop(N, A, NA).
 
-createPiles(Deck, Piles, NewDeck) :- 
+createPiles(Deck, Piles, NewDeck) :-
                                     transferElements(5, Deck, [], NDeck1, NewPile1),
                                     transferElements(5, NDeck1, [], NDeck2, NewPile2),
                                     transferElements(5, NDeck2, [], NDeck3, NewPile3),
@@ -82,50 +82,63 @@ createPiles(Deck, Piles, NewDeck) :-
 
 
 main:-
-    run([],[]).
+    run([],[], false).
 	%spiderLogo(), helpGame(), congrats(), bye(), halt(0).
 
 
-    %nao testado		
-userInput(X) :-
+    %nao testado
+readInput(X) :-
                 read_line_to_codes(user_input, X3),
                 string_to_atom(X3,X2),
                 atom_number(X2,X).
-     
-% os metodos start, reset, help, hint, print, deal, suits, exit e exception nao foram implementados    
-run(Deck, Piles) :-
-    read(X),
-    X =:= 1 -> start();
-    X =:= 2 -> reset();
-    X =:= 3 -> help();
-    X =:= 4 -> hint(Deck, Piles, NewDeck, NewPiles);
-    X =:= 5 -> print(Deck, Piles, NewDeck, NewPiles);
-    X =:= 6 -> deal(Deck, Piles, NewDeck, NewPiles);
-    X =:= 7 -> suits(Deck, Piles, NewDeck, NewPiles);
-    X =:= 8 -> exit();
-    X > 8   -> run(Deck, Piles);
-    X < 1   -> run(Deck, Piles).
+
+% os metodos start, reset, help, hint, print, deal, suits, exit e exception nao foram implementados
+run(Deck, Piles, Started) :-
+    write("Command?? "),
+    readInput(X),
+    (X =:= 1 -> start(Deck, Piles, Started); true),
+    (X =:= 2 -> reset(Deck, Piles, Started); true),
+    (X =:= 3 -> help(Started); true),
+    (X =:= 4 -> hint(Deck, Piles, Started); true),
+    (X =:= 5 -> print(Deck, Piles, NewDeck, NewPiles); true),
+    (X =:= 6 -> deal(Deck, Piles, NewDeck, NewPiles); true),
+    (X =:= 7 -> suits(Deck, Piles, NewDeck, NewPiles); true),
+    (X =:= 8 -> exit(); true),
+    (X > 8   -> run(Deck, Piles, Started); true),
+    (X < 1   -> run(Deck, Piles, Started); true).
 
 
 
-start() :-
+start(Deck, Piles, false) :-
     spiderLogo,
     createDeck(D),
-    createPiles(D, Piles, Deck),
+    createPiles(D, NewPiles, NewDeck),
     %print(Piles),
-    run(Deck, Piles).
+    run(NewDeck, NewPiles, true).
 
-reset() :-
+start(Deck, Piles, true):-
+    writeln("Is Started!!!"),
+    run(Deck, Piles, true).
+
+reset(Deck, Piles, true) :-
     createDeck(D),
-    createPiles(D, Piles, Deck),
-    run(Deck, Piles).
+    createPiles(D, NewPiles, NewDeck),
+    run(NewDeck, NewPiles,true).
 
-help() :-
-    help,
-    run(Deck, Piles).
+reset(Deck, Piles, false) :-
+    writeln("Is not Started!!!"),
+    run(Deck, Piles, false).
 
-hint(Deck, Piles, NewDeck, NewPiles) :-
-        run(Deck, Piles).
+help(Started) :-
+    helpGame,
+    run(Deck, Piles, Started).
+
+hint(Deck, Piles, true) :-
+      thereAreEmptyPiles(Piles) -> writeln("There are empty piles that can be used in moves."),
+      run(Deck, Piles, true).
+hint(Deck, Piles, false):-
+    writeln("Is not Started!!!"),
+    run(Deck, Piles, false).
 
 print(Deck, Piles, NewDeck, NewPiles) :-
     run(Deck, Piles).
@@ -148,24 +161,24 @@ nl,writeln(" _______  _______  ___      ___   _______  _______  ___   ______    
    writeln("|       ||       ||   |    |   | |       ||   _   ||   | |    _ |  |       |"),
    writeln("|  _____||   _   ||   |    |   | |_     _||  |_|  ||   | |   | ||  |    ___|"),
    writeln("| |_____ |  | |  ||   |    |   |   |   |  |       ||   | |   |_||_ |   |___ "),
-   writeln("|_____  ||  |_|  ||   |___ |   |   |   |  |       ||   | |    __  ||    ___|"), 
+   writeln("|_____  ||  |_|  ||   |___ |   |   |   |  |       ||   | |    __  ||    ___|"),
    writeln(" _____| ||       ||       ||   |   |   |  |   _   ||   | |   |  | ||   |___ "),
    writeln("|_______||_______||_______||___|   |___|  |__| |__||___| |___|  |_||_______|"),
    writeln("                                                                            "),
-   writeln("                              ////      \\\\\\\\                                "), 
+   writeln("                              ////      \\\\\\\\                                "),
    writeln("                              \\\\\\\\  ,,  ////                                "),
    writeln("                               \\\\\\\\ ()  ////                                 "),
-   writeln("                              ....(    )....                                "), 
+   writeln("                              ....(    )....                                "),
    writeln("		             ////(  X	)\\\\\\\\                              "),
    writeln("                            //// ||||||| ////                               "),
    writeln("                            \\\\\\\\         ////                               "),
    writeln("                             \\\\\\\\       ////                                ").
-   
-   
-   
-   
-   
-helpGame :- 
+
+
+
+
+
+helpGame :-
 nl, writeln("  |---------------------------------HELP--------------------------------|"),
     writeln("  |Start:            start (1)                                             |"),
     writeln("  |Reset Game:       reset (2)                                             |"),
@@ -180,11 +193,11 @@ nl, writeln("  |---------------------------------HELP---------------------------
     writeln("  |               <card value> <output pile number> <input pile number> |"),
     writeln("  |Cards:         Ace(1) 2 3 4 5 6 7 8 9 10 Jack(11) Queen(12) King(13) |"),
     writeln("  |---------------------------------------------------------------------|").
-  
-    
-    
-    
-    
+
+
+
+
+
 congrats :-
 nl, writeln(" __     __          __          ___       _        "),
 	writeln(" \\ \\   / /          \\ \\        / (_)     | |   "),
@@ -202,8 +215,8 @@ nl, writeln(" __     __          __          ___       _        "),
 	writeln("                    |___/                                                              ").
 
 
-        
-      
+
+
 
 bye :-
 nl, writeln("                    ____             _ _                        "),
@@ -215,7 +228,13 @@ nl, writeln("                    ____             _ _                        "),
 	writeln("                   |____/ \\__, |\\___(_|_)      /   \\                            "),
 	writeln("                         |___/                                  ").
 
+%-- HINT ----------------------------------------------------------------------------------------------------------------
+
+
+% used in run
+thereAreEmptyPiles([]):- false.
+thereAreEmptyPiles([Pile|Piles]):- length(Pile, L), L == 0 -> true; thereAreEmptyPiles(Piles).
 
 
 
-       
+%-- HINT ----------------------------------------------------------------------------------------------------------------
