@@ -82,50 +82,63 @@ createPiles(Deck, Piles, NewDeck) :-
 
 
 main:-
-    run([],[]).
+    run([],[], false).
 	%spiderLogo(), helpGame(), congrats(), bye(), halt(0).
 
 
     %nao testado
-userInput(X) :-
+readInput(X) :-
                 read_line_to_codes(user_input, X3),
                 string_to_atom(X3,X2),
                 atom_number(X2,X).
 
 % os metodos start, reset, help, hint, print, deal, suits, exit e exception nao foram implementados
-run(Deck, Piles) :-
-    read(X),
-    X =:= 1 -> start();
-    X =:= 2 -> reset();
-    X =:= 3 -> help();
-    X =:= 4 -> hint(Deck, Piles, NewDeck, NewPiles);
-    X =:= 5 -> print(Deck, Piles, NewDeck, NewPiles);
-    X =:= 6 -> deal(Deck, Piles, NewDeck, NewPiles);
-    X =:= 7 -> suits(Deck, Piles, NewDeck, NewPiles);
-    X =:= 8 -> exit();
-    X > 8   -> run(Deck, Piles);
-    X < 1   -> run(Deck, Piles).
+run(Deck, Piles, Started) :-
+    write("Command?? "),
+    readInput(X),
+    (X =:= 1 -> start(Deck, Piles, Started); true),
+    (X =:= 2 -> reset(Deck, Piles, Started); true),
+    (X =:= 3 -> help(Started); true),
+    (X =:= 4 -> hint(Deck, Piles, Started); true),
+    (X =:= 5 -> print(Deck, Piles, NewDeck, NewPiles); true),
+    (X =:= 6 -> deal(Deck, Piles, NewDeck, NewPiles); true),
+    (X =:= 7 -> suits(Deck, Piles, NewDeck, NewPiles); true),
+    (X =:= 8 -> exit(); true),
+    (X > 8   -> run(Deck, Piles, Started); true),
+    (X < 1   -> run(Deck, Piles, Started); true).
 
 
 
-start() :-
+start(Deck, Piles, false) :-
     spiderLogo,
     createDeck(D),
-    createPiles(D, Piles, Deck),
+    createPiles(D, NewPiles, NewDeck),
     %print(Piles),
-    run(Deck, Piles).
+    run(NewDeck, NewPiles, true).
 
-reset() :-
+start(Deck, Piles, true):-
+    writeln("Is Started!!!"),
+    run(Deck, Piles, true).
+
+reset(Deck, Piles, true) :-
     createDeck(D),
-    createPiles(D, Piles, Deck),
-    run(Deck, Piles).
+    createPiles(D, NewPiles, NewDeck),
+    run(NewDeck, NewPiles,true).
 
-help() :-
-    help,
-    run(Deck, Piles).
+reset(Deck, Piles, false) :-
+    writeln("Is not Started!!!"),
+    run(Deck, Piles, false).
 
-hint(Deck, Piles, NewDeck, NewPiles) :-
-        run(Deck, Piles).
+help(Started) :-
+    helpGame,
+    run(Deck, Piles, Started).
+
+hint(Deck, Piles, true) :-
+      thereAreEmptyPiles(Piles) -> writeln("There are empty piles that can be used in moves."),
+      run(Deck, Piles, true).
+hint(Deck, Piles, false):-
+    writeln("Is not Started!!!"),
+    run(Deck, Piles, false).
 
 print(Deck, Piles, NewDeck, NewPiles) :-
     run(Deck, Piles).
@@ -214,3 +227,14 @@ nl, writeln("                    ____             _ _                        "),
 	writeln("                   |____/ \\__, |\\___(_|_)      /   \\         "),
 	writeln("                   |____/ \\__, |\\___(_|_)      /   \\                            "),
 	writeln("                         |___/                                  ").
+
+%-- HINT ----------------------------------------------------------------------------------------------------------------
+
+
+% used in run
+thereAreEmptyPiles([]):- false.
+thereAreEmptyPiles([Pile|Piles]):- length(Pile, L), L == 0 -> true; thereAreEmptyPiles(Piles).
+
+
+
+%-- HINT ----------------------------------------------------------------------------------------------------------------
