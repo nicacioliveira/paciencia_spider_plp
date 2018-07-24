@@ -249,6 +249,27 @@ nl, writeln("                    ____             _ _                        "),
 	writeln("                   |____/ \\__, |\\___(_|_)      /   \\                            "),
 	writeln("                         |___/                                  ").
 
+
+
+%-- MOVE CARDS ----------------------------------------------------------------------------------------------------------------
+
+%-- check if the order of the cards below a card is correct
+% checkOrder(Card, Pile).
+checkOrder([V, T], [[V1, T1]]) :-
+    V == V1, T == true -> true; false.
+checkOrder([V, T], [LastCardP|LastPile]) :-
+    LastPile = [CardP|_],
+    LastCardP = [V1, T1],
+    (V == V1, T == true ->
+        true;
+    (isValidOrder(CardP, LastCardP) ->
+        checkOrder([V, T], LastPile);
+     false)).
+
+%-- MOVE CARDS ----------------------------------------------------------------------------------------------------------------
+
+
+
 %-- HINT ----------------------------------------------------------------------------------------------------------------
 
 
