@@ -1,8 +1,10 @@
 :-initialization(main).
 
 % --------------------- DECK, PILES AND CARDS
-
+  
 card(Value, Turned, [Value, Turned]).
+
+createSuit(S) :-card( 1    , true, Ace),
 invalidCard(C) :- C = [-1, false].
 isValidCard([V,_]) :- V > 0, V =< 13 -> true; false.
 toStringCard(VCard, StrCard) :-
@@ -53,6 +55,7 @@ createDeck(D) :-createSuit(S1), createSuit(S2), createSuit(S3), createSuit(S4), 
                 random_permutation(X7, D).
 
 
+
 insertInHead(NewHead, Tail, [NewHead|Tail]).
 
 head([H|T], H).
@@ -91,7 +94,92 @@ createPiles(Deck, Piles, NewDeck) :-
 
 %----------------------------------------------------------------------------------------------------------------------
 
+encontraeElem(0, [H|_], H):- !.
+encontraeElem(I, [_|T], E):- X is I - 1, encontraeElem(X, T, E).
 
+% Tamanho de uma Lista
+tamL([_], 1):- !.
+tamL([_|L], T):- tamL(L, X), T is X + 1.
+
+
+printar_pilha(I,Pilha) :-
+    tamL(Pilha, Tamanho),
+    encontraeElem(I + 1,Pilha,T2),
+    ((T2 == false, write(' |------| '));
+    (T2 == true,( I >= Tamanho , write('          ');
+				 I < Tamanho , encontraeElem(I,Pilha,T1),(T1 =:= 1, write(' | ace  | ');
+														  T1 > 1, T1 < 10, write(' |--0') ,print(T1),write('--| ');
+														  T1 =:= 10, write(' |--') ,print(T1),write('--| ');
+														  T1 =:= 11, write(' | jack | ');
+														  T1 =:= 12, write(' | queen| ');
+														  T1 =:= 13, write(' | king | '))))).
+                                            
+                                            
+
+print_p2(I,Pilha) :-
+	encontraeElem(I,Pilha,Pilha1),
+	printar_pilha(0,Pilha1).
+	
+
+printar_p(I,Pilha, 0):- !.
+printar_p(I,Pilha, X) :-
+    encontraeElem(0,Pilha,Pilha1),
+    encontraeElem(1,Pilha,Pilha2),
+    encontraeElem(2,Pilha,Pilha3),
+    encontraeElem(3,Pilha,Pilha4),
+    encontraeElem(4,Pilha,Pilha5),
+    encontraeElem(5,Pilha,Pilha6),
+    encontraeElem(6,Pilha,Pilha7),
+    encontraeElem(7,Pilha,Pilha8),
+    encontraeElem(8,Pilha,Pilha9),
+    encontraeElem(9,Pilha,Pilha10),
+    
+	tamL(Pilha1, Tamanho1),
+	tamL(Pilha2, Tamanho2),
+	tamL(Pilha3, Tamanho3),
+	tamL(Pilha4, Tamanho4),
+	tamL(Pilha5, Tamanho5),
+	tamL(Pilha6, Tamanho6),
+	tamL(Pilha7, Tamanho7),
+	tamL(Pilha8, Tamanho8),
+	tamL(Pilha9, Tamanho9),
+	tamL(Pilha10, Tamanho10),
+    
+    ( I >= Tamanho1 , write('          ');
+    I < Tamanho1 , print_p2(I,Pilha1)),
+    
+    ( I >= Tamanho2 , write('          ');
+    I < Tamanho2 , print_p2(I,Pilha2)),
+    
+    ( I >= Tamanho3 , write('          ');
+    I < Tamanho3 , print_p2(I,Pilha3)),
+    
+    ( I >= Tamanho4 , write('          ');
+    I < Tamanho4 , print_p2(I,Pilha4)),
+    
+    ( I >= Tamanho5 , write('          ');
+    I < Tamanho5 , print_p2(I,Pilha5)),
+    
+    ( I >= Tamanho6 , write('          ');
+    I < Tamanho6 , print_p2(I,Pilha6)),
+    
+    ( I >= Tamanho7 , write('          ');
+    I < Tamanho7 , print_p2(I,Pilha7)),
+    
+    ( I >= Tamanho8 , write('          ');
+    I < Tamanho8 , print_p2(I,Pilha8)),
+    
+    ( I >= Tamanho9 , write('          ');
+    I < Tamanho9 , print_p2(I,Pilha9)),
+    
+    ( I >= Tamanho10 , write('          ');
+    I < Tamanho10 , print_p2(I,Pilha10)),
+ 
+    write('\n'),
+	H is I + 1,X1 is X - 1, printar_p(H, Pilha,X1).
+	
+
+%----------------------------------------------------------------------------------------------------------------------
 
 main:-
     run([],[], false).
@@ -126,6 +214,8 @@ start(Deck, Piles, false) :-
     createDeck(D),
     createPiles(D, NewPiles, NewDeck),
     %print(Piles),
+    write('\n \n \n \n \n'),
+    printar_p(0,Piles,10).
     run(NewDeck, NewPiles, true).
 
 start(Deck, Piles, true):-
