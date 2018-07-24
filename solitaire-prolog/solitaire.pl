@@ -4,7 +4,6 @@
   
 card(Value, Turned, [Value, Turned]).
 
-createSuit(S) :-card( 1    , true, Ace),
 invalidCard(C) :- C = [-1, false].
 isValidCard([V,_]) :- V > 0, V =< 13 -> true; false.
 toStringCard(VCard, StrCard) :-
@@ -108,8 +107,8 @@ printar_pilha(I,Pilha) :-
     ((T2 == false, write(' |------| '));
     (T2 == true,( I >= Tamanho , write('          ');
 				 I < Tamanho , encontraeElem(I,Pilha,T1),(T1 =:= 1, write(' | ace  | ');
-														  T1 > 1, T1 < 10, write(' |--0') ,print(T1),write('--| ');
-														  T1 =:= 10, write(' |--') ,print(T1),write('--| ');
+														  T1 > 1, T1 < 10, write(' |  0') ,print(T1),write('  | ');
+														  T1 =:= 10, write(' |  ') ,print(T1),write('  | ');
 														  T1 =:= 11, write(' | jack | ');
 														  T1 =:= 12, write(' | queen| ');
 														  T1 =:= 13, write(' | king | '))))).
@@ -177,22 +176,21 @@ printar_p(I,Pilha, X) :-
  
     write('\n'),
 	H is I + 1,X1 is X - 1, printar_p(H, Pilha,X1).
-	
 
+%----------------------------------------------------------------------------------------------------------------------
 %----------------------------------------------------------------------------------------------------------------------
 
 main:-
+    spiderLogo, helpGame,
     run([],[], false).
-	%spiderLogo(), helpGame(), congrats(), bye(), halt(0).
 
 
-    %nao testado
 readInput(X) :-
                 read_line_to_codes(user_input, X3),
                 string_to_atom(X3,X2),
                 atom_number(X2,X).
 
-% os metodos start, reset, help, hint, print, deal, suits, exit e exception nao foram implementados
+
 run(Deck, Piles, Started) :-
     write("Command?? "),
     readInput(X),
@@ -200,7 +198,7 @@ run(Deck, Piles, Started) :-
     (X =:= 2 -> reset(Deck, Piles, Started); true),
     (X =:= 3 -> help(Started); true),
     (X =:= 4 -> hint(Deck, Piles, Started); true),
-    (X =:= 5 -> print(Deck, Piles, NewDeck, NewPiles); true),
+    (X =:= 5 -> print(Deck, Piles); true),
     (X =:= 6 -> deal(Deck, Piles, NewDeck, NewPiles); true),
     (X =:= 7 -> suits(Deck, Piles, NewDeck, NewPiles); true),
     (X =:= 8 -> exit(); true),
@@ -208,15 +206,12 @@ run(Deck, Piles, Started) :-
     (X < 1   -> run(Deck, Piles, Started); true).
 
 
-
-start(Deck, Piles, false) :-
-    spiderLogo,
+start(_, _, false) :-
     createDeck(D),
-    createPiles(D, NewPiles, NewDeck),
-    %print(Piles),
-    write('\n \n \n \n \n'),
-    printar_p(0,Piles,10).
-    run(NewDeck, NewPiles, true).
+    createPiles(D, NPiles, DD),
+    printar_p(0, NPiles, 10),
+    print(NPiles),
+    run(DD, NPiles, true).
 
 start(Deck, Piles, true):-
     writeln("Is Started!!!"),
@@ -251,8 +246,9 @@ hint(Deck, Piles, false):-
     writeln("Is not Started!!!"),
     run(Deck, Piles, false).
 
-print(Deck, Piles, NewDeck, NewPiles) :-
-    run(Deck, Piles).
+print(Deck, Piles) :-
+    printar_p(0,Piles,10),
+    run(Deck, Piles, true).
 
 deal(Deck, Piles, NewDeck, NewPiles) :-
     run(Deck, Piles).
@@ -291,19 +287,19 @@ nl,writeln(" _______  _______  ___      ___   _______  _______  ___   ______    
 
 helpGame :-
 nl, writeln("  |---------------------------------HELP--------------------------------|"),
-    writeln("  |Start:            start (1)                                             |"),
-    writeln("  |Reset Game:       reset (2)                                             |"),
-    writeln("  |Help:             help (3)                                              |"),
-    writeln("  |Hint:             hint (4)                                              |"),
-    writeln("  |print piles:      print (5)                                             |"),
-    writeln("  |deal:             deal (6)                                              |"),
-    writeln("  |Completed Suits:  suits (7)                                             |"),
-    writeln("  |Quit Game:        quit (8)                                              |"),
+    writeln("  |Start:            start (1)                                          |"),
+    writeln("  |Reset Game:       reset (2)                                          |"),
+    writeln("  |Help:             help  (3)                                          |"),
+    writeln("  |Hint:             hint  (4)                                          |"),
+    writeln("  |print piles:      print (5)                                          |"),
+    writeln("  |deal:             deal  (6)                                          |"),
+    writeln("  |Completed Suits:  suits (7)                                          |"),
+    writeln("  |Quit Game:        quit  (8)                                          |"),
     writeln("  |_____________________________________________________________________|"),
     writeln("  |Move cards:    move (press Enter)                                    |"),
     writeln("  |               <card value> <output pile number> <input pile number> |"),
     writeln("  |Cards:         Ace(1) 2 3 4 5 6 7 8 9 10 Jack(11) Queen(12) King(13) |"),
-    writeln("  |---------------------------------------------------------------------|").
+    writeln("  |---------------------------------------------------------------------|"),nl.
 
 
 
@@ -336,7 +332,6 @@ nl, writeln("                    ____             _ _                        "),
 	writeln("                   |  _ <| | | |/ _ \\ | |    \\_\\(_)/_/       "),
 	writeln("                   | |_) | |_| |  __/_|_|    \\_//\"\\\\_       "),
 	writeln("                   |____/ \\__, |\\___(_|_)      /   \\         "),
-	writeln("                   |____/ \\__, |\\___(_|_)      /   \\                            "),
 	writeln("                         |___/                                  ").
 
 %-- HINT ----------------------------------------------------------------------------------------------------------------
