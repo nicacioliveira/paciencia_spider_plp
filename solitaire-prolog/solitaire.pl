@@ -3,11 +3,20 @@
 % --------------------- DECK, PILES AND CARDS
 
 card(Value, Turned, [Value, Turned]).
-invalidCard(C) :- C = card(-1, false, MinusOne).
-isValidCard(card(V,_,_)) :- V > 0, V =< 13 -> true; false.
+invalidCard(C) :- C = [-1, false].
+isValidCard([V,_]) :- V > 0, V =< 13 -> true; false.
+toStringCard(VCard, StrCard) :-
+    VCard == 1, StrCard = "| Ace |";
+    VCard == 10, StrCard = "| 10  |";
+    VCard == 11, StrCard = "| Jack|";
+    VCard == 12, StrCard = "|Queen|";
+    VCard == 13, StrCard = "| King|";
+    Str1 = "|  ",
+    Str2 = "  |",
+    string_concat(Str1, VCard, Str3),
+    string_concat(Str3, Str2, StrCard).
 
-
-createSuit(S) :-card(ace    , true, Ace),
+createSuit(S) :-card(1    , true, Ace),
                 card( 2     , true, Two),
                 card( 3     , true, Three),
                 card( 4     , true, Four),
@@ -17,9 +26,9 @@ createSuit(S) :-card(ace    , true, Ace),
                 card( 8     , true, Eight),
                 card( 9     , true, Nine),
                 card(10     , true, Ten),
-                card(queen  , true, Jack),
-                card(jack   , true, Queen),
-                card(queen  , true, King),
+                card(11  , true, Jack),
+                card(12   , true, Queen),
+                card(13  , true, King),
                 append([Ace], [Two], X1),
 	            append(X1, [Three], X3),
 	            append(X3, [Four], X4),
@@ -145,8 +154,8 @@ hint(Deck, Piles, true) :-
           writeln("No hint at the moment. But you can deal a new card into each tableau at the column.");
           (HintResponse == "" ->
             writeln("No hint at the moment.");
-            writeln("\n--------------HINT-------------"),
-            writeln(HintResponse), writeln("-------------------------------\n"))),
+          writeln("\n--------------HINT-------------"),
+          writeln(HintResponse), writeln("-------------------------------\n"))),
       run(Deck, Piles, true).
 hint(Deck, Piles, false):-
     writeln("Is not Started!!!"),
@@ -251,17 +260,17 @@ thereAreEmptyPiles([Pile|Piles]) :-
     thereAreEmptyPiles(Piles).
 
 %-- checks if one card is smaller than another card
-isValidOrder(card(V, T, _),card(Vnext, T2,_)) :-
+isValidOrder([V, T], [Vnext, T2]) :-
     V1 is (V - 1),
     V1 == Vnext,
     T ,
     T2 -> true;
     false.
 
-isTurned(card(_, T, _), T).
+isTurned([_, T], T).
 
 %-- looks for a possible letter to give hint
-getPossibleCard([], card(-1, false, MinusOne)).
+getPossibleCard([], [-1, false]).
 getPossibleCard([C], C).
 getPossibleCard([C|ResultantePile], Card) :-
     ResultantePile = [NextC|Ps],
@@ -273,7 +282,8 @@ getPossibleCard([C|ResultantePile], Card) :-
    Card = C.
 
 genHintOfCard(NCard, NLastCard, Card, LastCard, Str) :-
-    isValidOrder(LastCard, Card) -> Card = card(StrC, _, _),
+    isValidOrder(LastCard, Card) -> Card = [VCard, _],
+    toStringCard(VCard, StrC),
     string_concat("Card: ", StrC, Str1),
     string_concat(Str1, "-- Pile: ", Str2),
     string_concat(Str2, NCard, Str3),
