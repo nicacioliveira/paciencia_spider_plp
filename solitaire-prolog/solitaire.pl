@@ -1,10 +1,24 @@
 :-initialization(main).
 
 % --------------------- DECK, PILES AND CARDS
-
+  
 card(Value, Turned, [Value, Turned]).
 
 createSuit(S) :-card( 1    , true, Ace),
+invalidCard(C) :- C = [-1, false].
+isValidCard([V,_]) :- V > 0, V =< 13 -> true; false.
+toStringCard(VCard, StrCard) :-
+    VCard == 1, StrCard = "| Ace |";
+    VCard == 10, StrCard = "| 10  |";
+    VCard == 11, StrCard = "| Jack|";
+    VCard == 12, StrCard = "|Queen|";
+    VCard == 13, StrCard = "| King|";
+    Str1 = "|  ",
+    Str2 = "  |",
+    string_concat(Str1, VCard, Str3),
+    string_concat(Str3, Str2, StrCard).
+
+createSuit(S) :-card(1    , true, Ace),
                 card( 2     , true, Two),
                 card( 3     , true, Three),
                 card( 4     , true, Four),
@@ -39,7 +53,7 @@ createDeck(D) :-createSuit(S1), createSuit(S2), createSuit(S3), createSuit(S4), 
                 append(X5, S7, X6),
                 append(X6, S8, X7),
                 random_permutation(X7, D).
-                
+
 
 
 insertInHead(NewHead, Tail, [NewHead|Tail]).
@@ -55,7 +69,7 @@ drop(N,[_|Tail],LastElements) :- N > 0, N1 is N  - 1, drop(N1,Tail,LastElements)
 
 transferElements(N, A, B, NA, NB) :- take(N, A, Elems), append(Elems, B, NB), drop(N, A, NA).
 
-createPiles(Deck, Piles, NewDeck) :- 
+createPiles(Deck, Piles, NewDeck) :-
                                     transferElements(5, Deck, [], NDeck1, NewPile1),
                                     transferElements(5, NDeck1, [], NDeck2, NewPile2),
                                     transferElements(5, NDeck2, [], NDeck3, NewPile3),
@@ -168,52 +182,74 @@ printar_p(I,Pilha, X) :-
 %----------------------------------------------------------------------------------------------------------------------
 
 main:-
-    run([],[]).
+    run([],[], false).
 	%spiderLogo(), helpGame(), congrats(), bye(), halt(0).
 
 
-    %nao testado		
-userInput(X) :-
+    %nao testado
+readInput(X) :-
                 read_line_to_codes(user_input, X3),
                 string_to_atom(X3,X2),
                 atom_number(X2,X).
-     
-% os metodos start, reset, help, hint, print, deal, suits, exit e exception nao foram implementados    
-run(Deck, Piles) :-
-    read(X),
-    X =:= 1 -> start();
-    X =:= 2 -> reset();
-    X =:= 3 -> help();
-    X =:= 4 -> hint(Deck, Piles, NewDeck, NewPiles);
-    X =:= 5 -> print(Deck, Piles, NewDeck, NewPiles);
-    X =:= 6 -> deal(Deck, Piles, NewDeck, NewPiles);
-    X =:= 7 -> suits(Deck, Piles, NewDeck, NewPiles);
-    X =:= 8 -> exit();
-    X > 8   -> run(Deck, Piles);
-    X < 1   -> run(Deck, Piles).
+
+% os metodos start, reset, help, hint, print, deal, suits, exit e exception nao foram implementados
+run(Deck, Piles, Started) :-
+    write("Command?? "),
+    readInput(X),
+    (X =:= 1 -> start(Deck, Piles, Started); true),
+    (X =:= 2 -> reset(Deck, Piles, Started); true),
+    (X =:= 3 -> help(Started); true),
+    (X =:= 4 -> hint(Deck, Piles, Started); true),
+    (X =:= 5 -> print(Deck, Piles, NewDeck, NewPiles); true),
+    (X =:= 6 -> deal(Deck, Piles, NewDeck, NewPiles); true),
+    (X =:= 7 -> suits(Deck, Piles, NewDeck, NewPiles); true),
+    (X =:= 8 -> exit(); true),
+    (X > 8   -> run(Deck, Piles, Started); true),
+    (X < 1   -> run(Deck, Piles, Started); true).
 
 
 
-start() :-
+start(Deck, Piles, false) :-
     spiderLogo,
     createDeck(D),
-    createPiles(D, Piles, Deck),
+    createPiles(D, NewPiles, NewDeck),
     %print(Piles),
-    run(Deck, Piles)
     write('\n \n \n \n \n'),
     printar_p(0,Piles,10).
+    run(NewDeck, NewPiles, true).
 
-reset() :-
+start(Deck, Piles, true):-
+    writeln("Is Started!!!"),
+    run(Deck, Piles, true).
+
+reset(Deck, Piles, true) :-
     createDeck(D),
-    createPiles(D, Piles, Deck),
-    run(Deck, Piles).
+    createPiles(D, NewPiles, NewDeck),
+    run(NewDeck, NewPiles,true).
 
-help() :-
-    help,
-    run(Deck, Piles).
+reset(Deck, Piles, false) :-
+    writeln("Is not Started!!!"),
+    run(Deck, Piles, false).
 
-hint(Deck, Piles, NewDeck, NewPiles) :-
-        run(Deck, Piles).
+help(Started) :-
+    helpGame,
+    run(Deck, Piles, Started).
+
+hint(Deck, Piles, true) :-
+      (thereAreEmptyPiles(Piles) ->
+        writeln("There are empty piles that can be used in moves.");
+      true),
+      hint(Piles, HintResponse),
+      (HintResponse == "", length(Deck, L), L >= 10 ->
+          writeln("No hint at the moment. But you can deal a new card into each tableau at the column.");
+          (HintResponse == "" ->
+            writeln("No hint at the moment.");
+          writeln("\n--------------HINT-------------"),
+          writeln(HintResponse), writeln("-------------------------------\n"))),
+      run(Deck, Piles, true).
+hint(Deck, Piles, false):-
+    writeln("Is not Started!!!"),
+    run(Deck, Piles, false).
 
 print(Deck, Piles, NewDeck, NewPiles) :-
     run(Deck, Piles).
@@ -236,24 +272,24 @@ nl,writeln(" _______  _______  ___      ___   _______  _______  ___   ______    
    writeln("|       ||       ||   |    |   | |       ||   _   ||   | |    _ |  |       |"),
    writeln("|  _____||   _   ||   |    |   | |_     _||  |_|  ||   | |   | ||  |    ___|"),
    writeln("| |_____ |  | |  ||   |    |   |   |   |  |       ||   | |   |_||_ |   |___ "),
-   writeln("|_____  ||  |_|  ||   |___ |   |   |   |  |       ||   | |    __  ||    ___|"), 
+   writeln("|_____  ||  |_|  ||   |___ |   |   |   |  |       ||   | |    __  ||    ___|"),
    writeln(" _____| ||       ||       ||   |   |   |  |   _   ||   | |   |  | ||   |___ "),
    writeln("|_______||_______||_______||___|   |___|  |__| |__||___| |___|  |_||_______|"),
    writeln("                                                                            "),
-   writeln("                              ////      \\\\\\\\                                "), 
+   writeln("                              ////      \\\\\\\\                                "),
    writeln("                              \\\\\\\\  ,,  ////                                "),
    writeln("                               \\\\\\\\ ()  ////                                 "),
-   writeln("                              ....(    )....                                "), 
+   writeln("                              ....(    )....                                "),
    writeln("		             ////(  X	)\\\\\\\\                              "),
    writeln("                            //// ||||||| ////                               "),
    writeln("                            \\\\\\\\         ////                               "),
    writeln("                             \\\\\\\\       ////                                ").
-   
-   
-   
-   
-   
-helpGame :- 
+
+
+
+
+
+helpGame :-
 nl, writeln("  |---------------------------------HELP--------------------------------|"),
     writeln("  |Start:            start (1)                                             |"),
     writeln("  |Reset Game:       reset (2)                                             |"),
@@ -268,11 +304,11 @@ nl, writeln("  |---------------------------------HELP---------------------------
     writeln("  |               <card value> <output pile number> <input pile number> |"),
     writeln("  |Cards:         Ace(1) 2 3 4 5 6 7 8 9 10 Jack(11) Queen(12) King(13) |"),
     writeln("  |---------------------------------------------------------------------|").
-  
-    
-    
-    
-    
+
+
+
+
+
 congrats :-
 nl, writeln(" __     __          __          ___       _        "),
 	writeln(" \\ \\   / /          \\ \\        / (_)     | |   "),
@@ -290,8 +326,8 @@ nl, writeln(" __     __          __          ___       _        "),
 	writeln("                    |___/                                                              ").
 
 
-        
-      
+
+
 
 bye :-
 nl, writeln("                    ____             _ _                        "),
@@ -303,7 +339,75 @@ nl, writeln("                    ____             _ _                        "),
 	writeln("                   |____/ \\__, |\\___(_|_)      /   \\                            "),
 	writeln("                         |___/                                  ").
 
+%-- HINT ----------------------------------------------------------------------------------------------------------------
 
 
+% used in run
+thereAreEmptyPiles([]):- false.
+thereAreEmptyPiles([Pile|Piles]) :-
+    length(Pile, L),
+    L == 0 -> true;
+    thereAreEmptyPiles(Piles).
 
-       
+%-- checks if one card is smaller than another card
+isValidOrder([V, T], [Vnext, T2]) :-
+    V1 is (V - 1),
+    V1 == Vnext,
+    T ,
+    T2 -> true;
+    false.
+
+isTurned([_, T], T).
+
+%-- looks for a possible letter to give hint
+getPossibleCard([], [-1, false]).
+getPossibleCard([C], C).
+getPossibleCard([C|ResultantePile], Card) :-
+    ResultantePile = [NextC|Ps],
+   isValidOrder(NextC, C),
+   isTurned(NextC, T1),
+   isTurned(C, T2),
+   T1 == true,
+   T2 == true -> getPossibleCard(ResultantePile, Card);
+   Card = C.
+
+genHintOfCard(NCard, NLastCard, Card, LastCard, Str) :-
+    isValidOrder(LastCard, Card) -> Card = [VCard, _],
+    toStringCard(VCard, StrC),
+    string_concat("Card: ", StrC, Str1),
+    string_concat(Str1, "-- Pile: ", Str2),
+    string_concat(Str2, NCard, Str3),
+    string_concat(Str3, "-->", Str4),
+    string_concat(Str4, NLastCard, Str5),
+    string_concat(Str5, "\n", Str6),
+    Str = Str6;
+    Str = "".
+
+genHintPerPile(_, _, _, _, [], "").
+genHintPerPile(Card, NCard, PileCard, PilesCounter, [Pile|Piles], Str) :-
+    (length(Pile, L), L == 0 -> invalidCard(LastCard); Pile = [LastCard|_]),
+    (isValidCard(Card) ->
+        (NCard =\= PilesCounter ->
+            genHintOfCard(NCard, PilesCounter, Card, LastCard, Str1),
+            PilesCounter2 is (PilesCounter + 1),
+            genHintPerPile(Card, NCard, PileCard, PilesCounter2, Piles, Str2),
+            string_concat(Str1, Str2, Str3), Str = Str3;
+          PilesCounter2 is (PilesCounter + 1),
+          genHintPerPile(Card, NCard, PileCard, PilesCounter2, Piles, Str));
+      Str = "").
+
+
+auxHint(_, [], Piles, "").
+auxHint(NCard, [PileCard|Ps], Piles, Response) :-
+    getPossibleCard(PileCard, Card),
+    genHintPerPile(Card, NCard, PileCard, 0, Piles, Str1),
+    NCard2 is (NCard + 1),
+    auxHint(NCard2, Ps, Piles, Str2),
+    string_concat(Str1, Str2, Str3),
+    Response = Str3.
+
+hint(Piles, HintResponse) :-
+    auxHint(0, Piles, Piles, Response),
+    HintResponse = Response.
+
+%-- HINT ----------------------------------------------------------------------------------------------------------------
