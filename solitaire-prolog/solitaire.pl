@@ -3,8 +3,20 @@
 % --------------------- DECK, PILES AND CARDS
 
 card(Value, Turned, [Value, Turned]).
+invalidCard(C) :- C = [-1, false].
+isValidCard([V,_]) :- V > 0, V =< 13 -> true; false.
+toStringCard(VCard, StrCard) :-
+    VCard == 1, StrCard = "| Ace |";
+    VCard == 10, StrCard = "| 10  |";
+    VCard == 11, StrCard = "| Jack|";
+    VCard == 12, StrCard = "|Queen|";
+    VCard == 13, StrCard = "| King|";
+    Str1 = "|  ",
+    Str2 = "  |",
+    string_concat(Str1, VCard, Str3),
+    string_concat(Str3, Str2, StrCard).
 
-createSuit(S) :-card(ace    , true, Ace),
+createSuit(S) :-card(1    , true, Ace),
                 card( 2     , true, Two),
                 card( 3     , true, Three),
                 card( 4     , true, Four),
@@ -14,9 +26,9 @@ createSuit(S) :-card(ace    , true, Ace),
                 card( 8     , true, Eight),
                 card( 9     , true, Nine),
                 card(10     , true, Ten),
-                card(queen  , true, Jack),
-                card(jack   , true, Queen),
-                card(queen  , true, King),
+                card(11  , true, Jack),
+                card(12   , true, Queen),
+                card(13  , true, King),
                 append([Ace], [Two], X1),
 	            append(X1, [Three], X3),
 	            append(X3, [Four], X4),
@@ -134,7 +146,16 @@ help(Started) :-
     run(Deck, Piles, Started).
 
 hint(Deck, Piles, true) :-
-      thereAreEmptyPiles(Piles) -> writeln("There are empty piles that can be used in moves."),
+      (thereAreEmptyPiles(Piles) ->
+        writeln("There are empty piles that can be used in moves.");
+      true),
+      hint(Piles, HintResponse),
+      (HintResponse == "", length(Deck, L), L >= 10 ->
+          writeln("No hint at the moment. But you can deal a new card into each tableau at the column.");
+          (HintResponse == "" ->
+            writeln("No hint at the moment.");
+          writeln("\n--------------HINT-------------"),
+          writeln(HintResponse), writeln("-------------------------------\n"))),
       run(Deck, Piles, true).
 hint(Deck, Piles, false):-
     writeln("Is not Started!!!"),
@@ -233,8 +254,70 @@ nl, writeln("                    ____             _ _                        "),
 
 % used in run
 thereAreEmptyPiles([]):- false.
-thereAreEmptyPiles([Pile|Piles]):- length(Pile, L), L == 0 -> true; thereAreEmptyPiles(Piles).
+thereAreEmptyPiles([Pile|Piles]) :-
+    length(Pile, L),
+    L == 0 -> true;
+    thereAreEmptyPiles(Piles).
+
+%-- checks if one card is smaller than another card
+isValidOrder([V, T], [Vnext, T2]) :-
+    V1 is (V - 1),
+    V1 == Vnext,
+    T ,
+    T2 -> true;
+    false.
+
+isTurned([_, T], T).
+
+%-- looks for a possible letter to give hint
+getPossibleCard([], [-1, false]).
+getPossibleCard([C], C).
+getPossibleCard([C|ResultantePile], Card) :-
+    ResultantePile = [NextC|Ps],
+   isValidOrder(NextC, C),
+   isTurned(NextC, T1),
+   isTurned(C, T2),
+   T1 == true,
+   T2 == true -> getPossibleCard(ResultantePile, Card);
+   Card = C.
+
+genHintOfCard(NCard, NLastCard, Card, LastCard, Str) :-
+    isValidOrder(LastCard, Card) -> Card = [VCard, _],
+    toStringCard(VCard, StrC),
+    string_concat("Card: ", StrC, Str1),
+    string_concat(Str1, "-- Pile: ", Str2),
+    string_concat(Str2, NCard, Str3),
+    string_concat(Str3, "-->", Str4),
+    string_concat(Str4, NLastCard, Str5),
+    string_concat(Str5, "\n", Str6),
+    Str = Str6;
+    Str = "".
+
+genHintPerPile(_, _, _, _, [], "").
+genHintPerPile(Card, NCard, PileCard, PilesCounter, [Pile|Piles], Str) :-
+    (length(Pile, L), L == 0 -> invalidCard(LastCard); Pile = [LastCard|_]),
+    (isValidCard(Card) ->
+        (NCard =\= PilesCounter ->
+            genHintOfCard(NCard, PilesCounter, Card, LastCard, Str1),
+            PilesCounter2 is (PilesCounter + 1),
+            genHintPerPile(Card, NCard, PileCard, PilesCounter2, Piles, Str2),
+            string_concat(Str1, Str2, Str3), Str = Str3;
+          PilesCounter2 is (PilesCounter + 1),
+          genHintPerPile(Card, NCard, PileCard, PilesCounter2, Piles, Str));
+      Str = "").
 
 
+auxHint(_, [], Piles, "").
+auxHint(NCard, [PileCard|Ps], Piles, Response) :-
+    getPossibleCard(PileCard, Card),
+    genHintPerPile(Card, NCard, PileCard, 0, Piles, Str1),
+    NCard2 is (NCard + 1),
+    auxHint(NCard2, Ps, Piles, Str2),
+    string_concat(Str1, Str2, Str3),
+    Response = Str3.
+
+hint(Piles, HintResponse) :-
+    auxHint(0, Piles, Piles, Response),
+    HintResponse = Response.
 
 %-- HINT ----------------------------------------------------------------------------------------------------------------
