@@ -39,7 +39,7 @@ createDeck(D) :-createSuit(S1), createSuit(S2), createSuit(S3), createSuit(S4), 
                 append(X5, S7, X6),
                 append(X6, S8, X7),
                 random_permutation(X7, D).
-                
+
 
 insertInHead(NewHead, Tail, [NewHead|Tail]).
 
@@ -54,7 +54,7 @@ drop(N,[_|Tail],LastElements) :- N > 0, N1 is N  - 1, drop(N1,Tail,LastElements)
 
 transferElements(N, A, B, NA, NB) :- take(N, A, Elems), append(Elems, B, NB), drop(N, A, NA).
 
-createPiles(Deck, Piles, NewDeck) :- 
+createPiles(Deck, Piles, NewDeck) :-
                                     transferElements(5, Deck, [], NDeck1, NewPile1),
                                     transferElements(5, NDeck1, [], NDeck2, NewPile2),
                                     transferElements(5, NDeck2, [], NDeck3, NewPile3),
@@ -86,13 +86,13 @@ main:-
 	%spiderLogo(), helpGame(), congrats(), bye(), halt(0).
 
 
-    %nao testado		
+    %nao testado
 userInput(X) :-
                 read_line_to_codes(user_input, X3),
                 string_to_atom(X3,X2),
                 atom_number(X2,X).
-     
-% os metodos start, reset, help, hint, print, deal, suits, exit e exception nao foram implementados    
+
+% os metodos start, reset, help, hint, print, deal, suits, exit e exception nao foram implementados
 run(Deck, Piles) :-
     read(X),
     X =:= 1 -> start();
@@ -148,24 +148,24 @@ nl,writeln(" _______  _______  ___      ___   _______  _______  ___   ______    
    writeln("|       ||       ||   |    |   | |       ||   _   ||   | |    _ |  |       |"),
    writeln("|  _____||   _   ||   |    |   | |_     _||  |_|  ||   | |   | ||  |    ___|"),
    writeln("| |_____ |  | |  ||   |    |   |   |   |  |       ||   | |   |_||_ |   |___ "),
-   writeln("|_____  ||  |_|  ||   |___ |   |   |   |  |       ||   | |    __  ||    ___|"), 
+   writeln("|_____  ||  |_|  ||   |___ |   |   |   |  |       ||   | |    __  ||    ___|"),
    writeln(" _____| ||       ||       ||   |   |   |  |   _   ||   | |   |  | ||   |___ "),
    writeln("|_______||_______||_______||___|   |___|  |__| |__||___| |___|  |_||_______|"),
    writeln("                                                                            "),
-   writeln("                              ////      \\\\\\\\                                "), 
+   writeln("                              ////      \\\\\\\\                                "),
    writeln("                              \\\\\\\\  ,,  ////                                "),
    writeln("                               \\\\\\\\ ()  ////                                 "),
-   writeln("                              ....(    )....                                "), 
+   writeln("                              ....(    )....                                "),
    writeln("		             ////(  X	)\\\\\\\\                              "),
    writeln("                            //// ||||||| ////                               "),
    writeln("                            \\\\\\\\         ////                               "),
    writeln("                             \\\\\\\\       ////                                ").
-   
-   
-   
-   
-   
-helpGame :- 
+
+
+
+
+
+helpGame :-
 nl, writeln("  |---------------------------------HELP--------------------------------|"),
     writeln("  |Start:            start (1)                                             |"),
     writeln("  |Reset Game:       reset (2)                                             |"),
@@ -180,11 +180,11 @@ nl, writeln("  |---------------------------------HELP---------------------------
     writeln("  |               <card value> <output pile number> <input pile number> |"),
     writeln("  |Cards:         Ace(1) 2 3 4 5 6 7 8 9 10 Jack(11) Queen(12) King(13) |"),
     writeln("  |---------------------------------------------------------------------|").
-  
-    
-    
-    
-    
+
+
+
+
+
 congrats :-
 nl, writeln(" __     __          __          ___       _        "),
 	writeln(" \\ \\   / /          \\ \\        / (_)     | |   "),
@@ -202,8 +202,8 @@ nl, writeln(" __     __          __          ___       _        "),
 	writeln("                    |___/                                                              ").
 
 
-        
-      
+
+
 
 bye :-
 nl, writeln("                    ____             _ _                        "),
@@ -214,8 +214,3 @@ nl, writeln("                    ____             _ _                        "),
 	writeln("                   |____/ \\__, |\\___(_|_)      /   \\         "),
 	writeln("                   |____/ \\__, |\\___(_|_)      /   \\                            "),
 	writeln("                         |___/                                  ").
-
-
-
-
-       
