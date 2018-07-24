@@ -1,23 +1,15 @@
+:- use_module(library(clpfd)).
+:-style_check(-discontiguous). %to ignore warnings
+
 :-initialization(main).
 
 % --------------------- DECK, PILES AND CARDS
-  
+
 card(Value, Turned, [Value, Turned]).
 
-invalidCard(C) :- C = [-1, false].
-isValidCard([V,_]) :- V > 0, V =< 13 -> true; false.
-toStringCard(VCard, StrCard) :-
-    VCard == 1, StrCard = "| Ace |";
-    VCard == 10, StrCard = "| 10  |";
-    VCard == 11, StrCard = "| Jack|";
-    VCard == 12, StrCard = "|Queen|";
-    VCard == 13, StrCard = "| King|";
-    Str1 = "|  ",
-    Str2 = "  |",
-    string_concat(Str1, VCard, Str3),
-    string_concat(Str3, Str2, StrCard).
+isTurned([_, true]).
 
-createSuit(S) :-card(1    , true, Ace),
+createSuit(S) :-card( 1    , true, Ace),
                 card( 2     , true, Two),
                 card( 3     , true, Three),
                 card( 4     , true, Four),
@@ -52,13 +44,9 @@ createDeck(D) :-createSuit(S1), createSuit(S2), createSuit(S3), createSuit(S4), 
                 append(X5, S7, X6),
                 append(X6, S8, X7),
                 random_permutation(X7, D).
-
-
+                
 
 insertInHead(NewHead, Tail, [NewHead|Tail]).
-
-head([H|T], H).
-tail([H|T], T).
 
 take(0, _, []) :- !.
 take(N, [H|TA], [H|TB]) :- N > 0, N2 is N - 1, take(N2, TA, TB).
@@ -68,12 +56,12 @@ drop(N,[_|Tail],LastElements) :- N > 0, N1 is N  - 1, drop(N1,Tail,LastElements)
 
 transferElements(N, A, B, NA, NB) :- take(N, A, Elems), append(Elems, B, NB), drop(N, A, NA).
 
-createPiles(Deck, Piles, NewDeck) :-
+createPiles(Deck, Piles, NewDeck) :- 
                                     transferElements(5, Deck, [], NDeck1, NewPile1),
                                     transferElements(5, NDeck1, [], NDeck2, NewPile2),
                                     transferElements(5, NDeck2, [], NDeck3, NewPile3),
                                     transferElements(5, NDeck3, [], NDeck4, NewPile4),
-                                    transferElements(4, NDeck4, [], NDeck5, NewPile5),
+                                    transferElements(0, NDeck4, [], NDeck5, NewPile5),
                                     transferElements(4, NDeck5, [], NDeck6, NewPile6),
                                     transferElements(4, NDeck6, [], NDeck7, NewPile7),
                                     transferElements(4, NDeck7, [], NDeck8, NewPile8),
@@ -91,251 +79,153 @@ createPiles(Deck, Piles, NewDeck) :-
                                     Piles = P9, NewDeck = NDeck10.
 
 
-%----------------------------------------------------------------------------------------------------------------------
+%-----PRINT PILES-----------------------------------------------------------------------------------------------------------------
 
-encontraeElem(0, [H|_], H):- !.
-encontraeElem(I, [_|T], E):- X is I - 1, encontraeElem(X, T, E).
+%for transpose matrix
+:- use_module(library(clpfd)).
 
-% Tamanho de uma Lista
-tamL([_], 1):- !.
-tamL([_|L], T):- tamL(L, X), T is X + 1.
+/*
+How to works?
+1: Searches for the largest pile of the piles
+2: Fills all lists so they are the size of the largest list
+    It is mandatory to leave them with the same size so that it is possible to print the columns in their correct places.
+3: Map each card with its string using the toStringCard,
+   where the blankSpace value means that a space must be printed at this location.
+4: Transpose the pile of piles.
+4: Print piles
+*/
 
 
-printar_pilha(I,Pilha) :-
-    tamL(Pilha, Tamanho),
-    encontraeElem(I + 1,Pilha,T2),
-    ((T2 == false, write(' |------| '));
-    (T2 == true,( I >= Tamanho , write('          ');
-				 I < Tamanho , encontraeElem(I,Pilha,T1),(T1 =:= 1, write(' | ace  | ');
-														  T1 > 1, T1 < 10, write(' |  0') ,print(T1),write('  | ');
-														  T1 =:= 10, write(' |  ') ,print(T1),write('  | ');
-														  T1 =:= 11, write(' | jack | ');
-														  T1 =:= 12, write(' | queen| ');
-														  T1 =:= 13, write(' | king | '))))).
-                                            
-                                            
+%toStringCard(Value,turned , String).
+toStringCard(blankSpace, true, "       ").
+toStringCard(_,false, "|-----|").
+toStringCard(1, true, "| Ace |").
+toStringCard(2, true, "|  2  |").
+toStringCard(3, true, "|  3  |").
+toStringCard(4, true, "|  4  |").
+toStringCard(5, true, "|  5  |").
+toStringCard(6, true, "|  6  |").
+toStringCard(7, true, "|  7  |").
+toStringCard(8, true, "|  8  |").
+toStringCard(9, true, "|  9  |").
+toStringCard(10, true, "| 10  |").
+toStringCard(11, true, "|Jack |").
+toStringCard(12, true, "|Queen|").
+toStringCard(13, true, "|King |").
 
-print_p2(I,Pilha) :-
-	encontraeElem(I,Pilha,Pilha1),
-	printar_pilha(0,Pilha1).
-	
+%getCard and get turned in [card,turned]
+getCard([Card|_], Card).
+getTurned([_,Turned|_], Turned).
 
-printar_p(I,Pilha, 0):- !.
-printar_p(I,Pilha, X) :-
-    encontraeElem(0,Pilha,Pilha1),
-    encontraeElem(1,Pilha,Pilha2),
-    encontraeElem(2,Pilha,Pilha3),
-    encontraeElem(3,Pilha,Pilha4),
-    encontraeElem(4,Pilha,Pilha5),
-    encontraeElem(5,Pilha,Pilha6),
-    encontraeElem(6,Pilha,Pilha7),
-    encontraeElem(7,Pilha,Pilha8),
-    encontraeElem(8,Pilha,Pilha9),
-    encontraeElem(9,Pilha,Pilha10),
+%pega o tamanho da maior lista da lista
+%gets length of the biggest pile
+maxlist([],0).
+maxlist([Head|Tail],Max) :- maxlist(Tail,TailMax), length(Head, Num), Num > TailMax, Max is Num.
+maxlist([Head|Tail],Max) :- maxlist(Tail,TailMax), length(Head, Num), Num =< TailMax, Max is TailMax.
+
+% generates spaces to complete the piles in print
+genSpaces(N, Elem, List) :- length(List,N),maplist(=(Elem),List).
+
+%gen blankCards
+completeSpaces(N, List, NewList) :- length(List, LenList), Qtd is N-LenList, genSpaces(Qtd, [blankSpace, true], Spaces), append(Spaces, List, NewList).
+
+%Format Pile
+formatPile(L,R) :- formatP(L,R).
+formatP([],[]).
+formatP([Card|T1],[H|T2]) :- 
+    getCard(Card, Value), getTurned(Card, Turned),
+    toStringCard(Value, Turned, H), 
+    formatP(T1,T2).
+
+%Format All Piles
+formatPiles(Piles, NewPiles) :- maxlist(Piles, MaxListLength), formatPs(Piles, NewPiles, MaxListLength).
+formatPs([],[], _).
+formatPs([Pile|Piles], [P|NewPiles], MaxListLength) :-
+    completeSpaces(MaxListLength, Pile, PileWithBlanckSpaces),
+    formatPile(PileWithBlanckSpaces, FormatedPile), reverse(FormatedPile, P),
+    formatPs(Piles, NewPiles, MaxListLength).
+
+
+printP([]).
+printP([Pile|Piles]) :-
+    atomic_list_concat(Pile, ' ',List),
+    writeln(List), printP(Piles).
     
-	tamL(Pilha1, Tamanho1),
-	tamL(Pilha2, Tamanho2),
-	tamL(Pilha3, Tamanho3),
-	tamL(Pilha4, Tamanho4),
-	tamL(Pilha5, Tamanho5),
-	tamL(Pilha6, Tamanho6),
-	tamL(Pilha7, Tamanho7),
-	tamL(Pilha8, Tamanho8),
-	tamL(Pilha9, Tamanho9),
-	tamL(Pilha10, Tamanho10),
-    
-    ( I >= Tamanho1 , write('          ');
-    I < Tamanho1 , print_p2(I,Pilha1)),
-    
-    ( I >= Tamanho2 , write('          ');
-    I < Tamanho2 , print_p2(I,Pilha2)),
-    
-    ( I >= Tamanho3 , write('          ');
-    I < Tamanho3 , print_p2(I,Pilha3)),
-    
-    ( I >= Tamanho4 , write('          ');
-    I < Tamanho4 , print_p2(I,Pilha4)),
-    
-    ( I >= Tamanho5 , write('          ');
-    I < Tamanho5 , print_p2(I,Pilha5)),
-    
-    ( I >= Tamanho6 , write('          ');
-    I < Tamanho6 , print_p2(I,Pilha6)),
-    
-    ( I >= Tamanho7 , write('          ');
-    I < Tamanho7 , print_p2(I,Pilha7)),
-    
-    ( I >= Tamanho8 , write('          ');
-    I < Tamanho8 , print_p2(I,Pilha8)),
-    
-    ( I >= Tamanho9 , write('          ');
-    I < Tamanho9 , print_p2(I,Pilha9)),
-    
-    ( I >= Tamanho10 , write('          ');
-    I < Tamanho10 , print_p2(I,Pilha10)),
- 
-    write('\n'),
-	H is I + 1,X1 is X - 1, printar_p(H, Pilha,X1).
-
-%----------------------------------------------------------------------------------------------------------------------
-%----------------------------------------------------------------------------------------------------------------------
-
-main:-
-    spiderLogo, helpGame,
-    run([],[], false).
+printPiles(Piles) :-
+    formatPiles(Piles, FormatedPiles),
+    transpose(FormatedPiles, P),
+    %writeln(P),
+    writeln("|  0  | |  1  | |  2  | |  3  | |  4  | |  5  | |  6  | |  7  | |  8  | |  9  |"),
+    writeln("|_____| |_____| |_____| |_____| |_____| |_____| |_____| |_____| |_____| |_____|"),
+    printP(P).
 
 
-readInput(X) :-
-                read_line_to_codes(user_input, X3),
-                string_to_atom(X3,X2),
-                atom_number(X2,X).
+%----MOVE CARDS---------------------------------------------------------------------------------------------------------------------
+
+getByIndex([X], 0, X).
+getByIndex([H|_], 0, H).
+getByIndex([_|T], I, E) :- NewIndex is I-1, getByIndex(T, NewIndex, E).
+
+moveCard(Card, [Cf|PFrom], PTo, F, T) :-
+    Cf =:= Card, F = PFrom, T = [Cf|PTo];
+    Cf =\= Card, moveCard(Card, PFrom, [Cf|PTo], F, T).
+
+getValue([Value, _], Value).
+
+getHead([H|_], H).
+getTail([_|Tail], Tail).
+
+/*
+How to works?
+verifies, two by two, if the previous element + 1 is equal to the second element and if this holds until the required card.
+*/
+checkOrder(Value, [[Value|_]]) :- !.
+checkOrder(Value, [C|Pile]) :-
+    isTurned(C), getValue(C, CValue), Value is CValue,!;
+    isTurned(C), getValue(C, CValue), getHead(Pile, C2), getValue(C2, C2Value), C2Value is CValue + 1, checkOrder(Value, Pile).
+
+replaceElemAtPos([_|T], 0, X, [X|T]).
+replaceElemAtPos([H|T], I, X, [H|R]) :- I > 0, I1 is I - 1, replaceElemAtPos(T, I1, X, R).
+
+getCardsToMove(Card, Pile, OldPile, NewPile) :- getCardsToMove(Card, Pile, NewPile), dropCardsToMove(Card, Pile, OldPile), !.
+
+dropCardsToMove(Card, [Card|Pile], Pile).
+dropCardsToMove(Card, [_|Pile], LastElements) :- dropCardsToMove(Card, Pile, LastElements).
+
+getCardsToMove(Card, [Card|_], [Card]).
+getCardsToMove(Card, [C|Pile],  [C|Resp]) :- getCardsToMove(Card, Pile, Resp).
+
+checkIsPossibleMove(_, Pile) :- length(Pile, 0).
+checkIsPossibleMove(CardValue, [[Value|_]|_]) :- CardValue is Value - 1,!.
+
+moveCardsTo(CardValue, IndexPileFrom, IndexPileTo, Piles, NewPiles) :-
+    % get pile from -> check order in pile from -> 
+    % getElement(s) to move -> get pile to -> 
+    % append Elements ++ pileTo ->
+    % replace new and old list in pies for return
+    getByIndex(Piles, IndexPileFrom, PileFrom), getByIndex(Piles, IndexPileTo, PileTo),
+    checkOrder(CardValue, PileFrom),checkIsPossibleMove(CardValue, PileTo),
+    getCardsToMove([CardValue, true], PileFrom, NewPileFrom, ElementsToMove),
+    append(ElementsToMove, PileTo, NewPileTo),
+    replaceElemAtPos(Piles, IndexPileFrom, NewPileFrom, Piles2),
+    replaceElemAtPos(Piles2, IndexPileTo, NewPileTo, NewPiles), !.
 
 
-run(Deck, Piles, Started) :-
-    write("Command?? "),
-    readInput(X),
-    (X =:= 1 -> start(Deck, Piles, Started); true),
-    (X =:= 2 -> reset(Deck, Piles, Started); true),
-    (X =:= 3 -> help(Started); true),
-    (X =:= 4 -> hint(Deck, Piles, Started); true),
-    (X =:= 5 -> print(Deck, Piles); true),
-    (X =:= 6 -> deal(Deck, Piles, NewDeck, NewPiles); true),
-    (X =:= 7 -> suits(Deck, Piles, NewDeck, NewPiles); true),
-    (X =:= 8 -> exit(); true),
-    (X > 8   -> run(Deck, Piles, Started); true),
-    (X < 1   -> run(Deck, Piles, Started); true).
+%-----DEAL--------------------------------------------------------------------------------------------------------------
 
+oneCardPerPile([]).
+oneCardPerPile([Pile|Piles]) :- length(Pile, LenPile), LenPile > 0, oneCardPerPile(Piles).
 
-start(_, _, false) :-
-    createDeck(D),
-    createPiles(D, NPiles, DD),
-    printar_p(0, NPiles, 10),
-    print(NPiles),
-    run(DD, NPiles, true).
+%++++++++++++++++Note. Verify if length(Deck) >= 10+++++++++++++++
+%one card perPile
+deal([Card|Deck], [Pile], [P], Deck) :- 
+    insertInHead(Card, Pile, P), !.
 
-start(Deck, Piles, true):-
-    writeln("Is Started!!!"),
-    run(Deck, Piles, true).
+deal([Card|Deck], [Pile|Piles], [P|RespPiles], RespDeck) :- 
+    insertInHead(Card, Pile, P), deal(Deck, Piles, RespPiles, RespDeck).
 
-reset(Deck, Piles, true) :-
-    createDeck(D),
-    createPiles(D, NewPiles, NewDeck),
-    run(NewDeck, NewPiles,true).
-
-reset(Deck, Piles, false) :-
-    writeln("Is not Started!!!"),
-    run(Deck, Piles, false).
-
-help(Started) :-
-    helpGame,
-    run(Deck, Piles, Started).
-
-hint(Deck, Piles, true) :-
-      (thereAreEmptyPiles(Piles) ->
-        writeln("There are empty piles that can be used in moves.");
-      true),
-      hint(Piles, HintResponse),
-      (HintResponse == "", length(Deck, L), L >= 10 ->
-          writeln("No hint at the moment. But you can deal a new card into each tableau at the column.");
-          (HintResponse == "" ->
-            writeln("No hint at the moment.");
-          writeln("\n--------------HINT-------------"),
-          writeln(HintResponse), writeln("-------------------------------\n"))),
-      run(Deck, Piles, true).
-hint(Deck, Piles, false):-
-    writeln("Is not Started!!!"),
-    run(Deck, Piles, false).
-
-print(Deck, Piles) :-
-    printar_p(0,Piles,10),
-    run(Deck, Piles, true).
-
-deal(Deck, Piles, NewDeck, NewPiles) :-
-    run(Deck, Piles).
-
-suits(Deck, Piles, NewDeck, NewPiles) :-
-    run(Deck, Piles).
-
-exit() :-
-    bye.
-
-
-%--------------------------------------------------------------------------
-
-
-spiderLogo :-
-nl,writeln(" _______  _______  ___      ___   _______  _______  ___   ______    _______ "),
-   writeln("|       ||       ||   |    |   | |       ||   _   ||   | |    _ |  |       |"),
-   writeln("|  _____||   _   ||   |    |   | |_     _||  |_|  ||   | |   | ||  |    ___|"),
-   writeln("| |_____ |  | |  ||   |    |   |   |   |  |       ||   | |   |_||_ |   |___ "),
-   writeln("|_____  ||  |_|  ||   |___ |   |   |   |  |       ||   | |    __  ||    ___|"),
-   writeln(" _____| ||       ||       ||   |   |   |  |   _   ||   | |   |  | ||   |___ "),
-   writeln("|_______||_______||_______||___|   |___|  |__| |__||___| |___|  |_||_______|"),
-   writeln("                                                                            "),
-   writeln("                              ////      \\\\\\\\                                "),
-   writeln("                              \\\\\\\\  ,,  ////                                "),
-   writeln("                               \\\\\\\\ ()  ////                                 "),
-   writeln("                              ....(    )....                                "),
-   writeln("		             ////(  X	)\\\\\\\\                              "),
-   writeln("                            //// ||||||| ////                               "),
-   writeln("                            \\\\\\\\         ////                               "),
-   writeln("                             \\\\\\\\       ////                                ").
-
-
-
-
-
-helpGame :-
-nl, writeln("  |---------------------------------HELP--------------------------------|"),
-    writeln("  |Start:            start (1)                                          |"),
-    writeln("  |Reset Game:       reset (2)                                          |"),
-    writeln("  |Help:             help  (3)                                          |"),
-    writeln("  |Hint:             hint  (4)                                          |"),
-    writeln("  |print piles:      print (5)                                          |"),
-    writeln("  |deal:             deal  (6)                                          |"),
-    writeln("  |Completed Suits:  suits (7)                                          |"),
-    writeln("  |Quit Game:        quit  (8)                                          |"),
-    writeln("  |_____________________________________________________________________|"),
-    writeln("  |Move cards:    move (press Enter)                                    |"),
-    writeln("  |               <card value> <output pile number> <input pile number> |"),
-    writeln("  |Cards:         Ace(1) 2 3 4 5 6 7 8 9 10 Jack(11) Queen(12) King(13) |"),
-    writeln("  |---------------------------------------------------------------------|"),nl.
-
-
-
-
-
-congrats :-
-nl, writeln(" __     __          __          ___       _        "),
-	writeln(" \\ \\   / /          \\ \\        / (_)     | |   "),
-	writeln("  \\ \\_/ /__  _   _   \\ \\  /\\  / / _ _ __ | |  "),
-	writeln("   \\   / _ \\| | | |   \\ \\/  \\/ / | | '_ \\| | "),
-	writeln("    | | (_) | |_| |    \\  /\\  /  | | | | |_|     "),
-	writeln("    |_|\\___/ \\__,_|     \\/  \\/   |_|_| |_(_)   "),
-	writeln("   _____                            _         _       _   _                 _          "),
-	writeln("  / ____|                          | |       | |     | | (_)               | |         "),
-	writeln(" | |     ___  _ __   __ _ _ __ __ _| |_ _   _| | __ _| |_ _  ___  _ __  ___| |         "),
-	writeln(" | |    / _ \\| '_ \\ / _` | '__/ _` | __| | | | |/ _` | __| |/ _ \\| '_ \\/ __| |     "),
-	writeln(" | |___| (_) | | | | (_| | | | (_| | |_| |_| | | (_| | |_| | (_) | | | \\__ \\_|       "),
-	writeln("  \\_____\\___/|_| |_|\\__, |_|  \\__,_|\\__|\\__,_|_|\\__,_|\\__|_|\\___/|_| |_|___(_)"),
-	writeln("                     __/ |                                                             "),
-	writeln("                    |___/                                                              ").
-
-
-
-
-
-bye :-
-nl, writeln("                    ____             _ _                        "),
-	writeln("                   |  _ \\           | | |                      "),
-	writeln("                   | |_) |_   _  ___| | |      / _ \\           "),
-	writeln("                   |  _ <| | | |/ _ \\ | |    \\_\\(_)/_/       "),
-	writeln("                   | |_) | |_| |  __/_|_|    \\_//\"\\\\_       "),
-	writeln("                   |____/ \\__, |\\___(_|_)      /   \\         "),
-	writeln("                         |___/                                  ").
 
 %-- HINT ----------------------------------------------------------------------------------------------------------------
-
 
 % used in run
 thereAreEmptyPiles([]):- false.
@@ -368,7 +258,7 @@ getPossibleCard([C|ResultantePile], Card) :-
 
 genHintOfCard(NCard, NLastCard, Card, LastCard, Str) :-
     isValidOrder(LastCard, Card) -> Card = [VCard, _],
-    toStringCard(VCard, StrC),
+    toStringCard([V|VCard], [T|VCard], StrC),
     string_concat("Card: ", StrC, Str1),
     string_concat(Str1, "-- Pile: ", Str2),
     string_concat(Str2, NCard, Str3),
@@ -377,6 +267,9 @@ genHintOfCard(NCard, NLastCard, Card, LastCard, Str) :-
     string_concat(Str5, "\n", Str6),
     Str = Str6;
     Str = "".
+
+invalidCard(C) :- C = [-1, false].
+isValidCard([V,_]) :- V > 0, V =< 13 -> true; false.
 
 genHintPerPile(_, _, _, _, [], "").
 genHintPerPile(Card, NCard, PileCard, PilesCounter, [Pile|Piles], Str) :-
@@ -405,4 +298,199 @@ hint(Piles, HintResponse) :-
     auxHint(0, Piles, Piles, Response),
     HintResponse = Response.
 
-%-- HINT ----------------------------------------------------------------------------------------------------------------
+%--HINT-------------------------------------------------------------------------------------------------------------------------
+
+%--GRAPHICS---------------------------------------------------------------------------------------------------------------------
+
+spiderLogo :-
+    nl,writeln(" _______  _______  ___      ___   _______  _______  ___   ______    _______ "),
+       writeln("|       ||       ||   |    |   | |       ||   _   ||   | |    _ |  |       |"),
+       writeln("|  _____||   _   ||   |    |   | |_     _||  |_|  ||   | |   | ||  |    ___|"),
+       writeln("| |_____ |  | |  ||   |    |   |   |   |  |       ||   | |   |_||_ |   |___ "),
+       writeln("|_____  ||  |_|  ||   |___ |   |   |   |  |       ||   | |    __  ||    ___|"),
+       writeln(" _____| ||       ||       ||   |   |   |  |   _   ||   | |   |  | ||   |___ "),
+       writeln("|_______||_______||_______||___|   |___|  |__| |__||___| |___|  |_||_______|"),
+       writeln("                                                                            "),
+       writeln("                              ////      \\\\\\\\                                "),
+       writeln("                              \\\\\\\\  ,,  ////                                "),
+       writeln("                               \\\\\\\\ ()  ////                                 "),
+       writeln("                              ....(    )....                                "),
+       writeln("		             ////(  X	)\\\\\\\\                              "),
+       writeln("                            //// ||||||| ////                               "),
+       writeln("                            \\\\\\\\         ////                               "),
+       writeln("                             \\\\\\\\       ////                                ").
+    
+    
+    
+    
+    
+    helpGame :-
+    nl, writeln("  |---------------------------------HELP--------------------------------|"),
+        writeln("  |Start:            start (1)                                          |"),
+        writeln("  |Reset Game:       reset (2)                                          |"),
+        writeln("  |Help:             help  (3)                                          |"),
+        writeln("  |Hint:             hint  (4)                                          |"),
+        writeln("  |print piles:      print (5)                                          |"),
+        writeln("  |deal:             deal  (6)                                          |"),
+        writeln("  |Completed Suits:  suits (7)                                          |"),
+        writeln("  |Quit Game:        quit  (8)                                          |"),
+        writeln("  |_____________________________________________________________________|"),
+        writeln("  |Move cards:    move(9) (press Enter)                                 |"),
+        writeln("  |               <card value> <output pile number> <input pile number> |"),
+        writeln("  |Cards:         Ace(1) 2 3 4 5 6 7 8 9 10 Jack(11) Queen(12) King(13) |"),
+        writeln("  |---------------------------------------------------------------------|"),nl.
+    
+    
+    
+    
+    
+    congrats :-
+    nl, writeln(" __     __          __          ___       _        "),
+        writeln(" \\ \\   / /          \\ \\        / (_)     | |   "),
+        writeln("  \\ \\_/ /__  _   _   \\ \\  /\\  / / _ _ __ | |  "),
+        writeln("   \\   / _ \\| | | |   \\ \\/  \\/ / | | '_ \\| | "),
+        writeln("    | | (_) | |_| |    \\  /\\  /  | | | | |_|     "),
+        writeln("    |_|\\___/ \\__,_|     \\/  \\/   |_|_| |_(_)   "),
+        writeln("   _____                            _         _       _   _                 _          "),
+        writeln("  / ____|                          | |       | |     | | (_)               | |         "),
+        writeln(" | |     ___  _ __   __ _ _ __ __ _| |_ _   _| | __ _| |_ _  ___  _ __  ___| |         "),
+        writeln(" | |    / _ \\| '_ \\ / _` | '__/ _` | __| | | | |/ _` | __| |/ _ \\| '_ \\/ __| |     "),
+        writeln(" | |___| (_) | | | | (_| | | | (_| | |_| |_| | | (_| | |_| | (_) | | | \\__ \\_|       "),
+        writeln("  \\_____\\___/|_| |_|\\__, |_|  \\__,_|\\__|\\__,_|_|\\__,_|\\__|_|\\___/|_| |_|___(_)"),
+        writeln("                     __/ |                                                             "),
+        writeln("                    |___/                                                              ").
+    
+        
+    
+    
+    
+    bye :-
+    nl, writeln("                    ____             _ _                        "),
+        writeln("                   |  _ \\           | | |                      "),
+        writeln("                   | |_) |_   _  ___| | |      / _ \\           "),
+        writeln("                   |  _ <| | | |/ _ \\ | |    \\_\\(_)/_/       "),
+        writeln("                   | |_) | |_| |  __/_|_|    \\_//\"\\\\_       "),
+        writeln("                   |____/ \\__, |\\___(_|_)      /   \\         "),
+        writeln("                         |___/                                  ").
+    
+
+%--GRAPHICS---------------------------------------------------------------------------------------------------------------------
+
+
+main:-
+    spiderLogo,
+    helpGame,
+    run(Deck, Piles, false).
+
+readInput(X) :-
+        read_line_to_codes(user_input, X3),
+        string_to_atom(X3,X2),
+        atom_number(X2,X).
+
+run(Deck, Piles, Started) :-
+                            write("Command?? "), readInput(X),
+                            (X =:= 1 -> start(Deck, Piles, Started); true),
+                            (X =:= 2 -> reset(Deck, Piles, Started); true),
+                            (X =:= 3 -> help(Deck, Piles, Started); true),
+                            (X =:= 4 -> hint(Deck, Piles, Started); true),
+                            (X =:= 5 -> print(Deck, Piles, Started); true),
+                            (X =:= 6 -> deal(Deck, Piles, Started); true),
+                            (X =:= 7 -> suits(Deck, Piles, NewDeck); true),
+                            (X =:= 8 -> exit; true),
+                            (X =:= 9 -> move(Deck, Piles, Started); true),
+                            (X > 8   -> run(Deck, Piles, Started); true),
+                            (X < 1   -> run(Deck, Piles, Started); true).
+
+%---------start
+start(_, _, false) :-
+    createDeck(D),
+    createPiles(D, P, DD),
+    printPiles(P),
+    run(DD, P, true).
+
+start(Deck,Piles,true) :- 
+    writeln("Is Started!!!"),
+    run(Deck, Piles, true).
+
+%---------reset
+reset(_, _, true) :-
+    start(_,_,false).
+
+reset(_,_,false) :- writeln("Not Started!!!").
+
+%---------help
+
+help(Deck, Piles, Started) :-
+    helpGame,
+    run(Deck, Piles, Started).
+
+%---------hint
+
+hint(Deck, Piles, true) :-
+        (thereAreEmptyPiles(Piles) ->
+          writeln("There are empty piles that can be used in moves.");
+        true),
+        hint(Piles, HintResponse),
+        (HintResponse == "", length(Deck, L), L >= 10 ->
+            writeln("No hint at the moment. But you can deal a new card into each tableau at the column.");
+            (HintResponse == "" ->
+              writeln("No hint at the moment.");
+            writeln("\n--------------HINT-------------"),
+            writeln(HintResponse), writeln("-------------------------------\n"))),
+        run(Deck, Piles, true).
+hint(Deck, Piles, false):-
+    writeln("Is not Started!!!"),
+    run(Deck, Piles, false).
+
+%---------print
+
+print(Deck, Piles, true) :-
+    printPiles(Piles),
+    write(Piles),nl,
+    run(Deck, Piles, true).
+
+print(Deck, Piles, false) :- 
+    write("Not Started"),
+    run(Deck, Piles, false).
+
+%---------deal
+
+deal(Deck, Piles, true) :-
+    length(Deck, LenDeck), LenDeck < 1,writeln("No more cards!!!"), run(Deck, Piles, true);
+    %or
+    oneCardPerPile(Piles), deal(Deck, Piles, NP, ND), printPiles(NP), run(ND, NP, true);
+    %or 
+    writeln("All piles must contain at least one card."), run(Deck, Piles, true).
+
+deal(Deck, Piles, false) :-
+    write("Not Started"),
+    run(Deck, Piles, false).
+
+%---------suits
+
+suits(Deck, Piles, true) :-
+    writeln("not implemented"),
+    run(Deck, Piles, true).
+
+suits(Deck, Piles, false) :-
+    writeln("Not Started"),
+    run(Deck, Piles, false).
+
+%----------move
+
+move(Deck, Piles, true) :-
+    write("Card? "), readInput(CardValue),
+    write("Pile from? "), readInput(IndexPileFrom),
+    write("Pile to? "), readInput(IndexPileTo),
+    moveCardsTo(CardValue, IndexPileFrom, IndexPileTo, Piles, NewPiles) -> printPiles(NewPiles), run(Deck, NewPiles, true);
+    writeln("Invalid or impossible movement!"), run(Deck, Piles, true).
+
+move(Deck, Piles, false) :-
+    writeln("Not Started"), 
+    run(Deck, Piles, false).
+
+%----------exit
+
+exit :-
+    bye, % ! para cortar aqui e nao retroceder
+    halt(0).
