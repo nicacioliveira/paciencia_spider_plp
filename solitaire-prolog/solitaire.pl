@@ -208,7 +208,28 @@ moveCardsTo(CardValue, IndexPileFrom, IndexPileTo, Piles, NewPiles) :-
     getCardsToMove([CardValue, true], PileFrom, NewPileFrom, ElementsToMove),
     append(ElementsToMove, PileTo, NewPileTo),
     replaceElemAtPos(Piles, IndexPileFrom, NewPileFrom, Piles2),
-    replaceElemAtPos(Piles2, IndexPileTo, NewPileTo, NewPiles), !.
+    replaceElemAtPos(Piles2, IndexPileTo, NewPileTo, NewPiles), (checkSuit(CardValue, NewPileTo);!).
+
+%-----CheckSuit---------------------------------------------------------------------------------------------------------
+checkSuit(Value, [C|Pile]):-
+    % Chack if card is ace in the pile with card moved ->
+    % Checks if a has Suit in pile ->
+    % Drop the Suit of the pile ->
+    Value =:= 1,auxCheckSuit(Value, Pile),drop(12,Pile,C).
+
+% Last suit
+auxCheckSuit(13, []).
+
+auxCheckSuit(Value, [C|Pile]) :-
+     % Value of the king
+    Value =:= 13.
+
+auxCheckSuit(Value, [C|Pile]) :-
+    isTurned(C), getValue(C, CValue), Value is CValue,!;
+    isTurned(C), getValue(C, CValue), getHead(Pile, C2), getValue(C2, C2Value),
+    C2Value is CValue + 1, auxCheckSuit(Value, Pile).
+%-----------------------------------------------------------------------------------------------------------------------
+
 
 
 %-----DEAL--------------------------------------------------------------------------------------------------------------
