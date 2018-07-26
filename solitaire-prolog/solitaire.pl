@@ -458,7 +458,7 @@ start(Deck,Piles, QtdSuit,true) :-
 reset(_, _, QtdSuit, true) :-
     start(_,_, QtdSuit,false).
 
-reset(_,_, QtdSuit,false) :- writeln("Not Started!!!").
+reset(_,_, QtdSuit,false) :- writeln("Not Started!!!"),run(Deck, Piles, QtdSuit, Started).
 
 %---------help
 
