@@ -208,7 +208,7 @@ moveCardsTo(CardValue, IndexPileFrom, IndexPileTo, Piles, NewPiles, QtdSuit) :-
     getCardsToMove([CardValue, true], PileFrom, NewPileFrom, ElementsToMove),
     append(ElementsToMove, PileTo, NewPileTo),
     replaceElemAtPos(Piles, IndexPileFrom, NewPileFrom, Piles2),
-    replaceElemAtPos(Piles2, IndexPileTo, NewPileTo, NewPiles), (checkSuit(CardValue, NewPileTo, QtdSuit);!),!.
+    replaceElemAtPos(Piles2, IndexPileTo, NewPileTo, NewPiles),(checkSuit(CardValue, NewPileTo, QtdSuit),won(QtdSuit);!),!.
 
 %-----CheckSuit---------------------------------------------------------------------------------------------------------
 checkSuit(Value, [C|Pile], QtdSuit):-
@@ -228,9 +228,10 @@ auxCheckSuit(Value, [C|Pile]) :-
     isTurned(C), getValue(C, CValue), Value is CValue,!;
     isTurned(C), getValue(C, CValue), getHead(Pile, C2), getValue(C2, C2Value),
     C2Value is CValue + 1, auxCheckSuit(Value, Pile).
-%-----------------------------------------------------------------------------------------------------------------------
 
-
+%-----ChackWon----------------------------------------------------------------------------------------------------------
+fullSuits(8).
+won(Suits):- (fullSuits(Suits), congrats,!);!.
 
 %-----DEAL--------------------------------------------------------------------------------------------------------------
 
@@ -400,7 +401,7 @@ spiderLogo :-
         writeln(" | |___| (_) | | | | (_| | | | (_| | |_| |_| | | (_| | |_| | (_) | | | \\__ \\_|       "),
         writeln("  \\_____\\___/|_| |_|\\__, |_|  \\__,_|\\__|\\__,_|_|\\__,_|\\__|_|\\___/|_| |_|___(_)"),
         writeln("                     __/ |                                                             "),
-        writeln("                    |___/                                                              ").
+        writeln("                    |___/                                                              "),nl.
 
 
 
@@ -415,14 +416,13 @@ spiderLogo :-
         writeln("                   |____/ \\__, |\\___(_|_)      /   \\         "),
         writeln("                         |___/                                  ").
 
-
 %--GRAPHICS---------------------------------------------------------------------------------------------------------------------
 
 
 main:-
     spiderLogo,
     helpGame,
-    run(Deck, Piles, 0, false).
+    run(Deck, Piles, 0, false).% 0 is value initialy of suits
 
 readInput(X) :-
         read_line_to_codes(user_input, X3),
@@ -488,7 +488,7 @@ hint(Deck, Piles, false):-
 
 print(Deck, Piles, QtdSuit, true) :-
     printPiles(Piles),
-    write(Piles),nl,
+% write(Piles),nl,
     run(Deck, Piles, QtdSuit, true).
 
 print(Deck, Piles, QtdSuit, false) :-
@@ -511,7 +511,7 @@ deal(Deck, Piles, QtdSuit, false) :-
 %---------suits
 
 suits(Deck, Piles, QtdSuit, true) :-
-    write("Quantidade Suit(s): "),writeln(QtdSuit),
+    write("Suits completed: "),writeln(QtdSuit),
     run(Deck, Piles, QtdSuit, true).
 
 suits(Deck, Piles, QtdSuit, false) :-
@@ -535,4 +535,5 @@ move(Deck, Piles, QtdSuit, false) :-
 
 exit :-
     bye, % ! para cortar aqui e nao retroceder
+    sleep(2),
     halt(0).
