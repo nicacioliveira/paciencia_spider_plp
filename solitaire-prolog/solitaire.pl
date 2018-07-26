@@ -9,19 +9,19 @@ card(Value, Turned, [Value, Turned]).
 
 isTurned([_, true]).
 
-createSuit(S) :-card( 1    , true, Ace),
-                card( 2     , true, Two),
-                card( 3     , true, Three),
-                card( 4     , true, Four),
-                card( 5     , true, Five),
-                card( 6     , true, Six),
-                card( 7     , true, Seven),
-                card( 8     , true, Eight),
-                card( 9     , true, Nine),
-                card(10     , true, Ten),
-                card(11  , true, Jack),
-                card(12   , true, Queen),
-                card(13  , true, King),
+createSuit(S) :-card( 1    , false, Ace),
+                card( 2     , false, Two),
+                card( 3     , false, Three),
+                card( 4     , false, Four),
+                card( 5     , false, Five),
+                card( 6     , false, Six),
+                card( 7     , false, Seven),
+                card( 8     , false, Eight),
+                card( 9     , false, Nine),
+                card(10     , false, Ten),
+                card(11  , false, Jack),
+                card(12   , false, Queen),
+                card(13  , false, King),
                 append([Ace], [Two], X1),
 	            append(X1, [Three], X3),
 	            append(X3, [Four], X4),
@@ -56,12 +56,12 @@ drop(N,[_|Tail],LastElements) :- N > 0, N1 is N  - 1, drop(N1,Tail,LastElements)
 
 transferElements(N, A, B, NA, NB) :- take(N, A, Elems), append(Elems, B, NB), drop(N, A, NA).
 
-createPiles(Deck, Piles, NewDeck) :-
+fillPiles(Deck, Piles, NewDeck) :-
                                     transferElements(5, Deck, [], NDeck1, NewPile1),
                                     transferElements(5, NDeck1, [], NDeck2, NewPile2),
                                     transferElements(5, NDeck2, [], NDeck3, NewPile3),
                                     transferElements(5, NDeck3, [], NDeck4, NewPile4),
-                                    transferElements(0, NDeck4, [], NDeck5, NewPile5),
+                                    transferElements(4, NDeck4, [], NDeck5, NewPile5),
                                     transferElements(4, NDeck5, [], NDeck6, NewPile6),
                                     transferElements(4, NDeck6, [], NDeck7, NewPile7),
                                     transferElements(4, NDeck7, [], NDeck8, NewPile8),
@@ -78,6 +78,15 @@ createPiles(Deck, Piles, NewDeck) :-
                                     append(P8, [NewPile10],P9),
                                     Piles = P9, NewDeck = NDeck10.
 
+
+setLastTurned([[Value|_]|Pile], [[Value,true]|Pile]).
+
+setAllLastsTurned([],[]).
+setAllLastsTurned([Pile|Piles], [NewPile|NewPiles]) :-
+    setLastTurned(Pile, NewPile), setAllLastsTurned(Piles, NewPiles).
+
+createPiles(Deck, Piles, NewDeck) :-
+    fillPiles(Deck, NewPiles, NewDeck), setAllLastsTurned(NewPiles, Piles).
 
 %-----PRINT PILES-----------------------------------------------------------------------------------------------------------------
 
@@ -166,9 +175,6 @@ getByIndex([X], 0, X).
 getByIndex([H|_], 0, H).
 getByIndex([_|T], I, E) :- NewIndex is I-1, getByIndex(T, NewIndex, E).
 
-moveCard(Card, [Cf|PFrom], PTo, F, T) :-
-    Cf =:= Card, F = PFrom, T = [Cf|PTo];
-    Cf =\= Card, moveCard(Card, PFrom, [Cf|PTo], F, T).
 
 getValue([Value, _], Value).
 
@@ -198,7 +204,7 @@ getCardsToMove(Card, [C|Pile],  [C|Resp]) :- getCardsToMove(Card, Pile, Resp).
 checkIsPossibleMove(_, Pile) :- length(Pile, 0).
 checkIsPossibleMove(CardValue, [[Value|_]|_]) :- CardValue is Value - 1,!.
 
-moveCardsTo(CardValue, IndexPileFrom, IndexPileTo, Piles, NewPiles, QtdSuit) :-
+moveCardsTo(CardValue, IndexPileFrom, IndexPileTo, Piles, NewPiles) :-
     % get pile from -> check order in pile from ->
     % getElement(s) to move -> get pile to ->
     % append Elements ++ pileTo ->
@@ -207,31 +213,31 @@ moveCardsTo(CardValue, IndexPileFrom, IndexPileTo, Piles, NewPiles, QtdSuit) :-
     checkOrder(CardValue, PileFrom),checkIsPossibleMove(CardValue, PileTo),
     getCardsToMove([CardValue, true], PileFrom, NewPileFrom, ElementsToMove),
     append(ElementsToMove, PileTo, NewPileTo),
-    replaceElemAtPos(Piles, IndexPileFrom, NewPileFrom, Piles2),
-    replaceElemAtPos(Piles2, IndexPileTo, NewPileTo, NewPiles),(checkSuit(CardValue, NewPileTo, QtdSuit),won(QtdSuit);!),!.
+    setLastTurned(NewPileFrom, PileFromLastTrue),
+    replaceElemAtPos(Piles, IndexPileFrom, PileFromLastTrue, Piles2),
+    replaceElemAtPos(Piles2, IndexPileTo, NewPileTo, NewPiles),!.
 
-%-----CheckSuit---------------------------------------------------------------------------------------------------------
-checkSuit(Value, [C|Pile], QtdSuit):-
-    % Chack if card is ace in the pile with last card moved ->
-    % Checks if a has Suit in pile ->
-    % Drop the Suit of the pile
-    Value =:= 1,auxCheckSuit(Value, Pile),QtdSuit is QtdSuit + 1,drop(12,Pile,C).
+%CHECK COMPLETED PILES------------------------------------------------------------------------------------------------------------
 
-% Last suit
-auxCheckSuit(13, []).
+isCompletedPile([[13,true]|_], 13) :- !.
+isCompletedPile([C|Cards], N) :-
+    isTurned(C), getValue(C, CValue), getHead(Cards, C2), getValue(C2, C2Value), C2Value is CValue + 1, 
+    NN is N + 1,
+    isCompletedPile(Cards, NN).
 
-auxCheckSuit(Value, [C|Pile]) :-
-     % Value of the king
-    Value =:= 13.
+checkCompletedPiles([], [], Qtd, Qtd) :- !.
+checkCompletedPiles([Pile|Piles], [NewPile|NewPiles], Qtd, NewQtd) :-
+    isCompletedPile(Pile, 1), drop(13, Pile, NewPile), Q is Qtd + 1, checkCompletedPiles(Piles, NewPiles, Q, NewQtd);
+    NewPile = Pile, checkCompletedPiles(Piles, NewPiles, Qtd, NewQtd).
 
-auxCheckSuit(Value, [C|Pile]) :-
-    isTurned(C), getValue(C, CValue), Value is CValue,!;
-    isTurned(C), getValue(C, CValue), getHead(Pile, C2), getValue(C2, C2Value),
-    C2Value is CValue + 1, auxCheckSuit(Value, Pile).
+%test
+%checkCompletedPiles([[[1,true],[2,true],[3,true],[4,true],[5,true],[6,true],[7,true],[8,true],[9,true],[10,true],[11,true],[12,true],[13,true], [13,true]],[],[[1,true],[2,true],[3,true],[4,true],[5,true],[6,true],[7,true],[8,true],[9,true],[10,true],[11,true],[12,true],[13,true]],[],[]], N, 0, QTD).
+
+%CHECK COMPLETED PILES------------------------------------------------------------------------------------------------------------
 
 %-----ChackWon----------------------------------------------------------------------------------------------------------
-fullSuits(8).
-won(Suits):- (fullSuits(Suits), congrats,!);!.
+won(8).
+%-----ChackWon----------------------------------------------------------------------------------------------------------
 
 %-----DEAL--------------------------------------------------------------------------------------------------------------
 
@@ -245,9 +251,6 @@ deal([Card|Deck], [Pile], [P], Deck) :-
 
 deal([Card|Deck], [Pile|Piles], [P|RespPiles], RespDeck) :-
     insertInHead(Card, Pile, P), deal(Deck, Piles, RespPiles, RespDeck).
-
-
-
 
 %-- MOVE CARDS ----------------------------------------------------------------------------------------------------------------
 
@@ -422,7 +425,7 @@ spiderLogo :-
 main:-
     spiderLogo,
     helpGame,
-    run(Deck, Piles, 0, false).% 0 is value initialy of suits
+    run(_, _, 0, false).% 0 is value initialy of suits
 
 readInput(X) :-
         read_line_to_codes(user_input, X3),
@@ -430,6 +433,7 @@ readInput(X) :-
         atom_number(X2,X).
 
 run(Deck, Piles, QtdSuit, Started) :-
+                            won(QtdSuit), congrats,nl, helpGame, exit;
                             write("Command?? "), readInput(X),
                             (X =:= 1 -> start(Deck, Piles, QtdSuit, Started); true),
                             (X =:= 2 -> reset(Deck, Piles, QtdSuit, Started); true),
@@ -437,17 +441,34 @@ run(Deck, Piles, QtdSuit, Started) :-
                             (X =:= 4 -> hint(Deck, Piles, QtdSuit, Started); true),
                             (X =:= 5 -> print(Deck, Piles, QtdSuit, Started); true),
                             (X =:= 6 -> deal(Deck, Piles, QtdSuit, Started); true),
-                            (X =:= 7 -> suits(Deck, Piles, QtdSuit, NewDeck); true),
+                            (X =:= 7 -> suits(Deck, Piles, QtdSuit, Started); true),
                             (X =:= 8 -> exit; true),
                             (X =:= 9 -> move(Deck, Piles, QtdSuit, Started); true),
                             (X > 8   -> run(Deck, Piles, QtdSuit, Started); true),
                             (X < 1   -> run(Deck, Piles, QtdSuit, Started); true).
 
 %---------start
+/*
+FOR TESTS
+auxCreateDeckAndPiles(Deck, Piles) :-
+    Deck = [[12,true],[8,true],[4,true],[3,true],[1,true],[13,true],[9,true],[1,true],[6,true],[2,true],[2,true],[13,true],[5,true],[12,true],[11,true],[13,true],[3,true],[4,true],[5,true],[7,true],[1,true],[8,true],[9,true],[8,true],[1,true],[12,true],[7,true],[8,true],[3,true],[13,true],[10,true],[7,true],[5,true],[9,true],[9,true],[8,true],[2,true],[7,true],[3,true],[6,true],[5,true],[3,true],[11,true],[10,true],[13,true],[5,true],[4,true],[8,true],[4,true],[13,true],[13,true],[2,true],[7,true],[7,true],[3,true],[5,true],[1,true],[6,true],[11,true],[1,true],[7,true],[11,true],[5,true],[6,true],[9,true],[10,true],[11,true],[6,true],[2,true],[11,true],[1,true],[9,true],[9,true],[3,true],[1,true],[13,true],[12,true],[8,true],[10,true],[10,true],[12,true],[5,true],[6,true],[2,true],[6,true],[10,true],[10,true],[2,true],[4,true],[12,true],[12,true],[12,true],[4,true],[10,true],[6,true],[8,true],[9,true],[3,true],[11,true],[11,true],[7,true],[4,true],[4,true],[2,true]],
+    Piles = [[[1,true],[2,true],[3,true],[4,true],[5,true],[6,true],[7,true],[8,true],[9,true],[10,true],[11,true],[12,true],[13,true]],
+            [[1,true],[2,true],[3,true],[4,true],[5,true],[6,true],[7,true],[8,true],[9,true],[10,true],[11,true],[12,true],[13,true]],
+            [[1,true],[2,true],[3,true],[4,true],[5,true],[6,true],[7,true],[8,true],[9,true],[10,true],[11,true],[12,true],[13,true]],
+            [[1,true],[2,true],[3,true],[4,true],[5,true],[6,true],[7,true],[8,true],[9,true],[10,true],[11,true],[12,true],[13,true]],
+            [[1,true],[2,true],[3,true],[4,true],[5,true],[6,true],[7,true],[8,true],[9,true],[10,true],[11,true],[12,true],[13,true]],
+            [[1,true],[2,true],[3,true],[4,true],[5,true],[6,true],[7,true],[8,true],[9,true],[10,true],[11,true],[12,true],[13,true]],
+            [[1,true],[2,true],[3,true],[4,true],[5,true],[6,true],[7,true],[8,true],[9,true],[10,true],[11,true],[12,true],[13,true]],
+            [[1,true],[2,true],[3,true],[4,true],[5,true],[6,true],[7,true],[8,true],[9,true],[10,true],[11,true],[12,true],[13,true]],
+            [[8,true],[1,true],[12,true],[11,true]],
+            [[9,true],[9,true],[7,true],[3,true]]].
+*/
+
 start(_, _, QtdSuit, false) :-
     createDeck(D),
     createPiles(D, P, DD),
-    printPiles(P),
+    %auxCreateDeckAndPiles(DD,P),
+    printPiles(P),nl,
     run(DD, P, QtdSuit, true).
 
 start(Deck,Piles, QtdSuit,true) :-
@@ -458,12 +479,13 @@ start(Deck,Piles, QtdSuit,true) :-
 reset(_, _, QtdSuit, true) :-
     start(_,_, QtdSuit,false).
 
-reset(_,_, QtdSuit,false) :- writeln("Not Started!!!"),run(Deck, Piles, QtdSuit, Started).
+reset(Deck,Piles, QtdSuit,false) :- 
+    writeln("Not Started!!!"),run(Deck, Piles, QtdSuit, false).
 
 %---------help
 
 help(Deck, Piles, QtdSuit, Started) :-
-    helpGame,
+    helpGame,nl,
     run(Deck, Piles, QtdSuit, Started).
 
 %---------hint
@@ -480,19 +502,20 @@ hint(Deck, Piles, QtdSuit, true) :-
             writeln("\n--------------HINT-------------"),
             writeln(HintResponse), writeln("-------------------------------\n"))),
         run(Deck, Piles, QtdSuit, true).
-hint(Deck, Piles, false):-
+
+hint(Deck, Piles, QtdSuit,false):-
     writeln("Is not Started!!!"),
     run(Deck, Piles, QtdSuit, false).
 
 %---------print
 
 print(Deck, Piles, QtdSuit, true) :-
-    printPiles(Piles),
+    printPiles(Piles),nl,
 % write(Piles),nl,
     run(Deck, Piles, QtdSuit, true).
 
 print(Deck, Piles, QtdSuit, false) :-
-    write("Not Started"),
+    writeln("Not Started"),
     run(Deck, Piles, QtdSuit, false).
 
 %---------deal
@@ -500,12 +523,12 @@ print(Deck, Piles, QtdSuit, false) :-
 deal(Deck, Piles, QtdSuit, true) :-
     length(Deck, LenDeck), LenDeck < 1,writeln("No more cards!!!"), run(Deck, Piles, QtdSuit, true);
     %or
-    oneCardPerPile(Piles), deal(Deck, Piles, NP, ND), printPiles(NP), run(ND, NP, QtdSuit, true);
+    oneCardPerPile(Piles), deal(Deck, Piles, NP, ND), printPiles(NP), nl, run(ND, NP, QtdSuit, true);
     %or
     writeln("All piles must contain at least one card."), run(Deck, Piles, QtdSuit, true).
 
 deal(Deck, Piles, QtdSuit, false) :-
-    write("Not Started"),
+    writeln("Not Started"),
     run(Deck, Piles, QtdSuit, false).
 
 %---------suits
@@ -524,8 +547,16 @@ move(Deck, Piles, QtdSuit, true) :-
     write("Card? "), readInput(CardValue),
     write("Pile from? "), readInput(IndexPileFrom),
     write("Pile to? "), readInput(IndexPileTo),
-    moveCardsTo(CardValue, IndexPileFrom, IndexPileTo, Piles, NewPiles, QtdSuit) -> printPiles(NewPiles), run(Deck, NewPiles, QtdSuit, true);
-    writeln("Invalid or impossible movement!"), run(Deck, Piles, QtdSuit, true).
+    
+    moveCardsTo(CardValue, IndexPileFrom, IndexPileTo, Piles, NewPiles) -> 
+    
+        checkCompletedPiles(NewPiles, CheckedPiles, QtdSuit, NewQtd),
+        printPiles(NewPiles), write("Completed Piles: "), writeln(NewQtd), 
+        printPiles(CheckedPiles), nl, run(Deck, CheckedPiles, NewQtd, true)
+        
+        ;
+
+        writeln("Invalid or impossible movement!"), run(Deck, Piles, QtdSuit, true).
 
 move(Deck, Piles, QtdSuit, false) :-
     writeln("Not Started"),
