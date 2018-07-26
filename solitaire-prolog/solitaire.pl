@@ -246,11 +246,14 @@ oneCardPerPile([Pile|Piles]) :- length(Pile, LenPile), LenPile > 0, oneCardPerPi
 
 %++++++++++++++++Note. Verify if length(Deck) >= 10+++++++++++++++
 %one card perPile
+
+setCardTurned([Value,_], [Value, true]).
+
 deal([Card|Deck], [Pile], [P], Deck) :-
-    insertInHead(Card, Pile, P), !.
+        setCardTurned(Card, NCard),insertInHead(NCard, Pile, P), !.
 
 deal([Card|Deck], [Pile|Piles], [P|RespPiles], RespDeck) :-
-    insertInHead(Card, Pile, P), deal(Deck, Piles, RespPiles, RespDeck).
+    setCardTurned(Card, NCard), insertInHead(NCard, Pile, P), deal(Deck, Piles, RespPiles, RespDeck).
 
 %-- MOVE CARDS ----------------------------------------------------------------------------------------------------------------
 
@@ -331,7 +334,7 @@ genHintPerPile(Card, NCard, PileCard, PilesCounter, [Pile|Piles], Str) :-
       Str = "").
 
 
-auxHint(_, [], Piles, "").
+auxHint(_, [], _, "").
 auxHint(NCard, [PileCard|Ps], Piles, Response) :-
     getPossibleCard(PileCard, Card),
     genHintPerPile(Card, NCard, PileCard, 0, Piles, Str1),
