@@ -437,7 +437,7 @@ readInput(X) :-
         atom_number(X2,X).
 
 run(Deck, Piles, QtdSuit, Started) :-
-                            won(QtdSuit), congrats,nl, helpGame, exit;
+                            won(QtdSuit), congrats,nl, exit;
                             write("Command?? "), readInput(X),
                             (X =:= 1 -> start(Deck, Piles, QtdSuit, Started); true),
                             (X =:= 2 -> reset(Deck, Piles, QtdSuit, Started); true),
