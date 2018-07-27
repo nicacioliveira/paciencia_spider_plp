@@ -79,6 +79,7 @@ fillPiles(Deck, Piles, NewDeck) :-
                                     Piles = P9, NewDeck = NDeck10.
 
 
+setLastTurned([],[]).
 setLastTurned([[Value|_]|Pile], [[Value,true]|Pile]).
 
 setAllLastsTurned([],[]).
@@ -465,12 +466,25 @@ auxCreateDeckAndPiles(Deck, Piles) :-
             [[1,true],[2,true],[3,true],[4,true],[5,true],[6,true],[7,true],[8,true],[9,true],[10,true],[11,true],[12,true],[13,true]],
             [[8,true],[1,true],[12,true],[11,true]],
             [[9,true],[9,true],[7,true],[3,true]]].
+
+auxCreateDeckAndPiles(Deck, Piles) :-
+    Deck = [[12,true],[8,true],[4,true],[3,true],[1,true],[13,true],[9,true],[1,true],[6,true],[2,true],[2,true],[13,true],[5,true],[12,true],[11,true],[13,true],[3,true],[4,true],[5,true],[7,true],[1,true],[8,true],[9,true],[8,true],[1,true],[12,true],[7,true],[8,true],[3,true],[13,true],[10,true],[7,true],[5,true],[9,true],[9,true],[8,true],[2,true],[7,true],[3,true],[6,true],[5,true],[3,true],[11,true],[10,true],[13,true],[5,true],[4,true],[8,true],[4,true],[13,true],[13,true],[2,true],[7,true],[7,true],[3,true],[5,true],[1,true],[6,true],[11,true],[1,true],[7,true],[11,true],[5,true],[6,true],[9,true],[10,true],[11,true],[6,true],[2,true],[11,true],[1,true],[9,true],[9,true],[3,true],[1,true],[13,true],[12,true],[8,true],[10,true],[10,true],[12,true],[5,true],[6,true],[2,true],[6,true],[10,true],[10,true],[2,true],[4,true],[12,true],[12,true],[12,true],[4,true],[10,true],[6,true],[8,true],[9,true],[3,true],[11,true],[11,true],[7,true],[4,true],[4,true],[2,true]],
+    Piles = [[[1,true],[2,true],[3,true],[4,true],[5,true],[6,true],[7,true],[8,true],[9,true],[10,true],[11,true],[12,true],[12,true]],
+            [[1,true],[2,true],[3,true],[4,true],[5,true],[6,true],[7,true],[8,true],[9,true],[10,true],[11,true],[12,true]],
+            [[1,true],[2,true],[3,true],[4,true],[5,true],[6,true],[7,true],[8,true],[9,true],[10,true],[11,true],[12,true]],
+            [[1,true],[2,true],[3,true],[4,true],[5,true],[6,true],[7,true],[8,true],[9,true],[10,true],[11,true],[12,true]],
+            [[1,true],[2,true],[3,true],[4,true],[5,true],[6,true],[7,true],[8,true],[9,true],[10,true],[11,true],[12,true]],
+            [[1,true],[2,true],[3,true],[4,true],[5,true],[6,true],[7,true],[8,true],[9,true],[10,true],[11,true],[12,true]],
+            [[1,true],[2,true],[3,true],[4,true],[5,true],[6,true],[7,true],[8,true],[9,true],[10,true],[11,true],[12,true]],
+            [[13,true]],
+            [[12,true]],
+            [[9,true],[9,true],[7,true],[3,true]]].
 */
 
 start(_, _, QtdSuit, false) :-
     createDeck(D),
     createPiles(D, P, DD),
-    %auxCreateDeckAndPiles(DD,P),
+    %auxCreateDeckAndPiles(DD,P), %for tests
     printPiles(P),nl,
     run(DD, P, QtdSuit, true).
 
@@ -554,7 +568,7 @@ move(Deck, Piles, QtdSuit, true) :-
     moveCardsTo(CardValue, IndexPileFrom, IndexPileTo, Piles, NewPiles) -> 
     
         checkCompletedPiles(NewPiles, CheckedPiles, QtdSuit, NewQtd),
-        printPiles(NewPiles), write("Completed Piles: "), writeln(NewQtd), 
+        write("Completed Piles: "), writeln(NewQtd), 
         printPiles(CheckedPiles), nl, run(Deck, CheckedPiles, NewQtd, true)
         
         ;
