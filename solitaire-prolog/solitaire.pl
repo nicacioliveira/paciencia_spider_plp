@@ -163,7 +163,8 @@ printP([Pile|Piles]) :-
 
 printPiles(Piles) :-
     formatPiles(Piles, FormatedPiles),
-    transpose(FormatedPiles, P),
+    transpose(
+        FormatedPiles, P),
     %writeln(P),
     writeln("|  0  | |  1  | |  2  | |  3  | |  4  | |  5  | |  6  | |  7  | |  8  | |  9  |"),
     writeln("|_____| |_____| |_____| |_____| |_____| |_____| |_____| |_____| |_____| |_____|"),
@@ -222,7 +223,7 @@ moveCardsTo(CardValue, IndexPileFrom, IndexPileTo, Piles, NewPiles) :-
 
 isCompletedPile([[13,true]|_], 13) :- !.
 isCompletedPile([C|Cards], N) :-
-    isTurned(C), getValue(C, CValue), getHead(Cards, C2), getValue(C2, C2Value), C2Value is CValue + 1, 
+    isTurned(C), getValue(C, CValue), getHead(Cards, C2), isTurned(C2), getValue(C2, C2Value), C2Value is CValue + 1, 
     NN is N + 1,
     isCompletedPile(Cards, NN).
 
