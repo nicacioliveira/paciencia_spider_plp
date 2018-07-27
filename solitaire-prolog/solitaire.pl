@@ -227,7 +227,7 @@ isCompletedPile([C|Cards], N) :-
 
 checkCompletedPiles([], [], Qtd, Qtd) :- !.
 checkCompletedPiles([Pile|Piles], [NewPile|NewPiles], Qtd, NewQtd) :-
-    isCompletedPile(Pile, 1), drop(13, Pile, NewPile), Q is Qtd + 1, checkCompletedPiles(Piles, NewPiles, Q, NewQtd);
+    isCompletedPile(Pile, 1), drop(13, Pile, DropedPile), setLastTurned(DropedPile, NewPile) , Q is Qtd + 1, checkCompletedPiles(Piles, NewPiles, Q, NewQtd);
     NewPile = Pile, checkCompletedPiles(Piles, NewPiles, Qtd, NewQtd).
 
 %test
